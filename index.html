@@ -1,32 +1,420 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Fresso Beats Shop</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresso Beats Store</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { 
-            font-family: Arial; 
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white; 
-            text-align: center; 
-            padding: 50px; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .btn { 
-            background: #ff6b6b; 
-            color: white; 
-            padding: 15px 30px; 
-            margin: 10px; 
-            border: none; 
-            border-radius: 10px; 
-            text-decoration: none; 
-            display: inline-block; 
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .beat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .beat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .beat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .beat-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .beat-price {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Стили для модального окна оплаты */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .payment-option {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .payment-option:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #667eea;
+        }
+
+        .payment-option.selected {
+            border-color: #ff6b6b;
+            background: rgba(255,107,107,0.1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .crypto-address {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(39, 174, 96, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>🎵 Fresso Beats Shop</h1>
-    <p>Скоро здесь будет крутой магазин битов!</p>
-    <a class="btn" href="https://t.me/Fr1sso">💬 Связь с автором</a>
-    <a class="btn" href="https://t.me/fresso1">📻 Канал с битами</a>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Fresso Beats</h1>
+            <p>Эксклюзивные биты • Прямые покупки</p>
+        </div>
+
+        <div id="beatsList">
+            <!-- Биты будут загружены здесь -->
+        </div>
+
+        <!-- Модальное окно оплаты -->
+        <div class="modal" id="paymentModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeModal()">×</button>
+                <h2>💳 Выберите способ оплаты</h2>
+                <p>Товар: <span id="selectedBeat"></span></p>
+                <p>Цена: <span id="selectedPrice"></span>₽</p>
+
+                <div class="payment-option" onclick="selectPayment('crypto')">
+                    <strong>₿ Криптовалюты</strong>
+                    <div class="crypto-address" id="cryptoAddress" style="display: none;">
+                        BTC: <span id="btcAddress">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span><br>
+                        ETH: <span id="ethAddress">0x742d35Cc6634C0532925a3b8D4a5a5a5a5a5a5a5</span>
+                        <button class="copy-btn" onclick="copyAddress('btc')">📋 Копировать BTC</button>
+                        <button class="copy-btn" onclick="copyAddress('eth')">📋 Копировать ETH</button>
+                    </div>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('sbp')">
+                    <strong>🏦 СБП (Сбер)</strong>
+                    <div id="sbpInfo" style="display: none; margin-top: 10px;">
+                        <p>Перевод по номеру телефона:</p>
+                        <div class="crypto-address">+7 999 123-45-67</div>
+                        <button class="copy-btn" onclick="copyPhone()">📋 Копировать номер</button>
+                    </div>
+                </div>
+
+                <div class="payment-option" onclick="selectPayment('umoney')">
+                    <strong>🪙 ЮMoney</strong>
+                    <div id="umoneyInfo" style="display: none; margin-top: 10px;">
+                        <p>Кошелек ЮMoney:</p>
+                        <div class="crypto-address">4100 1234 5678 9012</div>
+                        <button class="copy-btn" onclick="copyUMoney()">📋 Копировать номер</button>
+                    </div>
+                </div>
+
+                <button class="buy-btn" onclick="processPayment()" id="payButton" style="margin-top: 20px; display: none;">
+                    Подтвердить оплату
+                </button>
+            </div>
+        </div>
+
+        <!-- Сообщение об успехе -->
+        <div class="success-message" id="successMessage">
+            <h2>🎉 Оплата прошла успешно!</h2>
+            <p>Бит уже скачивается... Спасибо за покупку!</p>
+        </div>
+    </div>
+
+    <script>
+        let selectedBeat = null;
+        let selectedPayment = null;
+
+        // Данные битов
+        const beats = [
+            {
+                id: 1,
+                title: "🔥 Trap Beat 'Ice'",
+                price: 1500,
+                description: "Мощный trap бит с кристальными хай-хэтами",
+                audioUrl: "https://ваш-домен.com/beats/ice.mp3",
+                fileUrl: "https://ваш-домен.com/download/ice.zip"
+            },
+            {
+                id: 2, 
+                title: "🎤 Drill Beat 'Dark'",
+                price: 2000,
+                description: "Агрессивный drill с мрачной атмосферой",
+                audioUrl: "https://ваш-домен.com/beats/dark.mp3",
+                fileUrl: "https://ваш-домен.com/download/dark.zip"
+            }
+        ];
+
+        // Показываем биты
+        function displayBeats() {
+            const beatsList = document.getElementById('beatsList');
+            
+            beats.forEach(beat => {
+                const beatCard = document.createElement('div');
+                beatCard.className = 'beat-card';
+                beatCard.innerHTML = `
+                    <div class="beat-header">
+                        <div class="beat-title">${beat.title}</div>
+                        <div class="beat-price">${beat.price}₽</div>
+                    </div>
+                    <div class="beat-description">${beat.description}</div>
+                    <audio controls class="audio-player">
+                        <source src="${beat.audioUrl}" type="audio/mpeg">
+                    </audio>
+                    <button class="buy-btn" onclick="openPaymentModal(${beat.id})">
+                        🛒 Купить сейчас
+                    </button>
+                `;
+                beatsList.appendChild(beatCard);
+            });
+        }
+
+        // Открываем модальное окно оплаты
+        function openPaymentModal(beatId) {
+            selectedBeat = beats.find(b => b.id === beatId);
+            document.getElementById('selectedBeat').textContent = selectedBeat.title;
+            document.getElementById('selectedPrice').textContent = selectedBeat.price;
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+
+        // Закрываем модальное окно
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            resetPaymentSelection();
+        }
+
+        // Выбор способа оплаты
+        function selectPayment(method) {
+            selectedPayment = method;
+            
+            // Сбрасываем все выделения
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Скрываем все детали оплаты
+            document.getElementById('cryptoAddress').style.display = 'none';
+            document.getElementById('sbpInfo').style.display = 'none';
+            document.getElementById('umoneyInfo').style.display = 'none';
+            
+            // Выделяем выбранный метод
+            event.currentTarget.classList.add('selected');
+            
+            // Показываем соответствующие детали
+            if (method === 'crypto') {
+                document.getElementById('cryptoAddress').style.display = 'block';
+            } else if (method === 'sbp') {
+                document.getElementById('sbpInfo').style.display = 'block';
+            } else if (method === 'umoney') {
+                document.getElementById('umoneyInfo').style.display = 'block';
+            }
+            
+            // Показываем кнопку оплаты
+            document.getElementById('payButton').style.display = 'block';
+        }
+
+        // Сброс выбора оплаты
+        function resetPaymentSelection() {
+            selectedPayment = null;
+            document.querySelectorAll('.payment-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById('payButton').style.display = 'none';
+        }
+
+        // Обработка оплаты
+        async function processPayment() {
+            if (!selectedPayment) {
+                alert('Выберите способ оплаты');
+                return;
+            }
+
+            try {
+                // Показываем успешное сообщение
+                document.getElementById('paymentModal').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Отправляем данные в бота о успешной покупке
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'purchase_success',
+                    beat_id: selectedBeat.id,
+                    beat_title: selectedBeat.title,
+                    price: selectedBeat.price,
+                    payment_method: selectedPayment
+                }));
+
+            } catch (error) {
+                alert('Ошибка при обработке платежа: ' + error.message);
+            }
+        }
+
+        // Функции копирования
+        function copyAddress(type) {
+            const address = type === 'btc' ? 
+                document.getElementById('btcAddress').textContent : 
+                document.getElementById('ethAddress').textContent;
+            navigator.clipboard.writeText(address);
+            alert('Адрес скопирован!');
+        }
+
+        function copyPhone() {
+            navigator.clipboard.writeText('+79991234567');
+            alert('Номер скопирован!');
+        }
+
+        function copyUMoney() {
+            navigator.clipboard.writeText('4100123456789012');
+            alert('Номер кошелька скопирован!');
+        }
+
+        // Инициализация
+        Telegram.WebApp.ready();
+        Telegram.WebApp.expand();
+        
+        // Загружаем биты
+        setTimeout(displayBeats, 500);
+    </script>
 </body>
 </html>
