@@ -6,19 +6,21 @@
     <title>Fresso Beats</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #8B5CF6;
             --primary-dark: #7C3AED;
             --primary-light: #A78BFA;
             --accent: #F59E0B;
-            --bg-dark: #1F1F2E;
-            --bg-card: #2D2D42;
-            --bg-darker: #171723;
+            --bg-dark: #1a1029;
+            --bg-card: rgba(45, 45, 66, 0.8);
+            --bg-darker: #0f0a1c;
             --text: #FFFFFF;
             --text-secondary: #A0A0B0;
             --success: #10B981;
             --danger: #EF4444;
+            --glow: 0 0 20px rgba(139, 92, 246, 0.5);
         }
 
         * {
@@ -28,11 +30,13 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Inter', sans-serif;
+            background: 
+                linear-gradient(135deg, #1a1029 0%, #2d1b69 50%, #1a1029 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(139,92,246,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 80px; /* Для нижнего меню */
+            padding-bottom: 80px;
         }
 
         .container {
@@ -47,11 +51,12 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--bg-darker);
+            background: rgba(15, 10, 28, 0.95);
+            backdrop-filter: blur(20px);
             border-top: 1px solid var(--primary-dark);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0;
             z-index: 1000;
         }
 
@@ -60,56 +65,97 @@
             flex-direction: column;
             align-items: center;
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 11px;
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 5px 10px;
-            border-radius: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            font-weight: 500;
         }
 
         .nav-item.active {
             color: var(--primary);
-            background: rgba(139, 92, 246, 0.1);
+            background: rgba(139, 92, 246, 0.15);
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
         }
 
         .nav-icon {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.2);
         }
 
         /* Шапка */
         .header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            padding: 20px 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(124, 58, 237, 0.9));
+            padding: 25px 0;
             margin-bottom: 20px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g"><stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></radialGradient></defs><circle cx="50" cy="50" r="40" fill="url(%23g)"/></svg>');
+            animation: pulse 4s ease-in-out infinite;
         }
 
         .header h1 {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #FFFFFF, #E0E7FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
         }
 
         .header p {
             opacity: 0.9;
             font-size: 14px;
+            font-weight: 300;
+            position: relative;
         }
 
-        /* Поиск */
+        /* Поиск и фильтры */
+        .search-section {
+            margin-bottom: 25px;
+        }
+
         .search-container {
             position: relative;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 45px 12px 15px;
-            background: var(--bg-card);
-            border: 1px solid var(--primary-dark);
+            padding: 15px 50px 15px 20px;
+            background: rgba(45, 45, 66, 0.6);
+            border: 2px solid rgba(139, 92, 246, 0.3);
             border-radius: 25px;
             color: var(--text);
             font-size: 14px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+            outline: none;
         }
 
         .search-input::placeholder {
@@ -118,125 +164,283 @@
 
         .search-icon {
             position: absolute;
-            right: 15px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--primary);
+            font-size: 16px;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .filter-btn {
+            padding: 10px 16px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 20px;
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            box-shadow: var(--glow);
         }
 
         /* Секции */
         .section {
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .section-title {
-            font-size: 18px;
-            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            animation: slideIn 0.8s ease-out;
         }
 
         .see-all {
             color: var(--primary);
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .see-all:hover {
+            transform: translateX(5px);
         }
 
         /* Карточки битов */
         .beats-grid {
             display: grid;
-            gap: 15px;
+            gap: 12px;
         }
 
         .beat-card {
-            background: var(--bg-card);
-            border-radius: 15px;
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 20px;
             padding: 15px;
             border: 1px solid rgba(139, 92, 246, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             cursor: pointer;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .beat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .beat-card:hover::before {
+            left: 100%;
         }
 
         .beat-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-5px) scale(1.02);
             border-color: var(--primary);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+            box-shadow: var(--glow);
+        }
+
+        .beat-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
         }
 
         .beat-header {
             display: flex;
-            justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .beat-info {
+            flex: 1;
         }
 
         .beat-info h3 {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            line-height: 1.2;
         }
 
         .beat-meta {
             display: flex;
-            gap: 10px;
-            font-size: 12px;
-            color: var(--text-secondary);
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .beat-meta span {
-            background: rgba(139, 92, 246, 0.2);
-            padding: 2px 8px;
-            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.3);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text);
         }
 
         .beat-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .action-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 16px;
-            transition: color 0.3s ease;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
         }
 
         .action-btn:hover {
-            color: var(--primary);
+            background: rgba(139, 92, 246, 0.3);
+            color: var(--text);
+            transform: scale(1.1);
         }
 
         .action-btn.favorite.active {
-            color: var(--danger);
+            background: var(--danger);
+            color: white;
         }
 
-        /* Аудио плеер */
+        .action-btn.cart.active {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Аудио плеер - исправленная версия */
         .audio-player {
             width: 100%;
+            height: 40px;
             margin-top: 10px;
-            border-radius: 10px;
-            background: var(--bg-darker);
+            border-radius: 20px;
+            background: rgba(15, 10, 28, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            overflow: hidden;
+        }
+
+        .audio-player::-webkit-media-controls-panel {
+            background: transparent;
+        }
+
+        .audio-player::-webkit-media-controls-current-time-display,
+        .audio-player::-webkit-media-controls-time-remaining-display {
+            color: var(--text);
+        }
+
+        .audio-player::-webkit-media-controls-play-button {
+            background-color: var(--primary);
+            border-radius: 50%;
         }
 
         /* Анимации */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 30px; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+
         .fade-in {
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite;
         }
 
         /* Утилиты */
         .hidden {
             display: none !important;
+        }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -244,7 +448,7 @@
     <!-- Шапка -->
     <div class="header">
         <div class="container">
-            <h1>🎵 Fresso Beats</h1>
+            <h1>🎵 FRESSO BEATS</h1>
             <p>Эксклюзивные биты для твоего творчества</p>
         </div>
     </div>
@@ -252,17 +456,29 @@
     <div class="container">
         <!-- Главный экран -->
         <div id="homeScreen" class="screen">
-            <!-- Поиск -->
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Поиск по жанру, BPM, тональности...">
-                <i class="fas fa-search search-icon"></i>
+            <!-- Поиск и фильтры -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Поиск по названию, жанру...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="filters-row">
+                    <button class="filter-btn active">Все</button>
+                    <button class="filter-btn">Trap</button>
+                    <button class="filter-btn">Drill</button>
+                    <button class="filter-btn">Phonk</button>
+                    <button class="filter-btn">Lo-Fi</button>
+                    <button class="filter-btn">80-120 BPM</button>
+                    <button class="filter-btn">120-140 BPM</button>
+                    <button class="filter-btn">140+ BPM</button>
+                </div>
             </div>
 
             <!-- Новые биты -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🆕 Новые биты</h2>
-                    <span class="see-all">Все</span>
+                    <h2 class="section-title">НОВЫЕ БИТЫ</h2>
+                    <span class="see-all">Все →</span>
                 </div>
                 <div class="beats-grid" id="newBeats">
                     <!-- Новые биты загружаются здесь -->
@@ -272,8 +488,8 @@
             <!-- Все биты -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">🎧 Все биты</h2>
-                    <span class="see-all">Все</span>
+                    <h2 class="section-title">ВСЕ БИТЫ</h2>
+                    <span class="see-all">Все →</span>
                 </div>
                 <div class="beats-grid" id="allBeats">
                     <!-- Все биты загружаются здесь -->
@@ -282,45 +498,53 @@
         </div>
 
         <!-- Остальные экраны (пока скрыты) -->
+        <div id="newsScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">НОВОСТИ</h2>
+                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+                    Пока нет новостей
+                </p>
+            </div>
+        </div>
+
+        <div id="casinoScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">ЛУДИК</h2>
+                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+                    Скоро будет доступно!
+                </p>
+            </div>
+        </div>
+
         <div id="favoritesScreen" class="screen hidden">
             <div class="section">
-                <h2 class="section-title">❤️ Избранное</h2>
+                <h2 class="section-title">ИЗБРАННОЕ</h2>
                 <div class="beats-grid" id="favoriteBeats">
                     <!-- Избранные биты -->
                 </div>
             </div>
         </div>
 
-        <div id="casinoScreen" class="screen hidden">
-            <div class="section">
-                <h2 class="section-title">🎰 Лудик</h2>
-                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
-                    Скоро будет доступно!
-                </p>
-            </div>
-        </div>
-
         <div id="profileScreen" class="screen hidden">
             <div class="section">
-                <h2 class="section-title">👤 Профиль</h2>
+                <h2 class="section-title">ПРОФИЛЬ</h2>
                 <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
                     Скоро будет доступно!
-                </p>
-            </div>
-        </div>
-
-        <div id="newsScreen" class="screen hidden">
-            <div class="section">
-                <h2 class="section-title">📢 Новости</h2>
-                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
-                    Пока нет новостей
                 </p>
             </div>
         </div>
     </div>
 
-    <!-- Нижнее меню навигации -->
+    <!-- Нижнее меню навигации (ИСПРАВЛЕННЫЙ ПОРЯДОК) -->
     <div class="bottom-nav">
+        <div class="nav-item" data-screen="newsScreen">
+            <i class="fas fa-newspaper nav-icon"></i>
+            <span>Новости</span>
+        </div>
+        <div class="nav-item" data-screen="casinoScreen">
+            <i class="fas fa-dice nav-icon"></i>
+            <span>Лудик</span>
+        </div>
         <div class="nav-item active" data-screen="homeScreen">
             <i class="fas fa-home nav-icon"></i>
             <span>Главная</span>
@@ -329,17 +553,9 @@
             <i class="fas fa-heart nav-icon"></i>
             <span>Избранное</span>
         </div>
-        <div class="nav-item" data-screen="casinoScreen">
-            <i class="fas fa-dice nav-icon"></i>
-            <span>Лудик</span>
-        </div>
         <div class="nav-item" data-screen="profileScreen">
             <i class="fas fa-user nav-icon"></i>
             <span>Профиль</span>
-        </div>
-        <div class="nav-item" data-screen="newsScreen">
-            <i class="fas fa-newspaper nav-icon"></i>
-            <span>Новости</span>
         </div>
     </div>
 
@@ -352,10 +568,12 @@
                 bpm: 140,
                 key: "C#min",
                 genre: "Trap",
+                mood: "Dark",
                 isNew: true,
                 plays: 1245,
                 audioUrl: "#",
-                isFavorite: false
+                isFavorite: false,
+                inCart: false
             },
             {
                 id: 2,
@@ -363,10 +581,12 @@
                 bpm: 128,
                 key: "F#maj",
                 genre: "Synthwave",
+                mood: "Dreamy",
                 isNew: true,
                 plays: 892,
                 audioUrl: "#",
-                isFavorite: true
+                isFavorite: true,
+                inCart: false
             },
             {
                 id: 3,
@@ -374,10 +594,12 @@
                 bpm: 150,
                 key: "Amin",
                 genre: "Drill",
+                mood: "Aggressive",
                 isNew: false,
                 plays: 2103,
                 audioUrl: "#",
-                isFavorite: false
+                isFavorite: false,
+                inCart: true
             },
             {
                 id: 4,
@@ -385,10 +607,12 @@
                 bpm: 135,
                 key: "G#min",
                 genre: "Phonk",
+                mood: "Vibey",
                 isNew: false,
                 plays: 1678,
                 audioUrl: "#",
-                isFavorite: false
+                isFavorite: false,
+                inCart: false
             }
         ];
 
@@ -436,15 +660,27 @@
 
         // Создание карточки бита
         function createBeatCard(beat) {
+            const emojiMap = {
+                'Trap': '🎵',
+                'Drill': '🔫', 
+                'Phonk': '🌀',
+                'Synthwave': '🌌',
+                'Lo-Fi': '☕'
+            };
+
             return `
                 <div class="beat-card fade-in" data-beat-id="${beat.id}">
                     <div class="beat-header">
+                        <div class="beat-image glow">
+                            ${emojiMap[beat.genre] || '🎵'}
+                        </div>
                         <div class="beat-info">
                             <h3>${beat.title}</h3>
                             <div class="beat-meta">
                                 <span>${beat.bpm} BPM</span>
                                 <span>${beat.key}</span>
                                 <span>${beat.genre}</span>
+                                <span>${beat.mood}</span>
                             </div>
                         </div>
                         <div class="beat-actions">
@@ -452,7 +688,8 @@
                                     onclick="toggleFavorite(${beat.id})">
                                 <i class="fas fa-heart"></i>
                             </button>
-                            <button class="action-btn cart" onclick="addToCart(${beat.id})">
+                            <button class="action-btn cart ${beat.inCart ? 'active' : ''}" 
+                                    onclick="toggleCart(${beat.id})">
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
                         </div>
@@ -469,19 +706,16 @@
         function toggleFavorite(beatId) {
             const beat = beats.find(b => b.id === beatId);
             beat.isFavorite = !beat.isFavorite;
-            
-            // Обновляем отображение
             displayBeats();
-            
-            // Показываем уведомление
-            const action = beat.isFavorite ? 'добавлен' : 'удален';
-            showNotification(`Бит "${beat.title}" ${action} в избранное`);
+            showNotification(`Бит "${beat.title}" ${beat.isFavorite ? 'добавлен' : 'удален'} в избранное`);
         }
 
-        // Добавление в корзину
-        function addToCart(beatId) {
+        // Переключение корзины
+        function toggleCart(beatId) {
             const beat = beats.find(b => b.id === beatId);
-            showNotification(`Бит "${beat.title}" добавлен в корзину`);
+            beat.inCart = !beat.inCart;
+            displayBeats();
+            showNotification(`Бит "${beat.title}" ${beat.inCart ? 'добавлен' : 'удален'} в корзину`);
         }
 
         // Показать уведомление
