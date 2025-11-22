@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresso Beats Store</title>
+    <title>Fresso Beats</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-dark: #7C3AED;
+            --primary-light: #A78BFA;
+            --accent: #F59E0B;
+            --bg-dark: #1F1F2E;
+            --bg-card: #2D2D42;
+            --bg-darker: #171723;
+            --text: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,407 +29,472 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
+            background: var(--bg-dark);
+            color: var(--text);
             min-height: 100vh;
-            padding: 20px;
+            padding-bottom: 80px; /* Для нижнего меню */
         }
 
         .container {
             max-width: 400px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
+        /* Нижнее меню навигации */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-darker);
+            border-top: 1px solid var(--primary-dark);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* Шапка */
         .header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 20px 0;
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 30px;
-            animation: fadeIn 1s ease-in;
         }
 
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            background: linear-gradient(45deg, #ff6b6b, #667eea);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        .beat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        /* Поиск */
+        .search-container {
+            position: relative;
             margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: slideUp 0.6s ease-out;
         }
 
-        .beat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--primary-dark);
+            border-radius: 25px;
+            color: var(--text);
+            font-size: 14px;
         }
 
-        .beat-header {
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+        }
+
+        /* Секции */
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
 
-        .beat-title {
-            font-size: 20px;
+        .section-title {
+            font-size: 18px;
             font-weight: bold;
         }
 
-        .beat-price {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
+        .see-all {
+            color: var(--primary);
+            font-size: 14px;
+            cursor: pointer;
         }
 
-        .audio-player {
-            width: 100%;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.1);
+        /* Карточки битов */
+        .beats-grid {
+            display: grid;
+            gap: 15px;
         }
 
-        .buy-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px;
+        .beat-card {
+            background: var(--bg-card);
             border-radius: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .buy-btn:hover {
-            transform: scale(1.02);
-        }
-
-        /* Стили для модального окна оплаты */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 350px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .payment-option {
-            background: rgba(255,255,255,0.1);
             padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            cursor: pointer;
+            border: 1px solid rgba(139, 92, 246, 0.2);
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            cursor: pointer;
         }
 
-        .payment-option:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #667eea;
+        .beat-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
         }
 
-        .payment-option.selected {
-            border-color: #ff6b6b;
-            background: rgba(255,107,107,0.1);
+        .beat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+        .beat-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .beat-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .beat-meta span {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .beat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
             background: none;
             border: none;
-            color: white;
-            font-size: 20px;
+            color: var(--text-secondary);
             cursor: pointer;
+            font-size: 16px;
+            transition: color 0.3s ease;
         }
 
-        .crypto-address {
-            background: rgba(0,0,0,0.3);
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            margin: 10px 0;
-            word-break: break-all;
+        .action-btn:hover {
+            color: var(--primary);
         }
 
-        .copy-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
+        .action-btn.favorite.active {
+            color: var(--danger);
+        }
+
+        /* Аудио плеер */
+        .audio-player {
             width: 100%;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .success-message {
-            text-align: center;
-            padding: 20px;
-            background: rgba(39, 174, 96, 0.2);
+            margin-top: 10px;
             border-radius: 10px;
-            margin: 20px 0;
-            display: none;
+            background: var(--bg-darker);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Утилиты */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
+    <!-- Шапка -->
+    <div class="header">
+        <div class="container">
             <h1>🎵 Fresso Beats</h1>
-            <p>Эксклюзивные биты • Прямые покупки</p>
+            <p>Эксклюзивные биты для твоего творчества</p>
         </div>
+    </div>
 
-        <div id="beatsList">
-            <!-- Биты будут загружены здесь -->
-        </div>
+    <div class="container">
+        <!-- Главный экран -->
+        <div id="homeScreen" class="screen">
+            <!-- Поиск -->
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Поиск по жанру, BPM, тональности...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
 
-        <!-- Модальное окно оплаты -->
-        <div class="modal" id="paymentModal">
-            <div class="modal-content">
-                <button class="close-modal" onclick="closeModal()">×</button>
-                <h2>💳 Выберите способ оплаты</h2>
-                <p>Товар: <span id="selectedBeat"></span></p>
-                <p>Цена: <span id="selectedPrice"></span>₽</p>
-
-                <div class="payment-option" onclick="selectPayment('crypto')">
-                    <strong>₿ Криптовалюты</strong>
-                    <div class="crypto-address" id="cryptoAddress" style="display: none;">
-                        BTC: <span id="btcAddress">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span><br>
-                        ETH: <span id="ethAddress">0x742d35Cc6634C0532925a3b8D4a5a5a5a5a5a5a5</span>
-                        <button class="copy-btn" onclick="copyAddress('btc')">📋 Копировать BTC</button>
-                        <button class="copy-btn" onclick="copyAddress('eth')">📋 Копировать ETH</button>
-                    </div>
+            <!-- Новые биты -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🆕 Новые биты</h2>
+                    <span class="see-all">Все</span>
                 </div>
-
-                <div class="payment-option" onclick="selectPayment('sbp')">
-                    <strong>🏦 СБП (Сбер)</strong>
-                    <div id="sbpInfo" style="display: none; margin-top: 10px;">
-                        <p>Перевод по номеру телефона:</p>
-                        <div class="crypto-address">+7 999 123-45-67</div>
-                        <button class="copy-btn" onclick="copyPhone()">📋 Копировать номер</button>
-                    </div>
+                <div class="beats-grid" id="newBeats">
+                    <!-- Новые биты загружаются здесь -->
                 </div>
+            </div>
 
-                <div class="payment-option" onclick="selectPayment('umoney')">
-                    <strong>🪙 ЮMoney</strong>
-                    <div id="umoneyInfo" style="display: none; margin-top: 10px;">
-                        <p>Кошелек ЮMoney:</p>
-                        <div class="crypto-address">4100 1234 5678 9012</div>
-                        <button class="copy-btn" onclick="copyUMoney()">📋 Копировать номер</button>
-                    </div>
+            <!-- Все биты -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">🎧 Все биты</h2>
+                    <span class="see-all">Все</span>
                 </div>
-
-                <button class="buy-btn" onclick="processPayment()" id="payButton" style="margin-top: 20px; display: none;">
-                    Подтвердить оплату
-                </button>
+                <div class="beats-grid" id="allBeats">
+                    <!-- Все биты загружаются здесь -->
+                </div>
             </div>
         </div>
 
-        <!-- Сообщение об успехе -->
-        <div class="success-message" id="successMessage">
-            <h2>🎉 Оплата прошла успешно!</h2>
-            <p>Бит уже скачивается... Спасибо за покупку!</p>
+        <!-- Остальные экраны (пока скрыты) -->
+        <div id="favoritesScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">❤️ Избранное</h2>
+                <div class="beats-grid" id="favoriteBeats">
+                    <!-- Избранные биты -->
+                </div>
+            </div>
+        </div>
+
+        <div id="casinoScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">🎰 Лудик</h2>
+                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+                    Скоро будет доступно!
+                </p>
+            </div>
+        </div>
+
+        <div id="profileScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">👤 Профиль</h2>
+                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+                    Скоро будет доступно!
+                </p>
+            </div>
+        </div>
+
+        <div id="newsScreen" class="screen hidden">
+            <div class="section">
+                <h2 class="section-title">📢 Новости</h2>
+                <p style="text-align: center; margin-top: 50px; color: var(--text-secondary);">
+                    Пока нет новостей
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижнее меню навигации -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-screen="homeScreen">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Главная</span>
+        </div>
+        <div class="nav-item" data-screen="favoritesScreen">
+            <i class="fas fa-heart nav-icon"></i>
+            <span>Избранное</span>
+        </div>
+        <div class="nav-item" data-screen="casinoScreen">
+            <i class="fas fa-dice nav-icon"></i>
+            <span>Лудик</span>
+        </div>
+        <div class="nav-item" data-screen="profileScreen">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Профиль</span>
+        </div>
+        <div class="nav-item" data-screen="newsScreen">
+            <i class="fas fa-newspaper nav-icon"></i>
+            <span>Новости</span>
         </div>
     </div>
 
     <script>
-        let selectedBeat = null;
-        let selectedPayment = null;
-
-        // Данные битов
+        // Данные для тестирования
         const beats = [
             {
                 id: 1,
-                title: "🔥 Trap Beat 'Ice'",
-                price: 1500,
-                description: "Мощный trap бит с кристальными хай-хэтами",
-                audioUrl: "https://ваш-домен.com/beats/ice.mp3",
-                fileUrl: "https://ваш-домен.com/download/ice.zip"
+                title: "Midnight Drive",
+                bpm: 140,
+                key: "C#min",
+                genre: "Trap",
+                isNew: true,
+                plays: 1245,
+                audioUrl: "#",
+                isFavorite: false
             },
             {
-                id: 2, 
-                title: "🎤 Drill Beat 'Dark'",
-                price: 2000,
-                description: "Агрессивный drill с мрачной атмосферой",
-                audioUrl: "https://ваш-домен.com/beats/dark.mp3",
-                fileUrl: "https://ваш-домен.com/download/dark.zip"
+                id: 2,
+                title: "Neon Dreams", 
+                bpm: 128,
+                key: "F#maj",
+                genre: "Synthwave",
+                isNew: true,
+                plays: 892,
+                audioUrl: "#",
+                isFavorite: true
+            },
+            {
+                id: 3,
+                title: "Urban Storm",
+                bpm: 150,
+                key: "Amin",
+                genre: "Drill",
+                isNew: false,
+                plays: 2103,
+                audioUrl: "#",
+                isFavorite: false
+            },
+            {
+                id: 4,
+                title: "Crystal Flow",
+                bpm: 135,
+                key: "G#min",
+                genre: "Phonk",
+                isNew: false,
+                plays: 1678,
+                audioUrl: "#",
+                isFavorite: false
             }
         ];
 
-        // Показываем биты
-        function displayBeats() {
-            const beatsList = document.getElementById('beatsList');
-            
-            beats.forEach(beat => {
-                const beatCard = document.createElement('div');
-                beatCard.className = 'beat-card';
-                beatCard.innerHTML = `
-                    <div class="beat-header">
-                        <div class="beat-title">${beat.title}</div>
-                        <div class="beat-price">${beat.price}₽</div>
-                    </div>
-                    <div class="beat-description">${beat.description}</div>
-                    <audio controls class="audio-player">
-                        <source src="${beat.audioUrl}" type="audio/mpeg">
-                    </audio>
-                    <button class="buy-btn" onclick="openPaymentModal(${beat.id})">
-                        🛒 Купить сейчас
-                    </button>
-                `;
-                beatsList.appendChild(beatCard);
-            });
-        }
-
-        // Открываем модальное окно оплаты
-        function openPaymentModal(beatId) {
-            selectedBeat = beats.find(b => b.id === beatId);
-            document.getElementById('selectedBeat').textContent = selectedBeat.title;
-            document.getElementById('selectedPrice').textContent = selectedBeat.price;
-            document.getElementById('paymentModal').style.display = 'block';
-        }
-
-        // Закрываем модальное окно
-        function closeModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-            resetPaymentSelection();
-        }
-
-        // Выбор способа оплаты
-        function selectPayment(method) {
-            selectedPayment = method;
-            
-            // Сбрасываем все выделения
-            document.querySelectorAll('.payment-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            
-            // Скрываем все детали оплаты
-            document.getElementById('cryptoAddress').style.display = 'none';
-            document.getElementById('sbpInfo').style.display = 'none';
-            document.getElementById('umoneyInfo').style.display = 'none';
-            
-            // Выделяем выбранный метод
-            event.currentTarget.classList.add('selected');
-            
-            // Показываем соответствующие детали
-            if (method === 'crypto') {
-                document.getElementById('cryptoAddress').style.display = 'block';
-            } else if (method === 'sbp') {
-                document.getElementById('sbpInfo').style.display = 'block';
-            } else if (method === 'umoney') {
-                document.getElementById('umoneyInfo').style.display = 'block';
-            }
-            
-            // Показываем кнопку оплаты
-            document.getElementById('payButton').style.display = 'block';
-        }
-
-        // Сброс выбора оплаты
-        function resetPaymentSelection() {
-            selectedPayment = null;
-            document.querySelectorAll('.payment-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            document.getElementById('payButton').style.display = 'none';
-        }
-
-        // Обработка оплаты
-        async function processPayment() {
-            if (!selectedPayment) {
-                alert('Выберите способ оплаты');
-                return;
-            }
-
-            try {
-                // Показываем успешное сообщение
-                document.getElementById('paymentModal').style.display = 'none';
-                document.getElementById('successMessage').style.display = 'block';
-
-                // Отправляем данные в бота о успешной покупке
-                Telegram.WebApp.sendData(JSON.stringify({
-                    action: 'purchase_success',
-                    beat_id: selectedBeat.id,
-                    beat_title: selectedBeat.title,
-                    price: selectedBeat.price,
-                    payment_method: selectedPayment
-                }));
-
-            } catch (error) {
-                alert('Ошибка при обработке платежа: ' + error.message);
-            }
-        }
-
-        // Функции копирования
-        function copyAddress(type) {
-            const address = type === 'btc' ? 
-                document.getElementById('btcAddress').textContent : 
-                document.getElementById('ethAddress').textContent;
-            navigator.clipboard.writeText(address);
-            alert('Адрес скопирован!');
-        }
-
-        function copyPhone() {
-            navigator.clipboard.writeText('+79991234567');
-            alert('Номер скопирован!');
-        }
-
-        function copyUMoney() {
-            navigator.clipboard.writeText('4100123456789012');
-            alert('Номер кошелька скопирован!');
-        }
-
-        // Инициализация
+        // Инициализация Telegram Web App
         Telegram.WebApp.ready();
         Telegram.WebApp.expand();
-        
-        // Загружаем биты
-        setTimeout(displayBeats, 500);
+
+        // Навигация между экранами
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const screens = document.querySelectorAll('.screen');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetScreen = this.getAttribute('data-screen');
+                    
+                    // Обновляем активный элемент навигации
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Показываем целевой экран
+                    screens.forEach(screen => screen.classList.add('hidden'));
+                    document.getElementById(targetScreen).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Отображение битов
+        function displayBeats() {
+            const newBeatsContainer = document.getElementById('newBeats');
+            const allBeatsContainer = document.getElementById('allBeats');
+            const favoriteBeatsContainer = document.getElementById('favoriteBeats');
+
+            // Новые биты (первые 2)
+            const newBeats = beats.filter(beat => beat.isNew).slice(0, 2);
+            newBeatsContainer.innerHTML = newBeats.map(beat => createBeatCard(beat)).join('');
+
+            // Все биты
+            allBeatsContainer.innerHTML = beats.map(beat => createBeatCard(beat)).join('');
+
+            // Избранные биты
+            const favoriteBeats = beats.filter(beat => beat.isFavorite);
+            favoriteBeatsContainer.innerHTML = favoriteBeats.map(beat => createBeatCard(beat)).join('');
+        }
+
+        // Создание карточки бита
+        function createBeatCard(beat) {
+            return `
+                <div class="beat-card fade-in" data-beat-id="${beat.id}">
+                    <div class="beat-header">
+                        <div class="beat-info">
+                            <h3>${beat.title}</h3>
+                            <div class="beat-meta">
+                                <span>${beat.bpm} BPM</span>
+                                <span>${beat.key}</span>
+                                <span>${beat.genre}</span>
+                            </div>
+                        </div>
+                        <div class="beat-actions">
+                            <button class="action-btn favorite ${beat.isFavorite ? 'active' : ''}" 
+                                    onclick="toggleFavorite(${beat.id})">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="action-btn cart" onclick="addToCart(${beat.id})">
+                                <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <audio controls class="audio-player">
+                        <source src="${beat.audioUrl}" type="audio/mpeg">
+                        Ваш браузер не поддерживает аудио.
+                    </audio>
+                </div>
+            `;
+        }
+
+        // Переключение избранного
+        function toggleFavorite(beatId) {
+            const beat = beats.find(b => b.id === beatId);
+            beat.isFavorite = !beat.isFavorite;
+            
+            // Обновляем отображение
+            displayBeats();
+            
+            // Показываем уведомление
+            const action = beat.isFavorite ? 'добавлен' : 'удален';
+            showNotification(`Бит "${beat.title}" ${action} в избранное`);
+        }
+
+        // Добавление в корзину
+        function addToCart(beatId) {
+            const beat = beats.find(b => b.id === beatId);
+            showNotification(`Бит "${beat.title}" добавлен в корзину`);
+        }
+
+        // Показать уведомление
+        function showNotification(message) {
+            // Временное решение - alert
+            alert(message);
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            setupNavigation();
+            displayBeats();
+        });
     </script>
 </body>
 </html>
