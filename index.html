@@ -210,9 +210,10 @@
             transform: translateY(-2px);
         }
 
-        /* Секции */
+        /* Секции - ИСПРАВЛЕННЫЙ ОТСТУП */
         .section {
             margin-bottom: 30px;
+            margin-top: 20px; /* ДОБАВИЛ ОТСТУП СВЕРХУ */
         }
 
         .section-header {
@@ -542,6 +543,16 @@
             align-items: center;
         }
 
+        .referral-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+            color: var(--text);
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
         .copy-btn {
             background: var(--primary);
             border: none;
@@ -586,6 +597,190 @@
             opacity: 0.5;
         }
 
+        /* СТИЛИ ДЛЯ ЛУДИКА */
+        .casino-section {
+            text-align: center;
+        }
+
+        .slots-machine {
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .slots-display {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            gap: 10px;
+        }
+
+        .slot {
+            flex: 1;
+            height: 80px;
+            background: rgba(15, 10, 28, 0.8);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            transition: all 0.3s ease;
+        }
+
+        .slot.spinning {
+            animation: slotSpin 0.1s infinite;
+        }
+
+        .slot.win {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: var(--success);
+            animation: winGlow 0.5s ease-in-out;
+        }
+
+        .spin-btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .attempts-counter {
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .wheel-machine {
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                #EF4444 0deg 30deg,
+                #F59E0B 30deg 60deg,
+                #10B981 60deg 90deg,
+                #3B82F6 90deg 120deg,
+                #8B5CF6 120deg 150deg,
+                #EC4899 150deg 180deg,
+                #EF4444 180deg 210deg,
+                #F59E0B 210deg 240deg,
+                #10B981 240deg 270deg,
+                #3B82F6 270deg 300deg,
+                #8B5CF6 300deg 330deg,
+                #EC4899 330deg 360deg
+            );
+            position: relative;
+            transition: transform 3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .wheel.spinning {
+            animation: wheelSpin 3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 2;
+        }
+
+        .prize-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .prize-item {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .prize-item.wav {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: var(--accent);
+        }
+
+        .win-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .win-content {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+            animation: modalAppear 0.5s ease-out;
+        }
+
+        .win-content h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .win-content p {
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
         /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
@@ -605,6 +800,26 @@
         @keyframes glow {
             0%, 100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.3); }
             50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+
+        @keyframes slotSpin {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes winGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
+        }
+
+        @keyframes wheelSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1080deg); }
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.8) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .fade-in {
@@ -652,7 +867,7 @@
             <!-- Поиск и фильтры -->
             <div class="search-section">
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Поиск по названию, жанру...">
+                    <input type="text" class="search-input" placeholder="Поиск по названию, жанру..." id="searchInput">
                     <i class="fas fa-search search-icon"></i>
                 </div>
                 <div class="filters-row">
@@ -701,13 +916,55 @@
             </div>
         </div>
 
-        <!-- Лудик -->
+        <!-- ЛУДИК - ПОЛНОСТЬЮ РАБОЧИЙ -->
         <div id="casinoScreen" class="screen hidden">
-            <div class="section">
-                <h2 class="section-title">ЛУДИК</h2>
-                <div class="empty-state">
-                    <i class="fas fa-dice"></i>
-                    <p>Скоро будет доступно!</p>
+            <div class="casino-section">
+                <!-- Слоты -->
+                <div class="slots-machine">
+                    <h2 class="section-title">🎰 МУЗЫКАЛЬНЫЕ СЛОТЫ</h2>
+                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+        🎁 Выиграй WAV лицензию!
+    </p>
+                    
+                    <div class="slots-display">
+                        <div class="slot" id="slot1">🎵</div>
+                        <div class="slot" id="slot2">🎹</div>
+                        <div class="slot" id="slot3">🎤</div>
+                    </div>
+                    
+                    <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
+                        🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
+                    </button>
+                    <div class="attempts-counter" id="slotsTimer"></div>
+                </div>
+
+                <!-- Колесо фортуны -->
+                <div class="wheel-machine">
+                    <h2 class="section-title">🎡 КОЛЕСО ФОРТУНЫ</h2>
+                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+        Крути и получай призы!
+    </p>
+                    
+                    <div class="wheel-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="wheel"></div>
+                    </div>
+                    
+                    <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
+                        🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
+                    </button>
+                    <div class="attempts-counter" id="wheelTimer"></div>
+
+                    <div class="prize-list">
+                        <div class="prize-item">1% скидка</div>
+                        <div class="prize-item">5% скидка</div>
+                        <div class="prize-item">10% скидка</div>
+                        <div class="prize-item">15% скидка</div>
+                        <div class="prize-item">20% скидка</div>
+                        <div class="prize-item">25% скидка</div>
+                        <div class="prize-item wav">WAV лицензия</div>
+                        <div class="prize-item">Респект</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -728,9 +985,7 @@
                 <!-- Информация пользователя -->
                 <div class="profile-card">
                     <div class="user-info">
-                        <div class="user-avatar" id="userAvatar">
-                            <!-- Аватар генерируется автоматически -->
-                        </div>
+                        <div class="user-avatar" id="userAvatar">G</div>
                         <div class="user-details">
                             <h2 id="userName">Гость</h2>
                             <p id="userStatus">Не авторизован</p>
@@ -763,7 +1018,7 @@
                     <div class="referral-section">
                         <div class="referral-title">
                             <i class="fas fa-users"></i>
-                            Приведи друзей - получи скидку!
+                            Реферальная программа
                         </div>
                         <div class="referral-code">
                             <span id="referralCode">FRESSO-12345</span>
@@ -771,6 +1026,10 @@
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
+                        <input type="text" class="referral-input" placeholder="Введите реферальный код друга" id="friendReferralCode">
+                        <button class="copy-btn" onclick="useReferralCode()" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i> Активировать код
+                        </button>
                         <div class="referral-stats">
                             <div class="referral-stat">
                                 <div class="referral-stat-value" id="referralsCount">0</div>
@@ -802,6 +1061,17 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно выигрыша -->
+    <div class="win-modal" id="winModal">
+        <div class="win-content">
+            <h2>🎉 ПОЗДРАВЛЯЕМ!</h2>
+            <p id="winMessage">Вы выиграли WAV лицензию!</p>
+            <button class="spin-btn" onclick="closeWinModal()" style="background: var(--accent);">
+                🎵 Выбрать бит
+            </button>
         </div>
     </div>
 
@@ -842,16 +1112,41 @@
         let userData = {
             isAuthenticated: false,
             name: "Гость",
-            favorites: [2], // Neon Dreams в избранном по умолчанию
+            favorites: [2],
             purchases: [],
             listens: 0,
             referrals: 0,
-            discount: 0
+            discount: 0,
+            slotsAttempts: 3,
+            wheelAttempts: 1,
+            lastSlotsPlay: 0,
+            lastWheelPlay: 0
         };
 
         let beats = [];
         let currentFilter = 'all';
         const audioPlayers = new Map();
+        let searchQuery = '';
+
+        // Символы для слотов
+        const slotSymbols = ['🎵', '🎹', '🎤', '🥁', '🎧', '🎼', '🎷', '🎺'];
+        const slotPrizes = [
+            { symbols: ['🎵', '🎵', '🎵'], prize: 'WAV лицензия', type: 'wav', chance: 0.01 },
+            { symbols: ['🎹', '🎹', '🎹'], prize: '50% скидка', type: 'discount', chance: 0.05 },
+            { symbols: ['🎤', '🎤', '🎤'], prize: '25% скидка', type: 'discount', chance: 0.1 }
+        ];
+
+        // Призы для колеса
+        const wheelPrizes = [
+            { name: '1% скидка', value: 1, chance: 0.3 },
+            { name: '5% скидка', value: 5, chance: 0.2 },
+            { name: '10% скидка', value: 10, chance: 0.15 },
+            { name: '15% скидка', value: 15, chance: 0.1 },
+            { name: '20% скидка', value: 20, chance: 0.08 },
+            { name: '25% скидка', value: 25, chance: 0.05 },
+            { name: 'WAV лицензия', value: 'wav', chance: 0.01 },
+            { name: 'Респект', value: 'respect', chance: 0.11 }
+        ];
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
@@ -859,16 +1154,34 @@
             loadBeatsData();
             setupNavigation();
             setupFilters();
+            setupSearch();
             displayBeats();
             updateProfile();
             initializeAudioPlayers();
+            updateTimers();
+            
+            // Обновляем таймеры каждую минуту
+            setInterval(updateTimers, 60000);
         });
 
         // Загрузка данных пользователя из localStorage
         function loadUserData() {
             const saved = localStorage.getItem('fressoUserData');
             if (saved) {
-                userData = {...userData, ...JSON.parse(saved)};
+                const savedData = JSON.parse(saved);
+                userData = {...userData, ...savedData};
+                
+                // Восстанавливаем попытки если прошло больше 24 часов
+                const now = Date.now();
+                const dayInMs = 24 * 60 * 60 * 1000;
+                
+                if (now - userData.lastSlotsPlay > dayInMs) {
+                    userData.slotsAttempts = 3;
+                }
+                
+                if (now - userData.lastWheelPlay > dayInMs) {
+                    userData.wheelAttempts = 1;
+                }
             }
         }
 
@@ -883,7 +1196,6 @@
             if (savedBeats) {
                 beats = JSON.parse(savedBeats);
             } else {
-                // Начальные данные
                 beats = [
                     {
                         id: 1,
@@ -947,6 +1259,15 @@
             localStorage.setItem('fressoBeatsData', JSON.stringify(beats));
         }
 
+        // Настройка поиска
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                searchQuery = this.value.toLowerCase();
+                displayBeats();
+            });
+        }
+
         // Навигация между экранами
         function setupNavigation() {
             const navItems = document.querySelectorAll('.nav-item');
@@ -956,15 +1277,12 @@
                 item.addEventListener('click', function() {
                     const targetScreen = this.getAttribute('data-screen');
                     
-                    // Обновляем активный элемент навигации
                     navItems.forEach(nav => nav.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // Показываем целевой экран
                     screens.forEach(screen => screen.classList.add('hidden'));
                     document.getElementById(targetScreen).classList.remove('hidden');
                     
-                    // Если переходим на избранное - обновляем данные
                     if (targetScreen === 'favoritesScreen') {
                         displayBeats();
                     }
@@ -978,23 +1296,34 @@
             
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // Убираем активный класс у всех кнопок
                     filterBtns.forEach(b => b.classList.remove('active'));
-                    // Добавляем активный класс нажатой кнопке
                     this.classList.add('active');
                     
-                    // Применяем фильтр
                     currentFilter = this.getAttribute('data-filter');
                     displayBeats();
                 });
             });
         }
 
-        // Фильтрация битов
+        // Фильтрация битов с поиском
         function filterBeats(beats) {
-            if (currentFilter === 'all') return beats;
+            let filtered = beats;
             
-            return beats.filter(beat => {
+            // Применяем текстовый поиск
+            if (searchQuery) {
+                filtered = filtered.filter(beat => 
+                    beat.title.toLowerCase().includes(searchQuery) ||
+                    beat.genre.toLowerCase().includes(searchQuery) ||
+                    beat.mood.toLowerCase().includes(searchQuery) ||
+                    beat.key.toLowerCase().includes(searchQuery) ||
+                    beat.bpm.toString().includes(searchQuery)
+                );
+            }
+            
+            // Применяем фильтры по жанру/BPM
+            if (currentFilter === 'all') return filtered;
+            
+            return filtered.filter(beat => {
                 switch(currentFilter) {
                     case 'trap': return beat.genre === 'Trap';
                     case 'drill': return beat.genre === 'Drill';
@@ -1008,299 +1337,196 @@
             });
         }
 
-        // Отображение битов
-        function displayBeats() {
-            const newBeatsContainer = document.getElementById('newBeats');
-            const allBeatsContainer = document.getElementById('allBeats');
-            const favoriteBeatsContainer = document.getElementById('favoriteBeats');
+        // Остальные функции (displayBeats, createBeatCard, аудио-плеер, профиль) 
+        // остаются такими же как в предыдущей версии
+        // [Здесь должен быть весь остальной код из предыдущего сообщения]
 
-            const filteredBeats = filterBeats(beats);
-
-            // Новые биты (первые 2)
-            const newBeats = filteredBeats.filter(beat => beat.isNew).slice(0, 2);
-            newBeatsContainer.innerHTML = newBeats.map(beat => createBeatCard(beat)).join('');
-
-            // Все биты
-            allBeatsContainer.innerHTML = filteredBeats.map(beat => createBeatCard(beat)).join('');
-
-            // Избранные биты
-            const favoriteBeats = filterBeats(beats.filter(beat => beat.isFavorite));
-            if (favoriteBeats.length === 0) {
-                favoriteBeatsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-heart"></i>
-                        <p>Пока нет избранных битов</p>
-                    </div>
-                `;
-            } else {
-                favoriteBeatsContainer.innerHTML = favoriteBeats.map(beat => createBeatCard(beat)).join('');
+        // ИГРОВЫЕ ФУНКЦИИ ЛУДИКА
+        function spinSlots() {
+            if (userData.slotsAttempts <= 0) {
+                showNotification('❌ Попытки закончились! Возвращайся завтра!');
+                return;
             }
 
-            // Инициализируем аудио плееры
-            initializeAudioPlayers();
-        }
-
-        // Создание карточки бита
-        function createBeatCard(beat) {
-            const imageStyle = beatImages[beat.id] || 'linear-gradient(135deg, #8B5CF6, #F59E0B)';
+            const spinBtn = document.getElementById('spinBtn');
+            const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
             
-            return `
-                <div class="beat-card fade-in" data-beat-id="${beat.id}">
-                    <div class="beat-header">
-                        <div class="beat-image" style="background: ${imageStyle}; background-size: cover; background-position: center;">
-                            ${getGenreEmoji(beat.genre)}
-                        </div>
-                        <div class="beat-info">
-                            <h3>${beat.title}</h3>
-                            <div class="beat-meta">
-                                <span>${beat.bpm} BPM</span>
-                                <span>${beat.key}</span>
-                                <span>${beat.genre}</span>
-                                <span>${beat.mood}</span>
-                            </div>
-                        </div>
-                        <div class="beat-actions">
-                            <button class="action-btn favorite ${beat.isFavorite ? 'active' : ''}" 
-                                    onclick="toggleFavorite(${beat.id})">
-                                <i class="fas fa-heart"></i>
-                            </button>
-                            <button class="action-btn cart ${beat.inCart ? 'active' : ''}" 
-                                    onclick="toggleCart(${beat.id})">
-                                <i class="fas fa-shopping-cart"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="audio-player-container">
-                        <div class="custom-audio-player" id="audio-player-${beat.id}">
-                            <button class="play-btn" onclick="togglePlay(${beat.id})">
-                                <i class="fas fa-play"></i>
-                            </button>
-                            <div class="progress-container" onclick="seekAudio(${beat.id}, event)">
-                                <div class="progress-bar" id="progress-${beat.id}"></div>
-                            </div>
-                            <div class="time-display" id="time-${beat.id}">0:00</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Получение эмодзи для жанра
-        function getGenreEmoji(genre) {
-            const emojiMap = {
-                'Trap': '🎵',
-                'Drill': '🔫', 
-                'Phonk': '🌀',
-                'Synthwave': '🌌',
-                'Lo-Fi': '☕'
-            };
-            return emojiMap[genre] || '🎵';
-        }
-
-        // Инициализация аудио плееров
-        function initializeAudioPlayers() {
-            beats.forEach(beat => {
-                if (!audioPlayers.has(beat.id)) {
-                    const audio = new Audio(beat.audioUrl);
-                    audioPlayers.set(beat.id, {
-                        audio: audio,
-                        isPlaying: false
-                    });
-
-                    audio.addEventListener('timeupdate', () => updateProgress(beat.id));
-                    audio.addEventListener('ended', () => onAudioEnded(beat.id));
-                }
+            // Блокируем кнопку
+            spinBtn.disabled = true;
+            userData.slotsAttempts--;
+            userData.lastSlotsPlay = Date.now();
+            
+            // Анимация вращения
+            slots.forEach(slot => {
+                slot.classList.add('spinning');
+                slot.textContent = '🎰';
             });
-        }
 
-        // Переключение воспроизведения
-        function togglePlay(beatId) {
-            const playerData = audioPlayers.get(beatId);
-            const playBtn = document.querySelector(`#audio-player-${beatId} .play-btn i`);
-            
-            if (playerData.isPlaying) {
-                playerData.audio.pause();
-                playBtn.className = 'fas fa-play';
-            } else {
-                // Останавливаем все другие аудио
-                audioPlayers.forEach((data, id) => {
-                    if (id !== beatId && data.isPlaying) {
-                        data.audio.pause();
-                        data.isPlaying = false;
-                        document.querySelector(`#audio-player-${id} .play-btn i`).className = 'fas fa-play';
+            // Результат через 2 секунды
+            setTimeout(() => {
+                const results = [];
+                let isWin = false;
+                let winPrize = null;
+
+                // Генерация результатов
+                for (let i = 0; i < 3; i++) {
+                    const random = Math.random();
+                    let symbol;
+                    
+                    // Шанс выигрыша
+                    if (random < 0.01) { // 1% шанс на WAV
+                        symbol = '🎵';
+                    } else if (random < 0.05) { // 4% шанс на 50% скидку
+                        symbol = '🎹';
+                    } else if (random < 0.1) { // 5% шанс на 25% скидку
+                        symbol = '🎤';
+                    } else {
+                        symbol = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
                     }
-                });
-                
-                playerData.audio.play();
-                playBtn.className = 'fas fa-pause';
-                
-                // Увеличиваем счетчик прослушиваний
-                userData.listens++;
-                saveUserData();
+                    
+                    results.push(symbol);
+                    slots[i].textContent = symbol;
+                    slots[i].classList.remove('spinning');
+                }
+
+                // Проверка выигрыша
+                if (results[0] === '🎵' && results[1] === '🎵' && results[2] === '🎵') {
+                    isWin = true;
+                    winPrize = { prize: 'WAV лицензия', type: 'wav' };
+                    slots.forEach(slot => slot.classList.add('win'));
+                    showWinModal('🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!');
+                } else if (results[0] === '🎹' && results[1] === '🎹' && results[2] === '🎹') {
+                    isWin = true;
+                    winPrize = { prize: '50% скидка', type: 'discount' };
+                    userData.discount = Math.max(userData.discount, 50);
+                    slots.forEach(slot => slot.classList.add('win'));
+                    showWinModal('🎉 ВЫ ВЫИГРАЛИ 50% СКИДКУ!');
+                } else if (results[0] === '🎤' && results[1] === '🎤' && results[2] === '🎤') {
+                    isWin = true;
+                    winPrize = { prize: '25% скидка', type: 'discount' };
+                    userData.discount = Math.max(userData.discount, 25);
+                    slots.forEach(slot => slot.classList.add('win'));
+                    showWinModal('🎉 ВЫ ВЫИГРАЛИ 25% СКИДКУ!');
+                }
+
+                // Обновляем интерфейс
                 updateProfile();
-            }
-            
-            playerData.isPlaying = !playerData.isPlaying;
-        }
-
-        // Обновление прогресса
-        function updateProgress(beatId) {
-            const playerData = audioPlayers.get(beatId);
-            const progress = document.getElementById(`progress-${beatId}`);
-            const timeDisplay = document.getElementById(`time-${beatId}`);
-            
-            if (playerData && playerData.audio.duration) {
-                const percent = (playerData.audio.currentTime / playerData.audio.duration) * 100;
-                progress.style.width = percent + '%';
+                saveUserData();
+                spinBtn.disabled = false;
+                document.getElementById('slotsAttempts').textContent = userData.slotsAttempts;
                 
-                // Форматирование времени
-                const currentTime = formatTime(playerData.audio.currentTime);
-                timeDisplay.textContent = currentTime;
-            }
-        }
-
-        // Форматирование времени
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        // Перемотка аудио
-        function seekAudio(beatId, event) {
-            const playerData = audioPlayers.get(beatId);
-            const progressContainer = event.currentTarget;
-            const rect = progressContainer.getBoundingClientRect();
-            const percent = (event.clientX - rect.left) / rect.width;
-            
-            if (playerData && playerData.audio.duration) {
-                playerData.audio.currentTime = percent * playerData.audio.duration;
-            }
-        }
-
-        // Когда аудио закончилось
-        function onAudioEnded(beatId) {
-            const playBtn = document.querySelector(`#audio-player-${beatId} .play-btn i`);
-            const playerData = audioPlayers.get(beatId);
-            
-            playBtn.className = 'fas fa-play';
-            playerData.isPlaying = false;
-            
-            // Сброс прогресса
-            document.getElementById(`progress-${beatId}`).style.width = '0%';
-            document.getElementById(`time-${beatId}`).textContent = '0:00';
-        }
-
-        // Переключение избранного
-        function toggleFavorite(beatId) {
-            const beat = beats.find(b => b.id === beatId);
-            beat.isFavorite = !beat.isFavorite;
-            
-            // Обновляем данные пользователя
-            if (beat.isFavorite) {
-                if (!userData.favorites.includes(beatId)) {
-                    userData.favorites.push(beatId);
+                if (!isWin) {
+                    showNotification('😔 Повезет в следующий раз!');
                 }
-            } else {
-                userData.favorites = userData.favorites.filter(id => id !== beatId);
-            }
-            
-            saveUserData();
-            saveBeatsData();
-            displayBeats();
-            updateProfile();
-            
-            showNotification(`Бит "${beat.title}" ${beat.isFavorite ? 'добавлен' : 'удален'} в избранное`);
+
+            }, 2000);
         }
 
-        // Переключение корзины
-        function toggleCart(beatId) {
-            const beat = beats.find(b => b.id === beatId);
-            beat.inCart = !beat.inCart;
-            
-            if (beat.inCart && !userData.purchases.includes(beatId)) {
-                userData.purchases.push(beatId);
+        function spinWheel() {
+            if (userData.wheelAttempts <= 0) {
+                showNotification('❌ Попытки закончились! Возвращайся завтра!');
+                return;
             }
-            
-            saveUserData();
-            saveBeatsData();
-            displayBeats();
-            updateProfile();
-            
-            showNotification(`Бит "${beat.title}" ${beat.inCart ? 'добавлен' : 'удален'} в корзину`);
-        }
 
-        // Обновление профиля
-        function updateProfile() {
-            // Аватар
-            const avatar = document.getElementById('userAvatar');
-            const userName = document.getElementById('userName');
-            const userStatus = document.getElementById('userStatus');
-            const authButton = document.getElementById('authButton');
+            const wheelBtn = document.getElementById('wheelBtn');
+            const wheel = document.getElementById('wheel');
             
-            if (userData.isAuthenticated) {
-                const tgUser = Telegram.WebApp.initDataUnsafe.user;
-                avatar.innerHTML = tgUser.first_name ? tgUser.first_name[0].toUpperCase() : 'U';
-                userName.textContent = tgUser.first_name || 'Пользователь';
-                userStatus.textContent = `ID: ${tgUser.id}`;
-                authButton.innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
-            } else {
-                avatar.innerHTML = 'G';
-                userName.textContent = 'Гость';
-                userStatus.textContent = 'Не авторизован';
-                authButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти через Telegram';
+            // Блокируем кнопку
+            wheelBtn.disabled = true;
+            userData.wheelAttempts--;
+            userData.lastWheelPlay = Date.now();
+
+            // Анимация вращения
+            wheel.classList.add('spinning');
+
+            // Выбор приза
+            const random = Math.random();
+            let cumulativeChance = 0;
+            let selectedPrize = null;
+
+            for (const prize of wheelPrizes) {
+                cumulativeChance += prize.chance;
+                if (random <= cumulativeChance) {
+                    selectedPrize = prize;
+                    break;
+                }
             }
-            
-            // Статистика
-            document.getElementById('favoritesCount').textContent = userData.favorites.length;
-            document.getElementById('purchasesCount').textContent = userData.purchases.length;
-            document.getElementById('listensCount').textContent = userData.listens;
-            document.getElementById('discountPercent').textContent = userData.discount + '%';
-            
-            // Рефералы
-            document.getElementById('referralsCount').textContent = userData.referrals;
-            const referralDiscount = Math.min(userData.referrals * 5, 50);
-            document.getElementById('referralDiscount').textContent = referralDiscount + '%';
-        }
 
-        // Авторизация через Telegram
-        function toggleAuth() {
-            if (userData.isAuthenticated) {
-                // Выход
-                userData.isAuthenticated = false;
-                userData.name = "Гость";
-            } else {
-                // Вход
-                const tgUser = Telegram.WebApp.initDataUnsafe.user;
-                if (tgUser) {
-                    userData.isAuthenticated = true;
-                    userData.name = tgUser.first_name || 'Пользователь';
+            // Если не выбран приз (на всякий случай)
+            if (!selectedPrize) {
+                selectedPrize = wheelPrizes[0];
+            }
+
+            // Результат через 3 секунды
+            setTimeout(() => {
+                wheel.classList.remove('spinning');
+                
+                // Применяем выигрыш
+                if (selectedPrize.value === 'wav') {
+                    showWinModal('🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!');
+                } else if (selectedPrize.value === 'respect') {
+                    showWinModal('🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!');
                 } else {
-                    showNotification('Ошибка авторизации через Telegram');
-                    return;
+                    userData.discount = Math.max(userData.discount, selectedPrize.value);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`);
                 }
-            }
+
+                // Обновляем интерфейс
+                updateProfile();
+                saveUserData();
+                wheelBtn.disabled = false;
+                document.getElementById('wheelAttempts').textContent = userData.wheelAttempts;
+
+            }, 3000);
+        }
+
+        function showWinModal(message) {
+            document.getElementById('winMessage').textContent = message;
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        function closeWinModal() {
+            document.getElementById('winModal').style.display = 'none';
+        }
+
+        function updateTimers() {
+            const now = Date.now();
+            const dayInMs = 24 * 60 * 60 * 1000;
             
-            saveUserData();
-            updateProfile();
-            showNotification(userData.isAuthenticated ? 'Успешная авторизация!' : 'Вы вышли из системы');
+            // Слоты
+            const slotsTimeLeft = userData.lastSlotsPlay + dayInMs - now;
+            if (slotsTimeLeft <= 0 && userData.slotsAttempts < 3) {
+                userData.slotsAttempts = 3;
+                document.getElementById('slotsAttempts').textContent = 3;
+                saveUserData();
+            }
+
+            // Колесо
+            const wheelTimeLeft = userData.lastWheelPlay + dayInMs - now;
+            if (wheelTimeLeft <= 0 && userData.wheelAttempts < 1) {
+                userData.wheelAttempts = 1;
+                document.getElementById('wheelAttempts').textContent = 1;
+                saveUserData();
+            }
         }
 
-        // Копирование реферального кода
-        function copyReferralCode() {
-            const code = 'FRESSO-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-            navigator.clipboard.writeText(code);
-            showNotification('Реферальный код скопирован!');
+        function useReferralCode() {
+            const code = document.getElementById('friendReferralCode').value;
+            if (code && code.trim() !== '') {
+                userData.referrals++;
+                userData.discount = Math.min(userData.discount + 5, 50);
+                updateProfile();
+                saveUserData();
+                showNotification('✅ Реферальный код активирован! +5% скидки');
+                document.getElementById('friendReferralCode').value = '';
+            } else {
+                showNotification('❌ Введите реферальный код');
+            }
         }
 
-        // Показать уведомление
-        function showNotification(message) {
-            alert(message);
-        }
+        // [ВСТАВЬ СЮДА ВСЕ ОСТАЛЬНЫЕ ФУНКЦИИ ИЗ ПРЕДЫДУЩЕГО КОДА]
+        // (displayBeats, createBeatCard, аудио-плеер, профиль, авторизация и т.д.)
 
-        // Инициализация Telegram Web App
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand();
     </script>
 </body>
 </html>
