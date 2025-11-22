@@ -772,7 +772,7 @@
             color: var(--text-secondary);
         }
 
-        /* ОБНОВЛЕННОЕ КОЛЕСО */
+        /* ОБНОВЛЕННОЕ КОЛЕСО - ФИКС НАЛОЖЕНИЯ ТЕКСТА */
         .wheel-machine {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 20px;
@@ -826,25 +826,28 @@
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
 
+        /* ФИКСИРУЕМ НАЛОЖЕНИЕ ТЕКСТА НА КОЛЕСЕ */
         .wheel-label {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(calc(var(--angle) + 22.5deg));
             transform-origin: center;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            width: 90px;
+            width: 80px;
             height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            padding: 2px 5px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 8px;
+            padding: 2px 4px;
+            z-index: 1;
+            /* Располагаем текст по внешнему диаметру */
+            transform: translate(-50%, -50%) rotate(calc(var(--angle) + 22.5deg)) translateY(-100px) rotate(calc(-1 * (var(--angle) + 22.5deg)));
         }
 
         .prize-list {
@@ -1271,6 +1274,7 @@
         // 🔥 TELEGRAM WEB APP ИНИЦИАЛИЗАЦИЯ
         let tg = null;
         let isTelegram = false;
+        const ADMIN_TELEGRAM_ID = 856199923; // Твой Telegram ID
 
         // Инициализация Telegram Web App
         function initTelegram() {
@@ -1295,6 +1299,13 @@
                     
                     // Генерируем реферальный код на основе ID
                     userData.referralCode = `FRESSO-${user.id}`;
+                    
+                    // 🔥 ПРОВЕРЯЕМ АДМИНА - ДАЕМ БЕСКОНЕЧНЫЕ ПОПЫТКИ
+                    if (user.id === ADMIN_TELEGRAM_ID) {
+                        userData.slotsAttempts = 999;
+                        userData.wheelAttempts = 999;
+                        userData.isAdmin = true;
+                    }
                     
                     updateProfile();
                     saveUserData();
@@ -1367,6 +1378,7 @@
         // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ И БИТОВ
         let userData = {
             isAuthenticated: false,
+            isAdmin: false,
             name: "Гость",
             favorites: [2, 5],
             purchases: [],
@@ -1480,7 +1492,7 @@
             document.getElementById('wheelBtn').addEventListener('click', spinWheel);
         }
 
-        // Настройка меток на колесе
+        // Настройка меток на колесе - ФИКС НАЛОЖЕНИЯ
         function setupWheelLabels() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
@@ -1506,11 +1518,11 @@
                 const now = Date.now();
                 const dayInMs = 24 * 60 * 60 * 1000;
                 
-                if (now - userData.lastSlotsPlay > dayInMs) {
+                if (now - userData.lastSlotsPlay > dayInMs && !userData.isAdmin) {
                     userData.slotsAttempts = 3;
                 }
                 
-                if (now - userData.lastWheelPlay > dayInMs) {
+                if (now - userData.lastWheelPlay > dayInMs && !userData.isAdmin) {
                     userData.wheelAttempts = 1;
                 }
             }
@@ -1973,25 +1985,25 @@
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Избранное и корзина
+        // Избранное и корзина - ФИКС ПЕРЕКИДЫВАНИЯ В БОТА
         function toggleFavorite(beatId) {
             const index = userData.favorites.indexOf(beatId);
             if (index === -1) {
                 userData.favorites.push(beatId);
                 showNotification('❤️ Добавлено в избранное');
                 
-                // 🔥 ОТПРАВЛЯЕМ ДАННЫЕ В БОТА
-                const beat = beats.find(b => b.id === beatId);
-                if (beat) {
-                    const favoriteData = {
-                        type: 'favorite',
-                        beat_id: beatId,
-                        beat_title: beat.title,
-                        action: 'add',
-                        timestamp: Date.now()
-                    };
-                    sendToTelegramBot(favoriteData);
-                }
+                // 🔥 УБИРАЕМ ОТПРАВКУ ДАННЫХ В БОТА ПРИ ДОБАВЛЕНИИ В ИЗБРАННОЕ
+                // const beat = beats.find(b => b.id === beatId);
+                // if (beat) {
+                //     const favoriteData = {
+                //         type: 'favorite',
+                //         beat_id: beatId,
+                //         beat_title: beat.title,
+                //         action: 'add',
+                //         timestamp: Date.now()
+                //     };
+                //     sendToTelegramBot(favoriteData);
+                // }
             } else {
                 userData.favorites.splice(index, 1);
                 showNotification('💔 Удалено из избранного');
@@ -2016,7 +2028,7 @@
                 if (beat.inCart) {
                     userData.purchases.push(beatId);
                     
-                    // 🔥 ОТПРАВЛЯЕМ ДАННЫЕ В БОТА
+                    // 🔥 ОТПРАВЛЯЕМ ДАННЫЕ В БОТА ТОЛЬКО ПРИ ДОБАВЛЕНИИ В КОРЗИНУ
                     const cartData = {
                         type: 'cart_add',
                         beat_id: beatId,
@@ -2056,8 +2068,14 @@
             document.getElementById('discountPercent').textContent = userData.discount + '%';
             document.getElementById('referralsCount').textContent = userData.referrals;
             document.getElementById('referralDiscount').textContent = userData.discount + '%';
-            document.getElementById('slotsAttempts').textContent = userData.slotsAttempts;
-            document.getElementById('wheelAttempts').textContent = userData.wheelAttempts;
+            
+            // 🔥 ОБНОВЛЯЕМ ПОПЫТКИ С УЧЕТОМ АДМИНА
+            const slotsText = userData.isAdmin ? '∞' : userData.slotsAttempts;
+            const wheelText = userData.isAdmin ? '∞' : userData.wheelAttempts;
+            
+            document.getElementById('slotsAttempts').textContent = slotsText;
+            document.getElementById('wheelAttempts').textContent = wheelText;
+            
             document.getElementById('referralCode').textContent = userData.referralCode;
             
             // Обновляем аватар и имя
@@ -2071,10 +2089,19 @@
                     avatar.textContent = (tgUser.first_name || 'T').charAt(0).toUpperCase();
                     name.textContent = tgUser.first_name || 'Telegram User';
                     status.textContent = tgUser.username ? `@${tgUser.username}` : 'Premium пользователь';
+                    
+                    // 🔥 ДОБАВЛЯЕМ ОТМЕТКУ АДМИНА
+                    if (userData.isAdmin) {
+                        status.textContent += ' 👑 АДМИН';
+                    }
                 } else {
                     avatar.textContent = userData.name.charAt(0).toUpperCase();
                     name.textContent = userData.name;
                     status.textContent = 'Premium пользователь';
+                    
+                    if (userData.isAdmin) {
+                        status.textContent += ' 👑 АДМИН';
+                    }
                 }
                 document.getElementById('authButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
             } else {
@@ -2089,6 +2116,7 @@
             if (userData.isAuthenticated) {
                 // Выход
                 userData.isAuthenticated = false;
+                userData.isAdmin = false;
                 userData.name = "Гость";
                 showNotification('👋 До скорой встречи!');
             } else {
@@ -2103,7 +2131,15 @@
                         userData.discount = Math.max(userData.discount, 10);
                         userData.referralCode = `FRESSO-${user.id}`;
                         
-                        showNotification(`🎉 Добро пожаловать, ${userData.name}! +10% скидка`);
+                        // 🔥 ПРОВЕРЯЕМ АДМИНА И ДАЕМ БЕСКОНЕЧНЫЕ ПОПЫТКИ
+                        if (user.id === ADMIN_TELEGRAM_ID) {
+                            userData.slotsAttempts = 999;
+                            userData.wheelAttempts = 999;
+                            userData.isAdmin = true;
+                            showNotification(`🎉 Добро пожаловать, БОСС! 👑 Бесконечные попытки активированы!`);
+                        } else {
+                            showNotification(`🎉 Добро пожаловать, ${userData.name}! +10% скидка`);
+                        }
                     } else {
                         showNotification('⚠️ Telegram данные не получены');
                         userData.isAuthenticated = true;
@@ -2152,9 +2188,10 @@
             }
         }
 
-        // ИГРОВЫЕ ФУНКЦИИ ЛУДИКА
+        // ИГРОВЫЕ ФУНКЦИИ ЛУДИКА - ФИКС БЕСКОНЕЧНЫХ ПОПЫТОК ДЛЯ АДМИНА
         function spinSlots() {
-            if (userData.slotsAttempts <= 0) {
+            // 🔥 ПРОВЕРКА ДЛЯ АДМИНА - БЕСКОНЕЧНЫЕ ПОПЫТКИ
+            if (!userData.isAdmin && userData.slotsAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
                 return;
             }
@@ -2164,7 +2201,11 @@
             
             // Блокируем кнопку
             spinBtn.disabled = true;
-            userData.slotsAttempts--;
+            
+            // 🔥 УМЕНЬШАЕМ ПОПЫТКИ ТОЛЬКО ЕСЛИ НЕ АДМИН
+            if (!userData.isAdmin) {
+                userData.slotsAttempts--;
+            }
             userData.lastSlotsPlay = Date.now();
             
             // 🔥 УЛУЧШЕННАЯ АНИМАЦИЯ СЛОТОВ
@@ -2245,7 +2286,8 @@
         }
 
         function spinWheel() {
-            if (userData.wheelAttempts <= 0) {
+            // 🔥 ПРОВЕРКА ДЛЯ АДМИНА - БЕСКОНЕЧНЫЕ ПОПЫТКИ
+            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
                 return;
             }
@@ -2255,7 +2297,11 @@
             
             // Блокируем кнопку
             wheelBtn.disabled = true;
-            userData.wheelAttempts--;
+            
+            // 🔥 УМЕНЬШАЕМ ПОПЫТКИ ТОЛЬКО ЕСЛИ НЕ АДМИН
+            if (!userData.isAdmin) {
+                userData.wheelAttempts--;
+            }
             userData.lastWheelPlay = Date.now();
 
             // Анимация вращения
@@ -2314,18 +2360,22 @@
             const now = Date.now();
             const dayInMs = 24 * 60 * 60 * 1000;
             
-            // Слоты
-            const slotsTimeLeft = userData.lastSlotsPlay + dayInMs - now;
-            if (slotsTimeLeft <= 0 && userData.slotsAttempts < 3) {
-                userData.slotsAttempts = 3;
-                saveUserData();
+            // Слоты - обновляем только если не админ
+            if (!userData.isAdmin) {
+                const slotsTimeLeft = userData.lastSlotsPlay + dayInMs - now;
+                if (slotsTimeLeft <= 0 && userData.slotsAttempts < 3) {
+                    userData.slotsAttempts = 3;
+                    saveUserData();
+                }
             }
 
-            // Колесо
-            const wheelTimeLeft = userData.lastWheelPlay + dayInMs - now;
-            if (wheelTimeLeft <= 0 && userData.wheelAttempts < 1) {
-                userData.wheelAttempts = 1;
-                saveUserData();
+            // Колесо - обновляем только если не админ
+            if (!userData.isAdmin) {
+                const wheelTimeLeft = userData.lastWheelPlay + dayInMs - now;
+                if (wheelTimeLeft <= 0 && userData.wheelAttempts < 1) {
+                    userData.wheelAttempts = 1;
+                    saveUserData();
+                }
             }
 
             updateProfile();
