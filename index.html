@@ -228,25 +228,61 @@
             transform: translateY(-2px);
         }
 
-        .bpm-slider {
-            width: 100%;
-            margin: 10px 0;
+        /* ОБНОВЛЕННЫЙ BPM СЛАЙДЕР */
+        .bpm-range-container {
+            margin: 15px 0;
         }
 
-        .bpm-inputs {
+        .bpm-sliders {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .bpm-input {
+        .bpm-slider-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bpm-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 60px;
+        }
+
+        .bpm-slider {
             flex: 1;
-            padding: 8px;
+            height: 6px;
+            -webkit-appearance: none;
             background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 10px;
-            color: var(--text);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .bpm-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--glow);
+        }
+
+        .bpm-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 30px;
             text-align: center;
+        }
+
+        .bpm-display {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
         /* Секции */
@@ -290,10 +326,13 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 8px;
         }
 
         .see-all:hover {
             transform: translateX(5px);
+            background: rgba(139, 92, 246, 0.1);
         }
 
         /* Карточки битов */
@@ -674,10 +713,28 @@
             justify-content: center;
             font-size: 36px;
             transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slot::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .slot.spinning::before {
+            animation: shine 1s linear infinite;
         }
 
         .slot.spinning {
-            animation: slotSpin 0.5s ease-in-out infinite;
+            animation: slotSpin 0.2s infinite;
         }
 
         .slot.win {
@@ -715,6 +772,7 @@
             color: var(--text-secondary);
         }
 
+        /* ОБНОВЛЕННОЕ КОЛЕСО */
         .wheel-machine {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 20px;
@@ -726,8 +784,8 @@
 
         .wheel-container {
             position: relative;
-            width: 250px;
-            height: 250px;
+            width: 280px;
+            height: 280px;
             margin: 0 auto 20px;
         }
 
@@ -748,6 +806,7 @@
             );
             position: relative;
             transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
         }
 
         .wheel.spinning {
@@ -756,15 +815,15 @@
 
         .wheel-pointer {
             position: absolute;
-            top: -15px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             background: var(--accent);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             z-index: 2;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
 
         .wheel-label {
@@ -774,11 +833,18 @@
             transform: translate(-50%, -50%) rotate(calc(var(--angle) + 22.5deg));
             transform-origin: center;
             text-align: center;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            width: 80px;
+            width: 90px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 2px 5px;
         }
 
         .prize-list {
@@ -859,9 +925,9 @@
         }
 
         @keyframes slotSpin {
-            0% { transform: translateY(-10px) rotateX(0deg); opacity: 0.5; }
-            50% { transform: translateY(5px) rotateX(180deg); opacity: 1; }
-            100% { transform: translateY(0) rotateX(360deg); opacity: 1; }
+            0% { transform: translateY(-100px) rotateX(90deg); opacity: 0; }
+            50% { transform: translateY(0) rotateX(0deg); opacity: 1; }
+            100% { transform: translateY(0) rotateX(0deg); opacity: 1; }
         }
 
         @keyframes winGlow {
@@ -877,6 +943,11 @@
         @keyframes modalAppear {
             from { opacity: 0; transform: scale(0.8) translateY(-20px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .fade-in {
@@ -958,10 +1029,20 @@
                             <i class="fas fa-tachometer-alt"></i>
                             BPM
                         </div>
-                        <input type="range" class="bpm-slider" id="bpmSlider" min="60" max="200" value="140">
-                        <div class="bpm-inputs">
-                            <input type="number" class="bpm-input" id="minBpm" placeholder="От" min="60" max="200" value="60">
-                            <input type="number" class="bpm-input" id="maxBpm" placeholder="До" min="60" max="200" value="200">
+                        <div class="bpm-range-container">
+                            <div class="bpm-sliders">
+                                <div class="bpm-slider-group">
+                                    <span class="bpm-label">От:</span>
+                                    <input type="range" class="bpm-slider" id="minBpmSlider" min="60" max="200" value="60">
+                                    <span class="bpm-value" id="minBpmValue">60</span>
+                                </div>
+                                <div class="bpm-slider-group">
+                                    <span class="bpm-label">До:</span>
+                                    <input type="range" class="bpm-slider" id="maxBpmSlider" min="60" max="200" value="200">
+                                    <span class="bpm-value" id="maxBpmValue">200</span>
+                                </div>
+                            </div>
+                            <div class="bpm-display" id="bpmRangeDisplay">Диапазон: 60 - 200 BPM</div>
                         </div>
                     </div>
                 </div>
@@ -1187,6 +1268,90 @@
     </div>
 
     <script>
+        // 🔥 TELEGRAM WEB APP ИНИЦИАЛИЗАЦИЯ
+        let tg = null;
+        let isTelegram = false;
+
+        // Инициализация Telegram Web App
+        function initTelegram() {
+            if (window.Telegram && Telegram.WebApp) {
+                tg = Telegram.WebApp;
+                isTelegram = true;
+                
+                // Раскрываем на весь экран
+                tg.expand();
+                
+                // Включаем подтверждение закрытия
+                tg.enableClosingConfirmation();
+                
+                // Автоматическая авторизация если пользователь уже в Telegram
+                const user = tg.initDataUnsafe.user;
+                if (user) {
+                    userData.isAuthenticated = true;
+                    userData.name = user.first_name || 'Telegram User';
+                    userData.username = user.username || '';
+                    userData.userId = user.id;
+                    userData.discount = Math.max(userData.discount, 10);
+                    
+                    // Генерируем реферальный код на основе ID
+                    userData.referralCode = `FRESSO-${user.id}`;
+                    
+                    updateProfile();
+                    saveUserData();
+                    showNotification(`👋 С возвращением, ${userData.name}!`);
+                }
+                
+                // Меняем тему под Telegram
+                if (tg.colorScheme === 'dark') {
+                    document.body.style.setProperty('--bg-dark', '#1a1029');
+                }
+                
+                logger('✅ Telegram Web App инициализирован');
+            } else {
+                logger('⚠️ Запущено вне Telegram');
+            }
+        }
+
+        // Функция для отправки данных в бота
+        function sendToTelegramBot(data) {
+            if (isTelegram && tg) {
+                try {
+                    // Добавляем данные пользователя из Telegram
+                    const tgUser = tg.initDataUnsafe.user;
+                    if (tgUser) {
+                        data.telegram_user = {
+                            id: tgUser.id,
+                            first_name: tgUser.first_name,
+                            username: tgUser.username
+                        };
+                    }
+                    
+                    // Отправляем данные в бота
+                    tg.sendData(JSON.stringify(data));
+                    
+                    // Улучшенная обработка закрытия
+                    setTimeout(() => {
+                        if (data.type === 'purchase') {
+                            showNotification('✅ Заказ оформлен! Закрой окно когда прочитаешь сообщение от бота.');
+                        } else {
+                            tg.close();
+                        }
+                    }, 3000);
+                    
+                    return true;
+                } catch (error) {
+                    console.error('❌ Ошибка отправки в Telegram:', error);
+                    showNotification('❌ Ошибка отправки данных');
+                    return false;
+                }
+            } else {
+                // Режим тестирования
+                console.log("Web App Data:", data);
+                showNotification(`📱 Данные для бота: ${JSON.stringify(data, null, 2)}`);
+                return false;
+            }
+        }
+
         // КОНФИГУРАЦИЯ КАРТИНОК ДЛЯ БИТОВ
         const beatImages = {
             1: "linear-gradient(135deg, #667eea, #764ba2)",
@@ -1208,6 +1373,7 @@
             listens: 0,
             referrals: 0,
             discount: 0,
+            referralCode: "FRESSO-12345",
             slotsAttempts: 3,
             wheelAttempts: 1,
             lastSlotsPlay: 0,
@@ -1254,6 +1420,7 @@
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
+            initTelegram(); // 🔥 ИНИЦИАЛИЗАЦИЯ TELEGRAM
             loadUserData();
             loadBeatsData();
             setupNavigation();
@@ -1265,10 +1432,47 @@
             updateTimers();
             setupWheelLabels();
             setupCasinoEvents();
+            setupBpmSliders();
             
             // Обновляем таймеры каждую минуту
             setInterval(updateTimers, 60000);
         });
+
+        // Настройка BPM слайдеров
+        function setupBpmSliders() {
+            const minSlider = document.getElementById('minBpmSlider');
+            const maxSlider = document.getElementById('maxBpmSlider');
+            const minValue = document.getElementById('minBpmValue');
+            const maxValue = document.getElementById('maxBpmValue');
+            const display = document.getElementById('bpmRangeDisplay');
+
+            function updateBpmDisplay() {
+                currentFilters.minBpm = parseInt(minSlider.value);
+                currentFilters.maxBpm = parseInt(maxSlider.value);
+                
+                minValue.textContent = currentFilters.minBpm;
+                maxValue.textContent = currentFilters.maxBpm;
+                display.textContent = `Диапазон: ${currentFilters.minBpm} - ${currentFilters.maxBpm} BPM`;
+                
+                displayBeats();
+            }
+
+            minSlider.addEventListener('input', function() {
+                if (parseInt(this.value) > parseInt(maxSlider.value)) {
+                    maxSlider.value = this.value;
+                }
+                updateBpmDisplay();
+            });
+
+            maxSlider.addEventListener('input', function() {
+                if (parseInt(this.value) < parseInt(minSlider.value)) {
+                    minSlider.value = this.value;
+                }
+                updateBpmDisplay();
+            });
+
+            updateBpmDisplay();
+        }
 
         // Настройка событий для казино
         function setupCasinoEvents() {
@@ -1483,29 +1687,6 @@
                 });
                 genreContainer.appendChild(btn);
             });
-
-            // BPM слайдер
-            const bpmSlider = document.getElementById('bpmSlider');
-            const minBpm = document.getElementById('minBpm');
-            const maxBpm = document.getElementById('maxBpm');
-
-            bpmSlider.addEventListener('input', function() {
-                currentFilters.minBpm = 60;
-                currentFilters.maxBpm = parseInt(this.value);
-                maxBpm.value = this.value;
-                displayBeats();
-            });
-
-            minBpm.addEventListener('change', function() {
-                currentFilters.minBpm = parseInt(this.value) || 60;
-                displayBeats();
-            });
-
-            maxBpm.addEventListener('change', function() {
-                currentFilters.maxBpm = parseInt(this.value) || 200;
-                bpmSlider.value = this.value;
-                displayBeats();
-            });
         }
 
         // Навигация между экранами
@@ -1532,8 +1713,32 @@
 
         // Функция "Все" для битов
         function showAllBeats(type) {
-            // Здесь можно реализовать переход на отдельную страницу со всеми битами
-            showNotification(`Показаны все ${type === 'new' ? 'новые' : ''} биты`);
+            // Сбрасываем фильтры для показа всех битов
+            if (type === 'new') {
+                currentFilters.key = 'all';
+                currentFilters.genre = 'all';
+                currentFilters.minBpm = 60;
+                currentFilters.maxBpm = 200;
+                
+                // Сбрасываем активные кнопки фильтров
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.getAttribute('data-key') === 'all' || btn.getAttribute('data-genre') === 'all') {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Сбрасываем BPM слайдеры
+                document.getElementById('minBpmSlider').value = 60;
+                document.getElementById('maxBpmSlider').value = 200;
+                setupBpmSliders();
+                
+                showNotification('📀 Показаны все новые биты');
+            } else {
+                showNotification('📀 Показаны все биты');
+            }
+            displayBeats();
         }
 
         // Отображение битов
@@ -1573,6 +1778,7 @@
                         <div class="empty-state">
                             <i class="fas fa-heart"></i>
                             <p>Нет избранных битов</p>
+                            <p style="font-size: 12px; margin-top: 10px;">Добавляй биты в избранное сердечком!</p>
                         </div>
                     `;
                 }
@@ -1773,6 +1979,19 @@
             if (index === -1) {
                 userData.favorites.push(beatId);
                 showNotification('❤️ Добавлено в избранное');
+                
+                // 🔥 ОТПРАВЛЯЕМ ДАННЫЕ В БОТА
+                const beat = beats.find(b => b.id === beatId);
+                if (beat) {
+                    const favoriteData = {
+                        type: 'favorite',
+                        beat_id: beatId,
+                        beat_title: beat.title,
+                        action: 'add',
+                        timestamp: Date.now()
+                    };
+                    sendToTelegramBot(favoriteData);
+                }
             } else {
                 userData.favorites.splice(index, 1);
                 showNotification('💔 Удалено из избранного');
@@ -1796,6 +2015,17 @@
                 beat.inCart = !beat.inCart;
                 if (beat.inCart) {
                     userData.purchases.push(beatId);
+                    
+                    // 🔥 ОТПРАВЛЯЕМ ДАННЫЕ В БОТА
+                    const cartData = {
+                        type: 'cart_add',
+                        beat_id: beatId,
+                        beat_title: beat.title,
+                        price: calculatePrice(beat),
+                        timestamp: Date.now()
+                    };
+                    sendToTelegramBot(cartData);
+                    
                     showNotification('✅ Бит добавлен в корзину');
                 } else {
                     const index = userData.purchases.indexOf(beatId);
@@ -1809,6 +2039,15 @@
             }
         }
 
+        // Функция расчета цены
+        function calculatePrice(beat) {
+            const basePrice = 500;
+            const bpmMultiplier = beat.bpm > 140 ? 1.2 : 1.0;
+            const genreMultiplier = beat.genre === 'Trap' ? 1.5 : 1.0;
+            
+            return Math.round(basePrice * bpmMultiplier * genreMultiplier);
+        }
+
         // Профиль и авторизация
         function updateProfile() {
             document.getElementById('favoritesCount').textContent = userData.favorites.length;
@@ -1819,6 +2058,7 @@
             document.getElementById('referralDiscount').textContent = userData.discount + '%';
             document.getElementById('slotsAttempts').textContent = userData.slotsAttempts;
             document.getElementById('wheelAttempts').textContent = userData.wheelAttempts;
+            document.getElementById('referralCode').textContent = userData.referralCode;
             
             // Обновляем аватар и имя
             const avatar = document.getElementById('userAvatar');
@@ -1826,9 +2066,16 @@
             const status = document.getElementById('userStatus');
             
             if (userData.isAuthenticated) {
-                avatar.textContent = userData.name.charAt(0).toUpperCase();
-                name.textContent = userData.name;
-                status.textContent = 'Premium пользователь';
+                if (isTelegram && tg && tg.initDataUnsafe.user) {
+                    const tgUser = tg.initDataUnsafe.user;
+                    avatar.textContent = (tgUser.first_name || 'T').charAt(0).toUpperCase();
+                    name.textContent = tgUser.first_name || 'Telegram User';
+                    status.textContent = tgUser.username ? `@${tgUser.username}` : 'Premium пользователь';
+                } else {
+                    avatar.textContent = userData.name.charAt(0).toUpperCase();
+                    name.textContent = userData.name;
+                    status.textContent = 'Premium пользователь';
+                }
                 document.getElementById('authButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
             } else {
                 avatar.textContent = 'G';
@@ -1845,18 +2092,38 @@
                 userData.name = "Гость";
                 showNotification('👋 До скорой встречи!');
             } else {
-                // Заглушка для Telegram Auth - В РЕАЛЬНОМ ПРИЛОЖЕНИИ ЗДЕСЬ БУДЕТ Telegram.WebApp.initData
-                userData.isAuthenticated = true;
-                userData.name = "Telegram User";
-                showNotification('🎉 Добро пожаловать! +10% скидка за регистрацию');
-                userData.discount = Math.max(userData.discount, 10);
+                // 🔥 TELEGRAM АВТОРИЗАЦИЯ
+                if (isTelegram && tg) {
+                    const user = tg.initDataUnsafe.user;
+                    if (user) {
+                        userData.isAuthenticated = true;
+                        userData.name = user.first_name || 'Telegram User';
+                        userData.username = user.username || '';
+                        userData.userId = user.id;
+                        userData.discount = Math.max(userData.discount, 10);
+                        userData.referralCode = `FRESSO-${user.id}`;
+                        
+                        showNotification(`🎉 Добро пожаловать, ${userData.name}! +10% скидка`);
+                    } else {
+                        showNotification('⚠️ Telegram данные не получены');
+                        userData.isAuthenticated = true;
+                        userData.name = "Demo User";
+                        userData.discount = Math.max(userData.discount, 10);
+                    }
+                } else {
+                    // Демо-режим
+                    showNotification('🔗 Открой в Telegram для полного функционала');
+                    userData.isAuthenticated = true;
+                    userData.name = "Demo User"; 
+                    userData.discount = Math.max(userData.discount, 10);
+                }
             }
             saveUserData();
             updateProfile();
         }
 
         function copyReferralCode() {
-            const code = document.getElementById('referralCode').textContent;
+            const code = userData.referralCode;
             navigator.clipboard.writeText(code).then(() => {
                 showNotification('✅ Реферальный код скопирован!');
             }).catch(() => {
@@ -1900,13 +2167,18 @@
             userData.slotsAttempts--;
             userData.lastSlotsPlay = Date.now();
             
-            // Анимация вращения
-            slots.forEach(slot => {
+            // 🔥 УЛУЧШЕННАЯ АНИМАЦИЯ СЛОТОВ
+            slots.forEach((slot, index) => {
                 slot.classList.add('spinning');
                 slot.textContent = '🎰';
+                
+                // Разная задержка для каждого слота
+                setTimeout(() => {
+                    slot.style.animation = 'slotSpin 0.2s infinite';
+                }, index * 200);
             });
 
-            // Результат через 3 секунды (увеличил для драматизма)
+            // Результат через 3 секунды
             setTimeout(() => {
                 const results = [];
                 let isWin = false;
@@ -1934,10 +2206,11 @@
                     
                     results.push(symbol);
                     
-                    // Плавное появление символов с задержкой
+                    // 🔥 ПЛАВНОЕ ПОЯВЛЕНИЕ СИМВОЛОВ С РАЗНОЙ ЗАДЕРЖКОЙ
                     setTimeout(() => {
                         slots[i].textContent = symbol;
                         slots[i].classList.remove('spinning');
+                        slots[i].style.animation = 'none';
                     }, 500 * (i + 1));
                 }
 
@@ -2006,7 +2279,7 @@
                 selectedPrize = wheelPrizes[0];
             }
 
-            // Результат через 4 секунды (увеличил для плавности)
+            // Результат через 4 секунды
             setTimeout(() => {
                 wheel.classList.remove('spinning');
                 
@@ -2073,6 +2346,7 @@
                 animation: fadeIn 0.3s ease;
                 max-width: 300px;
                 box-shadow: var(--glow);
+                font-size: 14px;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
@@ -2083,6 +2357,10 @@
                     notification.remove();
                 }, 300);
             }, 3000);
+        }
+
+        function logger(message) {
+            console.log(`[Fresso Beats] ${message}`);
         }
     </script>
 </body>
