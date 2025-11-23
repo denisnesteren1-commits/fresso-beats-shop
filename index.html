@@ -640,9 +640,20 @@
             animation: winGlow 2s ease-in-out infinite;
         }
 
+        .slot.lose {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: var(--danger);
+            animation: loseGlow 1s ease-in-out;
+        }
+
         @keyframes winGlow {
             0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
             50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
+        }
+
+        @keyframes loseGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
         }
 
         /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО - КРУГЛОЕ И С ПРАВИЛЬНОЙ СТРЕЛКОЙ */
@@ -1365,10 +1376,33 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-    </style>
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+/* 🔥 КНОПКА ЗВУКА */
+#muteButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--primary);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: var(--glow);
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+#muteButton:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
+}
+</style>
 </head>
 <body>
     <!-- 🔥 ГЛОБАЛЬНЫЙ ЛОАДЕР -->
@@ -1405,7 +1439,7 @@
                             Тональность
                         </div>
                         <div class="filter-options" id="keyFilters">
-                            <button class="filter-btn active" data-key="all">Все</button>
+                            <!-- Фильтры загружаются динамически -->
                         </div>
                     </div>
 
@@ -1416,7 +1450,7 @@
                             Жанр
                         </div>
                         <div class="filter-options" id="genreFilters">
-                            <button class="filter-btn active" data-genre="all">Все</button>
+                            <!-- Фильтры загружаются динамически -->
                         </div>
                     </div>
 
@@ -1878,121 +1912,121 @@
         const ADMIN_TELEGRAM_ID = 856199923;
 
         // 🔥 РАБОЧАЯ СИСТЕМА ЗВУКОВ С ТВОИМИ ССЫЛКАМИ
-const soundSystem = {
-    sounds: {},
-    backgroundMusic: null,
-    isMuted: false,
-    
-    init: function() {
-        // 🔥 ТВОИ РАБОЧИЕ ССЫЛКИ
-        const soundFiles = {
-            background: 'https://drive.usercontent.google.com/download?id=1bOsUIgu4cr-ADHIX2150Irvqupl0VGPq&export=download&authuser=0&confirm=t&uuid=97c753e8-a037-4301-98c0-6298e385c192&at=ALWLOp7ztl4DmEbgBRVzW3EPVNpa:1763893105860',
-            click: 'https://drive.usercontent.google.com/download?id=1wUvnE5eQCkKYagdRYmFLnkNcJr9GQGbW&export=download&authuser=0&confirm=t&uuid=573fd24e-3bdf-4aa0-845f-ea38edf29688&at=ALWLOp7Vuv1u_CTv_d04htKninEc:1763893188402',
-            lose: 'https://drive.usercontent.google.com/download?id=1u-yDkBcFPFJOKTiLVXMhF5EQJBAj4mso&export=download&authuser=0&confirm=t&uuid=64175dbb-23a8-441b-8a92-f40ca79a07e5&at=ALWLOp48XRfAGV7YWjn1d7NW3BQx:1763893189867',
-            spin: 'https://drive.usercontent.google.com/download?id=13mSvewjK_cKANk_Cfo8pajQafKK_7vyz&export=download&authuser=0&confirm=t&uuid=8439213c-b8b7-4bc6-85b9-06cda7fe7dfc&at=ALWLOp6W-V1m8fltMDp-kxmnjXN7:1763893191528',
-            spin2: 'https://drive.usercontent.google.com/download?id=1xuY8UT2vpIYW0iSkwowTSQNz3wqdWZHa&export=download&authuser=0&confirm=t&uuid=09781a64-054b-4b81-a1c2-d7f4c07644e7&at=ALWLOp6EC9GdpYEQvYf_WMeVfI3d:1763893193460',
-            bigwin: 'https://drive.usercontent.google.com/download?id=1XXkOrU5GieDVOcTNm3qD5VrtiaTQVYm-&export=download&authuser=0&confirm=t&uuid=8e660e0b-9b8b-4e2a-a15b-9007ecc3f968&at=ALWLOp6P6T4hVB_Rn5e3IWxui1sR:1763893195904',
-            smallwin: 'https://drive.usercontent.google.com/download?id=1paLSNEfH_MKwYJyvRtGWDVfUuaz1wcx2&export=download&authuser=0&confirm=t&uuid=7939a5ad-3b83-4b13-be9a-f9a72ba22caa&at=ALWLOp6T-TNbhiiEXZdNXzMtPcAl:1763893197604'
+        const soundSystem = {
+            sounds: {},
+            backgroundMusic: null,
+            isMuted: false,
+            
+            init: function() {
+                // 🔥 ТВОИ РАБОЧИЕ ССЫЛКИ
+                const soundFiles = {
+                    background: 'https://drive.usercontent.google.com/download?id=1bOsUIgu4cr-ADHIX2150Irvqupl0VGPq&export=download&authuser=0&confirm=t&uuid=97c753e8-a037-4301-98c0-6298e385c192&at=ALWLOp7ztl4DmEbgBRVzW3EPVNpa:1763893105860',
+                    click: 'https://drive.usercontent.google.com/download?id=1wUvnE5eQCkKYagdRYmFLnkNcJr9GQGbW&export=download&authuser=0&confirm=t&uuid=573fd24e-3bdf-4aa0-845f-ea38edf29688&at=ALWLOp7Vuv1u_CTv_d04htKninEc:1763893188402',
+                    lose: 'https://drive.usercontent.google.com/download?id=1u-yDkBcFPFJOKTiLVXMhF5EQJBAj4mso&export=download&authuser=0&confirm=t&uuid=64175dbb-23a8-441b-8a92-f40ca79a07e5&at=ALWLOp48XRfAGV7YWjn1d7NW3BQx:1763893189867',
+                    spin: 'https://drive.usercontent.google.com/download?id=13mSvewjK_cKANk_Cfo8pajQafKK_7vyz&export=download&authuser=0&confirm=t&uuid=8439213c-b8b7-4bc6-85b9-06cda7fe7dfc&at=ALWLOp6W-V1m8fltMDp-kxmnjXN7:1763893191528',
+                    spin2: 'https://drive.usercontent.google.com/download?id=1xuY8UT2vpIYW0iSkwowTSQNz3wqdWZHa&export=download&authuser=0&confirm=t&uuid=09781a64-054b-4b81-a1c2-d7f4c07644e7&at=ALWLOp6EC9GdpYEQvYf_WMeVfI3d:1763893193460',
+                    bigwin: 'https://drive.usercontent.google.com/download?id=1XXkOrU5GieDVOcTNm3qD5VrtiaTQVYm-&export=download&authuser=0&confirm=t&uuid=8e660e0b-9b8b-4e2a-a15b-9007ecc3f968&at=ALWLOp6P6T4hVB_Rn5e3IWxui1sR:1763893195904',
+                    smallwin: 'https://drive.usercontent.google.com/download?id=1paLSNEfH_MKwYJyvRtGWDVfUuaz1wcx2&export=download&authuser=0&confirm=t&uuid=7939a5ad-3b83-4b13-be9a-f9a72ba22caa&at=ALWLOp6T-TNbhiiEXZdNXzMtPcAl:1763893197604'
+                };
+                
+                // 🔥 ПРЕЗАГРУЗКА ЗВУКОВ
+                Object.keys(soundFiles).forEach(key => {
+                    this.sounds[key] = new Audio();
+                    this.sounds[key].src = soundFiles[key];
+                    this.sounds[key].preload = 'auto';
+                    this.sounds[key].load();
+                });
+            },
+            
+            play: function(soundName, volume = 0.7) {
+                if (this.isMuted || !this.sounds[soundName]) return;
+                
+                try {
+                    const sound = this.sounds[soundName].cloneNode();
+                    sound.volume = volume;
+                    
+                    const playPromise = sound.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.warn('Не удалось воспроизвести звук:', error);
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Ошибка воспроизведения звука:', e);
+                }
+            },
+            
+            playBackground: function() {
+                if (this.isMuted || !this.sounds.background) return;
+                
+                try {
+                    this.backgroundMusic = this.sounds.background.cloneNode();
+                    this.backgroundMusic.volume = 0.3;
+                    this.backgroundMusic.loop = true;
+                    
+                    const playPromise = this.backgroundMusic.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(e => {
+                            console.warn('Фоновая музыка не воспроизводится:', e);
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Ошибка фоновой музыки:', e);
+                }
+            },
+            
+            stopBackground: function() {
+                if (this.backgroundMusic) {
+                    this.backgroundMusic.pause();
+                    this.backgroundMusic.currentTime = 0;
+                }
+            },
+            
+            toggleMute: function() {
+                this.isMuted = !this.isMuted;
+                if (this.isMuted) {
+                    this.stopBackground();
+                    showNotification('🔇 Звук выключен');
+                } else {
+                    showNotification('🔊 Звук включен');
+                }
+                updateMuteButton();
+                return this.isMuted;
+            }
         };
-        
-        // 🔥 ПРЕЗАГРУЗКА ЗВУКОВ
-        Object.keys(soundFiles).forEach(key => {
-            this.sounds[key] = new Audio();
-            this.sounds[key].src = soundFiles[key];
-            this.sounds[key].preload = 'auto';
-            this.sounds[key].load();
-        });
-    },
-    
-    play: function(soundName, volume = 0.7) {
-        if (this.isMuted || !this.sounds[soundName]) return;
-        
-        try {
-            const sound = this.sounds[soundName].cloneNode();
-            sound.volume = volume;
-            
-            const playPromise = sound.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.warn('Не удалось воспроизвести звук:', error);
-                });
-            }
-        } catch (e) {
-            console.warn('Ошибка воспроизведения звука:', e);
-        }
-    },
-    
-    playBackground: function() {
-        if (this.isMuted || !this.sounds.background) return;
-        
-        try {
-            this.backgroundMusic = this.sounds.background.cloneNode();
-            this.backgroundMusic.volume = 0.3;
-            this.backgroundMusic.loop = true;
-            
-            const playPromise = this.backgroundMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(e => {
-                    console.warn('Фоновая музыка не воспроизводится:', e);
-                });
-            }
-        } catch (e) {
-            console.warn('Ошибка фоновой музыки:', e);
-        }
-    },
-    
-    stopBackground: function() {
-        if (this.backgroundMusic) {
-            this.backgroundMusic.pause();
-            this.backgroundMusic.currentTime = 0;
-        }
-    },
-    
-    toggleMute: function() {
-        this.isMuted = !this.isMuted;
-        if (this.isMuted) {
-            this.stopBackground();
-            showNotification('🔇 Звук выключен');
-        } else {
-            showNotification('🔊 Звук включен');
-        }
-        updateMuteButton();
-        return this.isMuted;
-    }
-};
 
-// 🔥 КНОПКА ЗВУКА В ШАПКЕ
-function addSoundButton() {
-    const header = document.querySelector('.header');
-    const soundBtn = document.createElement('button');
-    soundBtn.innerHTML = '🔊';
-    soundBtn.id = 'muteButton';
-    soundBtn.style.cssText = `
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: var(--primary);
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        box-shadow: var(--glow);
-        z-index: 100;
-    `;
-    soundBtn.onclick = () => soundSystem.toggleMute();
-    header.style.position = 'relative';
-    header.appendChild(soundBtn);
-}
+        // 🔥 КНОПКА ЗВУКА В ШАПКЕ
+        function addSoundButton() {
+            const header = document.querySelector('.header');
+            const soundBtn = document.createElement('button');
+            soundBtn.innerHTML = '🔊';
+            soundBtn.id = 'muteButton';
+            soundBtn.style.cssText = `
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: var(--primary);
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                color: white;
+                cursor: pointer;
+                font-size: 16px;
+                box-shadow: var(--glow);
+                z-index: 100;
+            `;
+            soundBtn.onclick = () => soundSystem.toggleMute();
+            header.style.position = 'relative';
+            header.appendChild(soundBtn);
+        }
 
-function updateMuteButton() {
-    const muteButton = document.getElementById('muteButton');
-    if (muteButton) {
-        muteButton.textContent = soundSystem.isMuted ? '🔇' : '🔊';
-    }
-}
+        function updateMuteButton() {
+            const muteButton = document.getElementById('muteButton');
+            if (muteButton) {
+                muteButton.textContent = soundSystem.isMuted ? '🔇' : '🔊';
+            }
+        }
 
         // 🔥 ДАННЫЕ СИСТЕМЫ
         let userData = {
@@ -2112,6 +2146,7 @@ function updateMuteButton() {
                         handleTelegramAuth(user);
                     }
                     
+                    addSoundButton(); // 🔥 ДОБАВЛЯЕМ КНОПКУ ЗВУКА
                     logger('✅ Telegram Web App инициализирован');
                 } else {
                     logger('⚠️ Запущено вне Telegram');
@@ -2157,6 +2192,7 @@ function updateMuteButton() {
             userData.referralCode = "FRESSO-DEMO";
             updateProfile();
             saveUserData();
+            addSoundButton(); // 🔥 ДОБАВЛЯЕМ КНОПКУ ЗВУКА ДЛЯ ДЕМО
         }
 
         // 🔥 АНИМАЦИЯ ЗАГРУЗКИ
@@ -2294,71 +2330,110 @@ function updateMuteButton() {
         }
 
         // 🔥 ИСПРАВЛЕННЫЕ ФИЛЬТРЫ
-function setupFilters() {
-    // Тональности
-    const keyContainer = document.getElementById('keyFilters');
-    
-    // 🔥 ДОБАВЛЯЕМ КНОПКУ "ВСЕ" ПЕРВОЙ
-    const allKeyBtn = document.createElement('button');
-    allKeyBtn.className = 'filter-btn active';
-    allKeyBtn.textContent = 'Все';
-    allKeyBtn.setAttribute('data-key', 'all');
-    allKeyBtn.addEventListener('click', function() {
-        soundSystem.play('click', 0.3);
-        document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentFilters.key = 'all';
-        displayBeats();
-    });
-    keyContainer.appendChild(allKeyBtn);
+        function setupFilters() {
+            // Тональности
+            const keyContainer = document.getElementById('keyFilters');
+            
+            // 🔥 ДОБАВЛЯЕМ КНОПКУ "ВСЕ" ПЕРВОЙ
+            const allKeyBtn = document.createElement('button');
+            allKeyBtn.className = 'filter-btn active';
+            allKeyBtn.textContent = 'Все';
+            allKeyBtn.setAttribute('data-key', 'all');
+            allKeyBtn.addEventListener('click', function() {
+                soundSystem.play('click', 0.3);
+                document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilters.key = 'all';
+                displayBeats();
+            });
+            keyContainer.appendChild(allKeyBtn);
 
-    systemConfig.musicKeys.forEach(key => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.textContent = key;
-        btn.setAttribute('data-key', key);
-        btn.addEventListener('click', function() {
-            soundSystem.play('click', 0.3);
-            document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentFilters.key = key;
-            displayBeats();
-        });
-        keyContainer.appendChild(btn);
-    });
+            systemConfig.musicKeys.forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = key;
+                btn.setAttribute('data-key', key);
+                btn.addEventListener('click', function() {
+                    soundSystem.play('click', 0.3);
+                    document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilters.key = key;
+                    displayBeats();
+                });
+                keyContainer.appendChild(btn);
+            });
 
-    // Жанры
-    const genreContainer = document.getElementById('genreFilters');
-    
-    // 🔥 ДОБАВЛЯЕМ КНОПКУ "ВСЕ" ПЕРВОЙ
-    const allGenreBtn = document.createElement('button');
-    allGenreBtn.className = 'filter-btn active';
-    allGenreBtn.textContent = 'Все';
-    allGenreBtn.setAttribute('data-genre', 'all');
-    allGenreBtn.addEventListener('click', function() {
-        soundSystem.play('click', 0.3);
-        document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentFilters.genre = 'all';
-        displayBeats();
-    });
-    genreContainer.appendChild(allGenreBtn);
+            // Жанры
+            const genreContainer = document.getElementById('genreFilters');
+            
+            // 🔥 ДОБАВЛЯЕМ КНОПКУ "ВСЕ" ПЕРВОЙ
+            const allGenreBtn = document.createElement('button');
+            allGenreBtn.className = 'filter-btn active';
+            allGenreBtn.textContent = 'Все';
+            allGenreBtn.setAttribute('data-genre', 'all');
+            allGenreBtn.addEventListener('click', function() {
+                soundSystem.play('click', 0.3);
+                document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilters.genre = 'all';
+                displayBeats();
+            });
+            genreContainer.appendChild(allGenreBtn);
 
-    systemConfig.musicGenres.forEach(genre => {
-        const btn = document.createElement('button');
-        btn.className = 'filter-btn';
-        btn.textContent = genre;
-        btn.setAttribute('data-genre', genre);
-        btn.addEventListener('click', function() {
-            soundSystem.play('click', 0.3);
-            document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            currentFilters.genre = genre;
-            displayBeats();
-        });
-        genreContainer.appendChild(btn);
-    });
-}
+            systemConfig.musicGenres.forEach(genre => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.textContent = genre;
+                btn.setAttribute('data-genre', genre);
+                btn.addEventListener('click', function() {
+                    soundSystem.play('click', 0.3);
+                    document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilters.genre = genre;
+                    displayBeats();
+                });
+                genreContainer.appendChild(btn);
+            });
+
+            // Теги
+            const tagButtons = document.querySelectorAll('#tagFilters .filter-btn');
+            tagButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    soundSystem.play('click', 0.3);
+                    this.classList.toggle('active');
+                    const tag = this.getAttribute('data-tag');
+                    
+                    if (this.classList.contains('active')) {
+                        if (!currentFilters.tags.includes(tag)) {
+                            currentFilters.tags.push(tag);
+                        }
+                    } else {
+                        currentFilters.tags = currentFilters.tags.filter(t => t !== tag);
+                    }
+                    displayBeats();
+                });
+            });
+        }
+
+        function setupBpmSliders() {
+            const minSlider = document.getElementById('minBpmSlider');
+            const maxSlider = document.getElementById('maxBpmSlider');
+            const minValue = document.getElementById('minBpmValue');
+            const maxValue = document.getElementById('maxBpmValue');
+            const display = document.getElementById('bpmRangeDisplay');
+
+            function updateBpmDisplay() {
+                currentFilters.minBpm = parseInt(minSlider.value);
+                currentFilters.maxBpm = parseInt(maxSlider.value);
+                minValue.textContent = currentFilters.minBpm;
+                maxValue.textContent = currentFilters.maxBpm;
+                display.textContent = `Диапазон: ${currentFilters.minBpm} - ${currentFilters.maxBpm} BPM`;
+                displayBeats();
+            }
+
+            minSlider.addEventListener('input', updateBpmDisplay);
+            maxSlider.addEventListener('input', updateBpmDisplay);
+        }
 
         // 🔥 ОТОБРАЖЕНИЕ БИТОВ
         function displayBeats() {
@@ -2759,101 +2834,101 @@ function setupFilters() {
         }
 
         // 🔥 ПРОСТОЕ КОЛЕСО КАК В КАЗИНО
-function setupWheel() {
-    const wheel = document.getElementById('wheel');
-    wheel.innerHTML = '';
-    
-    const prizes = systemConfig.wheelPrizes;
-    const segmentAngle = 360 / prizes.length;
-    
-    prizes.forEach((prize, index) => {
-        const startAngle = index * segmentAngle;
-        
-        // СЕГМЕНТ КОЛЕСА
-        const segment = document.createElement('div');
-        segment.className = 'wheel-segment';
-        segment.style.cssText = `
-            background: ${prize.color};
-            transform: rotate(${startAngle}deg);
-        `;
-        wheel.appendChild(segment);
-        
-        // ТЕКСТ ПРИЗА
-        const label = document.createElement('div');
-        label.className = 'wheel-label';
-        label.textContent = prize.name;
-        label.style.cssText = `
-            transform: translate(-50%, -50%) rotate(${startAngle + segmentAngle/2}deg) translateY(-90px) rotate(-${startAngle + segmentAngle/2}deg);
-            font-size: ${prize.name.length > 8 ? '8px' : '10px'};
-        `;
-        wheel.appendChild(label);
-    });
-}
-
-function spinWheel() {
-    soundSystem.play('spin2', 0.7);
-    
-    if (!userData.isAdmin && userData.wheelAttempts <= 0) {
-        showNotification('❌ Попытки закончились! Возвращайся завтра!');
-        return;
-    }
-
-    const wheelBtn = document.getElementById('wheelBtn');
-    const wheel = document.getElementById('wheel');
-    
-    wheelBtn.disabled = true;
-    
-    if (!userData.isAdmin) {
-        userData.wheelAttempts--;
-    }
-    userData.lastWheelPlay = Date.now();
-
-    // 🔥 ВЫБИРАЕМ СЛУЧАЙНЫЙ ПРИЗ
-    const selectedPrize = getRandomWheelPrize();
-    const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
-    
-    wheel.classList.add('spinning');
-
-    // 🔥 ПРОСТАЯ И ПОНЯТНАЯ АНИМАЦИЯ
-    const segmentAngle = 360 / systemConfig.wheelPrizes.length;
-    const fullRotations = 5; // 5 полных оборотов
-    const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle) + (segmentAngle / 2);
-
-    wheel.style.transform = `rotate(${targetAngle}deg)`;
-
-    setTimeout(() => {
-        wheel.classList.remove('spinning');
-        
-        userData.prizes.push({
-            type: 'wheel',
-            prize: selectedPrize.name,
-            prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
-            value: selectedPrize.value,
-            date: new Date().toISOString(),
-            used: false
-        });
-
-        // 🔥 ЗВУК ВЫИГРЫША
-        if (selectedPrize.value === 'wav') {
-            soundSystem.play('bigwin', 0.8);
-        } else {
-            soundSystem.play('smallwin', 0.6);
+        function setupWheel() {
+            const wheel = document.getElementById('wheel');
+            wheel.innerHTML = '';
+            
+            const prizes = systemConfig.wheelPrizes;
+            const segmentAngle = 360 / prizes.length;
+            
+            prizes.forEach((prize, index) => {
+                const startAngle = index * segmentAngle;
+                
+                // СЕГМЕНТ КОЛЕСА
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.cssText = `
+                    background: ${prize.color};
+                    transform: rotate(${startAngle}deg);
+                `;
+                wheel.appendChild(segment);
+                
+                // ТЕКСТ ПРИЗА
+                const label = document.createElement('div');
+                label.className = 'wheel-label';
+                label.textContent = prize.name;
+                label.style.cssText = `
+                    transform: translate(-50%, -50%) rotate(${startAngle + segmentAngle/2}deg) translateY(-90px) rotate(-${startAngle + segmentAngle/2}deg);
+                    font-size: ${prize.name.length > 8 ? '8px' : '10px'};
+                `;
+                wheel.appendChild(label);
+            });
         }
 
-        if (selectedPrize.value === 'wav') {
-            showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-        } else if (selectedPrize.value === 'respect') {
-            showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
-        } else {
-            showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
+        function spinWheel() {
+            soundSystem.play('spin2', 0.7);
+            
+            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
+                showNotification('❌ Попытки закончились! Возвращайся завтра!');
+                return;
+            }
+
+            const wheelBtn = document.getElementById('wheelBtn');
+            const wheel = document.getElementById('wheel');
+            
+            wheelBtn.disabled = true;
+            
+            if (!userData.isAdmin) {
+                userData.wheelAttempts--;
+            }
+            userData.lastWheelPlay = Date.now();
+
+            // 🔥 ВЫБИРАЕМ СЛУЧАЙНЫЙ ПРИЗ
+            const selectedPrize = getRandomWheelPrize();
+            const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
+            
+            wheel.classList.add('spinning');
+
+            // 🔥 ПРОСТАЯ И ПОНЯТНАЯ АНИМАЦИЯ
+            const segmentAngle = 360 / systemConfig.wheelPrizes.length;
+            const fullRotations = 5; // 5 полных оборотов
+            const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle) + (segmentAngle / 2);
+
+            wheel.style.transform = `rotate(${targetAngle}deg)`;
+
+            setTimeout(() => {
+                wheel.classList.remove('spinning');
+                
+                userData.prizes.push({
+                    type: 'wheel',
+                    prize: selectedPrize.name,
+                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
+                    value: selectedPrize.value,
+                    date: new Date().toISOString(),
+                    used: false
+                });
+
+                // 🔥 ЗВУК ВЫИГРЫША
+                if (selectedPrize.value === 'wav') {
+                    soundSystem.play('bigwin', 0.8);
+                } else {
+                    soundSystem.play('smallwin', 0.6);
+                }
+
+                if (selectedPrize.value === 'wav') {
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
+                } else if (selectedPrize.value === 'respect') {
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
+                } else {
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
+                }
+
+                updateProfile();
+                saveUserData();
+                wheelBtn.disabled = false;
+
+            }, 4000);
         }
-
-        updateProfile();
-        saveUserData();
-        wheelBtn.disabled = false;
-
-    }, 4000);
-}
 
         function getRandomWheelPrize() {
             const random = Math.random();
@@ -2952,62 +3027,62 @@ function spinWheel() {
         }
 
         function checkSlotsWin(symbols) {
-    let isWin = false;
-    let winPrize = null;
+            let isWin = false;
+            let winPrize = null;
 
-    systemConfig.slotPrizes.forEach(prize => {
-        if (symbols[0] === prize.symbols[0] && symbols[1] === prize.symbols[1] && symbols[2] === prize.symbols[2]) {
-            isWin = true;
-            winPrize = prize;
-            
-            // 🔥 ЗЕЛЕНОЕ СВЕЧЕНИЕ ПРИ ВЫИГРЫШЕ
-            document.querySelectorAll('.slot').forEach(slot => slot.classList.add('win'));
-            
-            userData.prizes.push({
-                type: 'slots',
-                prize: prize.prize,
-                prizeType: prize.type,
-                date: new Date().toISOString(),
-                used: false
+            systemConfig.slotPrizes.forEach(prize => {
+                if (symbols[0] === prize.symbols[0] && symbols[1] === prize.symbols[1] && symbols[2] === prize.symbols[2]) {
+                    isWin = true;
+                    winPrize = prize;
+                    
+                    // 🔥 ЗЕЛЕНОЕ СВЕЧЕНИЕ ПРИ ВЫИГРЫШЕ
+                    document.querySelectorAll('.slot').forEach(slot => slot.classList.add('win'));
+                    
+                    userData.prizes.push({
+                        type: 'slots',
+                        prize: prize.prize,
+                        prizeType: prize.type,
+                        date: new Date().toISOString(),
+                        used: false
+                    });
+                    
+                    // 🔥 ЗВУК ВЫИГРЫША
+                    if (prize.type === 'wav') {
+                        soundSystem.play('bigwin', 0.8);
+                    } else {
+                        soundSystem.play('smallwin', 0.6);
+                    }
+                    
+                    if (prize.type === 'wav') {
+                        showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${prize.prize.toUpperCase()}!`, true);
+                    } else {
+                        showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${prize.prize.toUpperCase()}!`, false);
+                    }
+                }
             });
-            
-            // 🔥 ЗВУК ВЫИГРЫША
-            if (prize.type === 'wav') {
-                soundSystem.play('bigwin', 0.8);
-            } else {
-                soundSystem.play('smallwin', 0.6);
-            }
-            
-            if (prize.type === 'wav') {
-                showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${prize.prize.toUpperCase()}!`, true);
-            } else {
-                showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${prize.prize.toUpperCase()}!`, false);
-            }
-        }
-    });
 
-    if (!isWin) {
-        // 🔥 КРАСНОЕ СВЕЧЕНИЕ ПРИ ПРОИГРЫШЕ
-        document.querySelectorAll('.slot').forEach(slot => {
-            slot.classList.add('lose');
-            setTimeout(() => slot.classList.remove('lose'), 1000);
-        });
-        
-        soundSystem.play('lose', 0.5);
-        setTimeout(() => {
-            showNotification('😔 Повезет в следующий раз!');
-        }, 1000);
-    }
-    
-    // 🔥 УБИРАЕМ СВЕЧЕНИЕ ЧЕРЕЗ 2 СЕКУНДЫ
-    setTimeout(() => {
-        document.querySelectorAll('.slot').forEach(slot => {
-            slot.classList.remove('win');
-        });
-    }, 2000);
-    
-    saveUserData();
-}
+            if (!isWin) {
+                // 🔥 КРАСНОЕ СВЕЧЕНИЕ ПРИ ПРОИГРЫШЕ
+                document.querySelectorAll('.slot').forEach(slot => {
+                    slot.classList.add('lose');
+                    setTimeout(() => slot.classList.remove('lose'), 1000);
+                });
+                
+                soundSystem.play('lose', 0.5);
+                setTimeout(() => {
+                    showNotification('😔 Повезет в следующий раз!');
+                }, 1000);
+            }
+            
+            // 🔥 УБИРАЕМ СВЕЧЕНИЕ ЧЕРЕЗ 2 СЕКУНДЫ
+            setTimeout(() => {
+                document.querySelectorAll('.slot').forEach(slot => {
+                    slot.classList.remove('win');
+                });
+            }, 2000);
+            
+            saveUserData();
+        }
 
         function setupCasinoEvents() {
             // Кнопки уже имеют onclick обработчики в HTML
