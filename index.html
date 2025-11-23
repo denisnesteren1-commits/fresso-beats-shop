@@ -306,7 +306,6 @@
         /* СЕКЦИИ */
         .section {
             margin-bottom: 30px;
-            margin-top: 20px;
         }
 
         .section-header {
@@ -335,7 +334,6 @@
             width: 30px;
             height: 2px;
             background: linear-gradient(45deg, var(--primary), var(--accent));
-            animation: slideIn 0.8s ease-out;
         }
 
         .see-all {
@@ -403,8 +401,6 @@
             font-size: 24px;
             margin-right: 15px;
             flex-shrink: 0;
-            background-size: cover;
-            background-position: center;
         }
 
         .beat-header {
@@ -549,7 +545,6 @@
             border: 1px solid rgba(139, 92, 246, 0.2);
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
-            perspective: 1000px;
         }
 
         .slots-display {
@@ -557,7 +552,6 @@
             justify-content: space-between;
             margin: 20px 0;
             gap: 10px;
-            transform-style: preserve-3d;
         }
 
         .slot {
@@ -572,24 +566,7 @@
             font-size: 36px;
             position: relative;
             overflow: hidden;
-            transform-style: preserve-3d;
-            box-shadow: 
-                0 10px 20px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-        }
-
-        .slot::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, 
-                rgba(255,255,255,0.1) 0%, 
-                transparent 50%, 
-                rgba(0,0,0,0.3) 100%);
-            border-radius: 13px;
+            transition: all 0.5s ease;
         }
 
         .slot-content {
@@ -617,7 +594,6 @@
             align-items: center;
             justify-content: center;
             font-size: 36px;
-            transition: opacity 0.3s ease;
             background: rgba(255,255,255,0.05);
             width: 100%;
         }
@@ -629,21 +605,12 @@
         .slot.win {
             background: rgba(16, 185, 129, 0.3);
             border-color: var(--success);
-            animation: winGlow3D 2s ease-in-out infinite;
-            transform: rotateX(10deg) scale(1.05);
+            animation: winGlow 2s ease-in-out infinite;
         }
 
-        @keyframes winGlow3D {
-            0%, 100% { 
-                box-shadow: 
-                    0 10px 20px rgba(0,0,0,0.3),
-                    0 0 10px rgba(16, 185, 129, 0.5); 
-            }
-            50% { 
-                box-shadow: 
-                    0 15px 30px rgba(0,0,0,0.4),
-                    0 0 30px rgba(16, 185, 129, 0.8); 
-            }
+        @keyframes winGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
         }
 
         /* 🔥 ГРАДИЕНТНОЕ КОЛЕСО */
@@ -679,12 +646,17 @@
                 #F7DC6F 315deg 360deg
             );
             position: relative;
-            transition: transform 5s cubic-bezier(0.1, 0.8, 0.2, 1);
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
             box-shadow: 0 0 30px rgba(0,0,0,0.3);
         }
 
         .wheel.spinning {
-            animation: wheelSpin 5s cubic-bezier(0.1, 0.8, 0.2, 1);
+            animation: wheelSpin 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        @keyframes wheelSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1080deg); }
         }
 
         .wheel-pointer {
@@ -722,7 +694,7 @@
             transform: translate(-50%, -50%) rotate(calc(var(--angle) + 22.5deg)) translateY(-100px) rotate(calc(-1 * (var(--angle) + 22.5deg)));
         }
 
-        /* 🔥 УЛУЧШЕННАЯ КОРЗИНА */
+        /* КОРЗИНА */
         .cart-item {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 15px;
@@ -880,6 +852,38 @@
             gap: 8px;
         }
 
+        /* 🔥 КНОПКИ В ПРОФИЛЕ */
+        .profile-actions {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .profile-action-btn {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .profile-action-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .profile-action-btn.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: var(--primary);
+        }
+
         .referral-section {
             background: rgba(139, 92, 246, 0.1);
             border-radius: 15px;
@@ -969,6 +973,33 @@
             border-color: var(--accent);
         }
 
+        /* НОВОСТИ */
+        .news-item {
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .news-item h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .news-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .news-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
         /* МОДАЛЬНЫЕ ОКНА */
         .win-modal {
             display: none;
@@ -1038,21 +1069,6 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideIn {
-            from { width: 0; }
-            to { width: 30px; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 0.8; }
-        }
-
-        @keyframes wheelSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(1080deg); }
         }
 
         @keyframes modalAppear {
@@ -1206,18 +1222,17 @@
             </div>
         </div>
 
-        <!-- НОВОСТИ -->
+        <!-- 🔥 НОВОСТИ С АВТОМАТИЧЕСКИМ ОБНОВЛЕНИЕМ -->
         <div id="newsScreen" class="screen hidden">
             <div class="section">
                 <h2 class="section-title">НОВОСТИ</h2>
-                <div class="empty-state">
-                    <i class="fas fa-newspaper"></i>
-                    <p>Пока нет новостей</p>
+                <div id="newsContainer">
+                    <!-- Новости загружаются автоматически -->
                 </div>
             </div>
         </div>
 
-        <!-- 🔥 ЛУДИК С УЛУЧШЕННЫМИ АНИМАЦИЯМИ -->
+        <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ -->
         <div id="casinoScreen" class="screen hidden">
             <div class="casino-section">
                 <!-- СЛОТЫ -->
@@ -1259,7 +1274,7 @@
             </div>
         </div>
 
-        <!-- 🔥 КОРЗИНА С ОПЛАТОЙ -->
+        <!-- КОРЗИНА -->
         <div id="cartScreen" class="screen hidden">
             <div class="section">
                 <h2 class="section-title">🛒 КОРЗИНА</h2>
@@ -1276,7 +1291,7 @@
                         </p>
                     </div>
 
-                    <!-- 🔥 МЕТОДЫ ОПЛАТЫ -->
+                    <!-- МЕТОДЫ ОПЛАТЫ -->
                     <div class="payment-methods">
                         <div class="payment-method" onclick="selectPayment('crypto')">
                             <h4>💎 Криптовалюта (USDT)</h4>
@@ -1321,25 +1336,10 @@
             </div>
         </div>
 
-        <!-- ИЗБРАННОЕ -->
-        <div id="favoritesScreen" class="screen hidden">
-            <div class="section">
-                <h2 class="section-title">ИЗБРАННОЕ</h2>
-                <div class="beats-grid" id="favoriteBeats"></div>
-            </div>
-        </div>
-
-        <!-- 🔥 МОИ ПРИЗЫ -->
-        <div id="prizesScreen" class="screen hidden">
-            <div class="section">
-                <h2 class="section-title">МОИ ПРИЗЫ</h2>
-                <div class="beats-grid" id="prizesList"></div>
-            </div>
-        </div>
-
-        <!-- ПРОФИЛЬ -->
+        <!-- 🔥 ПРОФИЛЬ С ВКЛАДКАМИ -->
         <div id="profileScreen" class="screen hidden">
             <div class="profile-section">
+                <!-- ИНФОРМАЦИЯ ПОЛЬЗОВАТЕЛЯ -->
                 <div class="profile-card">
                     <div class="user-info">
                         <div class="user-avatar" id="userAvatar">G</div>
@@ -1392,33 +1392,67 @@
                     </div>
                 </div>
 
-                <!-- РЕФЕРАЛЬНАЯ ПРОГРАММА -->
+                <!-- 🔥 КНОПКИ ДЕЙСТВИЙ В ПРОФИЛЕ -->
                 <div class="profile-card">
-                    <div class="referral-section">
-                        <div class="referral-title">
+                    <div class="profile-actions">
+                        <div class="profile-action-btn active" onclick="showProfileSection('favorites')">
+                            <i class="fas fa-heart"></i>
+                            <span>Моё избранное</span>
+                        </div>
+                        <div class="profile-action-btn" onclick="showProfileSection('prizes')">
+                            <i class="fas fa-gift"></i>
+                            <span>Мои призы</span>
+                        </div>
+                        <div class="profile-action-btn" onclick="showProfileSection('referral')">
                             <i class="fas fa-users"></i>
-                            Реферальная программа
+                            <span>Реферальная программа</span>
                         </div>
-                        <div class="referral-code">
-                            <span id="referralCode">FRESSO-12345</span>
-                            <button class="copy-btn" onclick="copyReferralCode()">
-                                <i class="fas fa-copy"></i> Копировать
-                            </button>
+                    </div>
+
+                    <!-- 🔥 СЕКЦИЯ ИЗБРАННОГО -->
+                    <div id="profileFavorites" class="profile-section-content">
+                        <div class="section-header">
+                            <h2 class="section-title">❤️ МОЁ ИЗБРАННОЕ</h2>
                         </div>
-                        <div id="referralInputSection">
-                            <input type="text" class="referral-input" placeholder="Введите реферальный код друга" id="friendReferralCode">
-                            <button class="copy-btn" onclick="useReferralCode()" style="width: 100%;">
-                                <i class="fas fa-user-plus"></i> Активировать код
-                            </button>
+                        <div class="beats-grid" id="profileFavoriteBeats"></div>
+                    </div>
+
+                    <!-- 🔥 СЕКЦИЯ ПРИЗОВ -->
+                    <div id="profilePrizes" class="profile-section-content hidden">
+                        <div class="section-header">
+                            <h2 class="section-title">🎁 МОИ ПРИЗЫ</h2>
                         </div>
-                        <div class="referral-stats">
-                            <div class="referral-stat">
-                                <div class="referral-stat-value" id="referralsCount">0</div>
-                                <div class="referral-stat-label">Приглашено</div>
+                        <div class="beats-grid" id="profilePrizesList"></div>
+                    </div>
+
+                    <!-- 🔥 СЕКЦИЯ РЕФЕРАЛЬНОЙ ПРОГРАММЫ -->
+                    <div id="profileReferral" class="profile-section-content hidden">
+                        <div class="referral-section">
+                            <div class="referral-title">
+                                <i class="fas fa-users"></i>
+                                Реферальная программа
                             </div>
-                            <div class="referral-stat">
-                                <div class="referral-stat-value" id="referralDiscount">0%</div>
-                                <div class="referral-stat-label">Текущая скидка</div>
+                            <div class="referral-code">
+                                <span id="referralCode">FRESSO-12345</span>
+                                <button class="copy-btn" onclick="copyReferralCode()">
+                                    <i class="fas fa-copy"></i> Копировать
+                                </button>
+                            </div>
+                            <div id="referralInputSection">
+                                <input type="text" class="referral-input" placeholder="Введите реферальный код друга" id="friendReferralCode">
+                                <button class="copy-btn" onclick="useReferralCode()" style="width: 100%;">
+                                    <i class="fas fa-user-plus"></i> Активировать код
+                                </button>
+                            </div>
+                            <div class="referral-stats">
+                                <div class="referral-stat">
+                                    <div class="referral-stat-value" id="referralsCount">0</div>
+                                    <div class="referral-stat-label">Приглашено</div>
+                                </div>
+                                <div class="referral-stat">
+                                    <div class="referral-stat-value" id="referralDiscount">0%</div>
+                                    <div class="referral-stat-label">Текущая скидка</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1472,14 +1506,6 @@
             <i class="fas fa-shopping-cart nav-icon"></i>
             <span>Корзина</span>
         </div>
-        <div class="nav-item" data-screen="favoritesScreen">
-            <i class="fas fa-heart nav-icon"></i>
-            <span>Избранное</span>
-        </div>
-        <div class="nav-item" data-screen="prizesScreen">
-            <i class="fas fa-gift nav-icon"></i>
-            <span>Призы</span>
-        </div>
         <div class="nav-item" data-screen="profileScreen">
             <i class="fas fa-user nav-icon"></i>
             <span>Профиль</span>
@@ -1492,32 +1518,12 @@
         let isTelegram = false;
         const ADMIN_TELEGRAM_ID = 856199923;
 
-        // 🔥 ОПТИМИЗАЦИЯ ПАМЯТИ
-        const performanceOptimization = {
-            debounceTimer: null,
-            
-            debounceSearch: function(callback, delay = 300) {
-                clearTimeout(this.debounceTimer);
-                this.debounceTimer = setTimeout(callback, delay);
-            },
-            
-            cleanupMemory: function() {
-                if (audioPlayers) {
-                    audioPlayers.forEach((player, id) => {
-                        if (!player.isPlaying) {
-                            clearInterval(player.interval);
-                        }
-                    });
-                }
-            }
-        };
-
         // 🔥 ДАННЫЕ СИСТЕМЫ
         let userData = {
             isAuthenticated: false,
             isAdmin: false,
             name: "Гость",
-            favorites: [2, 5],
+            favorites: [],
             cart: [],
             purchases: [],
             listens: 0,
@@ -1531,7 +1537,6 @@
             lastWheelPlay: 0,
             telegramData: null,
             prizes: [],
-            // 🔥 СТАТИСТИКА ПРОДАЖ
             salesStats: {
                 totalSales: 0,
                 totalRevenue: 0,
@@ -1553,7 +1558,6 @@
 
         // 🔥 КОНФИГУРАЦИЯ СИСТЕМЫ
         const systemConfig = {
-            // 🔥 РЕКВИЗИТЫ ДЛЯ ОПЛАТЫ (МОЖЕШЬ ПОМЕНЯТЬ)
             paymentDetails: {
                 crypto: {
                     wallet: "TBr7p8qLdK8mWZ4sN9tY2Xy1zAbCdEfGh",
@@ -1570,27 +1574,27 @@
                     instructions: "После оплаты отправьте скриншот @Fr1sso"
                 }
             },
-            // 🔥 МУЗЫКАЛЬНЫЕ НАСТРОЙКИ
             musicKeys: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
             musicGenres: ['Trap', 'Drill', 'Phonk', 'Lo-Fi', 'Hip-Hop', 'R&B', 'Pop', 'Electronic', 'Rock', 'Jazz', 'Classical'],
-            // 🔥 ИГРОВЫЕ НАСТРОЙКИ
+            // 🔥 ИСПРАВЛЕННЫЕ ШАНСЫ ДЛЯ ЛУДИКА
             slotSymbols: ['🎵', '🎹', '🎤', '🥁', '🎧', '🎼', '🎷', '🎺'],
             slotPrizes: [
-                { symbols: ['🎵', '🎵', '🎵'], prize: 'WAV лицензия', type: 'wav', chance: 0.01 },
+                { symbols: ['🎵', '🎵', '🎵'], prize: 'WAV лицензия', type: 'wav', chance: 0.03 },
                 { symbols: ['🎹', '🎹', '🎹'], prize: '50% скидка', type: 'discount', chance: 0.05 },
-                { symbols: ['🎤', '🎤', '🎤'], prize: '25% скидка', type: 'discount', chance: 0.1 },
-                { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.15 },
-                { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.2 }
+                { symbols: ['🎤', '🎤', '🎤'], prize: '25% скидка', type: 'discount', chance: 0.08 },
+                { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
+                { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
+            // 🔥 УВЕЛИЧЕННЫЕ ШАНСЫ НА БОЛЬШИЕ СКИДКИ
             wheelPrizes: [
-                { name: '1% скидка', value: 1, chance: 0.3 },
-                { name: '5% скидка', value: 5, chance: 0.2 },
-                { name: '10% скидка', value: 10, chance: 0.15 },
-                { name: '15% скидка', value: 15, chance: 0.1 },
-                { name: '20% скидка', value: 20, chance: 0.08 },
-                { name: '25% скидка', value: 25, chance: 0.05 },
-                { name: 'WAV лицензия', value: 'wav', chance: 0.01 },
-                { name: 'Респект', value: 'respect', chance: 0.11 }
+                { name: '1% скидка', value: 1, chance: 0.15 },
+                { name: '5% скидка', value: 5, chance: 0.20 },
+                { name: '10% скидка', value: 10, chance: 0.18 },
+                { name: '15% скидка', value: 15, chance: 0.15 },
+                { name: '20% скидка', value: 20, chance: 0.12 },
+                { name: '25% скидка', value: 25, chance: 0.10 },
+                { name: 'WAV лицензия', value: 'wav', chance: 0.05 },
+                { name: 'Респект', value: 'respect', chance: 0.05 }
             ]
         };
 
@@ -1611,10 +1615,9 @@
             setupWheelLabels();
             setupCasinoEvents();
             displayCart();
-            displayPrizes();
+            loadNews();
             
             setInterval(updateTimers, 60000);
-            setInterval(performanceOptimization.cleanupMemory, 30000);
         });
 
         // 🔥 TELEGRAM ИНИЦИАЛИЗАЦИЯ
@@ -1630,13 +1633,6 @@
                     const user = tg.initDataUnsafe?.user;
                     if (user) {
                         handleTelegramAuth(user);
-                    } else {
-                        setTimeout(() => {
-                            const retryUser = tg.initDataUnsafe?.user;
-                            if (retryUser) {
-                                handleTelegramAuth(retryUser);
-                            }
-                        }, 1000);
                     }
                     
                     logger('✅ Telegram Web App инициализирован');
@@ -1673,7 +1669,6 @@
             
             updateProfile();
             saveUserData();
-            sendAuthToBot();
             showNotification(`👋 Добро пожаловать, ${userData.name}!`);
         }
 
@@ -1686,32 +1681,6 @@
             saveUserData();
         }
 
-        function sendAuthToBot() {
-            if (!isTelegram || !tg) return;
-            
-            try {
-                const authData = {
-                    type: 'auth',
-                    user_data: {
-                        name: userData.name,
-                        username: userData.username,
-                        userId: userData.userId,
-                        favorites: userData.favorites,
-                        purchases: userData.purchases,
-                        discount: userData.discount,
-                        referrals: userData.referrals
-                    },
-                    telegram_user: userData.telegramData,
-                    timestamp: Date.now()
-                };
-                
-                tg.sendData(JSON.stringify(authData));
-                logger('✅ Данные авторизации отправлены в бота');
-            } catch (error) {
-                console.error('❌ Ошибка отправки данных авторизации:', error);
-            }
-        }
-
         // 🔥 АНИМАЦИЯ ЗАГРУЗКИ
         function showLoadingAnimation() {
             setTimeout(() => {
@@ -1720,7 +1689,7 @@
                     loader.style.opacity = '0';
                     setTimeout(() => loader.remove(), 500);
                 }
-            }, 2000);
+            }, 1500);
         }
 
         // 🔥 ЗАГРУЗКА ДАННЫХ
@@ -1753,14 +1722,14 @@
                 beats = JSON.parse(savedBeats);
             } else {
                 beats = [
-                    {id: 1, title: "Midnight Drive", bpm: 140, key: "C#min", genre: "Trap", mood: "Dark", isNew: true, plays: 1245, audioUrl: "#", isFavorite: userData.favorites.includes(1), inCart: false, price: 1500},
-                    {id: 2, title: "Neon Dreams", bpm: 128, key: "F#maj", genre: "Synthwave", mood: "Dreamy", isNew: true, plays: 892, audioUrl: "#", isFavorite: userData.favorites.includes(2), inCart: false, price: 1200},
-                    {id: 3, title: "Urban Storm", bpm: 150, key: "Amin", genre: "Drill", mood: "Aggressive", isNew: false, plays: 2103, audioUrl: "#", isFavorite: userData.favorites.includes(3), inCart: false, price: 1800},
-                    {id: 4, title: "Crystal Flow", bpm: 135, key: "G#min", genre: "Phonk", mood: "Vibey", isNew: false, plays: 1678, audioUrl: "#", isFavorite: userData.favorites.includes(4), inCart: false, price: 1600},
-                    {id: 5, title: "Sunset Vibes", bpm: 95, key: "Dmin", genre: "Lo-Fi", mood: "Chill", isNew: true, plays: 756, audioUrl: "#", isFavorite: userData.favorites.includes(5), inCart: false, price: 1000},
-                    {id: 6, title: "Thunder Bolt", bpm: 160, key: "Emin", genre: "Trap", mood: "Energetic", isNew: false, plays: 1890, audioUrl: "#", isFavorite: userData.favorites.includes(6), inCart: false, price: 1700},
-                    {id: 7, title: "Ocean Waves", bpm: 110, key: "Cmaj", genre: "Hip-Hop", mood: "Relaxed", isNew: true, plays: 543, audioUrl: "#", isFavorite: userData.favorites.includes(7), inCart: false, price: 1100},
-                    {id: 8, title: "City Lights", bpm: 145, key: "Bmin", genre: "Electronic", mood: "Mysterious", isNew: false, plays: 1321, audioUrl: "#", isFavorite: userData.favorites.includes(8), inCart: false, price: 1400}
+                    {id: 1, title: "Midnight Drive", bpm: 140, key: "C#min", genre: "Trap", mood: "Dark", isNew: true, plays: 1245, audioUrl: "#", isFavorite: false, inCart: false, price: 1500},
+                    {id: 2, title: "Neon Dreams", bpm: 128, key: "F#maj", genre: "Synthwave", mood: "Dreamy", isNew: true, plays: 892, audioUrl: "#", isFavorite: false, inCart: false, price: 1200},
+                    {id: 3, title: "Urban Storm", bpm: 150, key: "Amin", genre: "Drill", mood: "Aggressive", isNew: false, plays: 2103, audioUrl: "#", isFavorite: false, inCart: false, price: 1800},
+                    {id: 4, title: "Crystal Flow", bpm: 135, key: "G#min", genre: "Phonk", mood: "Vibey", isNew: false, plays: 1678, audioUrl: "#", isFavorite: false, inCart: false, price: 1600},
+                    {id: 5, title: "Sunset Vibes", bpm: 95, key: "Dmin", genre: "Lo-Fi", mood: "Chill", isNew: true, plays: 756, audioUrl: "#", isFavorite: false, inCart: false, price: 1000},
+                    {id: 6, title: "Thunder Bolt", bpm: 160, key: "Emin", genre: "Trap", mood: "Energetic", isNew: false, plays: 1890, audioUrl: "#", isFavorite: false, inCart: false, price: 1700},
+                    {id: 7, title: "Ocean Waves", bpm: 110, key: "Cmaj", genre: "Hip-Hop", mood: "Relaxed", isNew: true, plays: 543, audioUrl: "#", isFavorite: false, inCart: false, price: 1100},
+                    {id: 8, title: "City Lights", bpm: 145, key: "Bmin", genre: "Electronic", mood: "Mysterious", isNew: false, plays: 1321, audioUrl: "#", isFavorite: false, inCart: false, price: 1400}
                 ];
                 saveBeatsData();
             }
@@ -1785,12 +1754,12 @@
                     screens.forEach(screen => screen.classList.add('hidden'));
                     document.getElementById(targetScreen).classList.remove('hidden');
                     
-                    if (targetScreen === 'favoritesScreen') {
-                        displayBeats();
-                    } else if (targetScreen === 'cartScreen') {
+                    if (targetScreen === 'cartScreen') {
                         displayCart();
-                    } else if (targetScreen === 'prizesScreen') {
-                        displayPrizes();
+                    } else if (targetScreen === 'profileScreen') {
+                        showProfileSection('favorites');
+                    } else if (targetScreen === 'newsScreen') {
+                        loadNews();
                     }
                 });
             });
@@ -1799,8 +1768,11 @@
         // 🔥 СИСТЕМА ПОИСКА И ФИЛЬТРОВ
         function setupSearch() {
             const searchInput = document.getElementById('searchInput');
+            let debounceTimer;
+            
             searchInput.addEventListener('input', function() {
-                performanceOptimization.debounceSearch(() => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
                     searchQuery = this.value.toLowerCase();
                     displayBeats();
                 }, 300);
@@ -1809,27 +1781,15 @@
 
         function performSearch() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            searchQuery = searchTerm;
+            displayBeats();
             
             if (searchTerm) {
-                const filteredBeats = beats.filter(beat => {
-                    const searchFields = [
-                        beat.title,
-                        beat.genre,
-                        beat.mood,
-                        beat.key,
-                        beat.bpm.toString()
-                    ].join(' ').toLowerCase();
-                    
-                    return searchFields.includes(searchTerm);
-                });
-                
-                displayFilteredBeats(filteredBeats);
-                showNotification(`🔍 Найдено битов: ${filteredBeats.length}`);
-            } else {
-                displayBeats();
+                showNotification(`🔍 Найдено битов: ${filterBeats(beats).length}`);
             }
         }
 
+        // 🔥 ИСПРАВЛЕННЫЕ ФИЛЬТРЫ
         function setupFilters() {
             // Тональности
             const keyContainer = document.getElementById('keyFilters');
@@ -1839,9 +1799,21 @@
                 btn.textContent = key;
                 btn.setAttribute('data-key', key);
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilters.key = this.getAttribute('data-key');
+                    document.querySelectorAll('#keyFilters .filter-btn').forEach(b => {
+                        if (b.getAttribute('data-key') === 'all') {
+                            b.classList.remove('active');
+                        }
+                    });
+                    
+                    if (currentFilters.key === key) {
+                        // Клик на активную кнопку - возвращаем "Все"
+                        document.querySelector('#keyFilters .filter-btn[data-key="all"]').classList.add('active');
+                        currentFilters.key = 'all';
+                    } else {
+                        document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentFilters.key = key;
+                    }
                     displayBeats();
                 });
                 keyContainer.appendChild(btn);
@@ -1855,9 +1827,20 @@
                 btn.textContent = genre;
                 btn.setAttribute('data-genre', genre);
                 btn.addEventListener('click', function() {
-                    document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilters.genre = this.getAttribute('data-genre');
+                    document.querySelectorAll('#genreFilters .filter-btn').forEach(b => {
+                        if (b.getAttribute('data-genre') === 'all') {
+                            b.classList.remove('active');
+                        }
+                    });
+                    
+                    if (currentFilters.genre === genre) {
+                        document.querySelector('#genreFilters .filter-btn[data-genre="all"]').classList.add('active');
+                        currentFilters.genre = 'all';
+                    } else {
+                        document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        currentFilters.genre = genre;
+                    }
                     displayBeats();
                 });
                 genreContainer.appendChild(btn);
@@ -1922,15 +1905,12 @@
         function displayBeats() {
             const newBeatsContainer = document.getElementById('newBeats');
             const allBeatsContainer = document.getElementById('allBeats');
-            const favoritesContainer = document.getElementById('favoriteBeats');
             
             newBeatsContainer.innerHTML = '';
             allBeatsContainer.innerHTML = '';
-            if (favoritesContainer) favoritesContainer.innerHTML = '';
             
             const filteredBeats = filterBeats(beats);
             const newBeats = filteredBeats.filter(beat => beat.isNew);
-            const favoriteBeats = filteredBeats.filter(beat => userData.favorites.includes(beat.id));
             
             newBeats.forEach(beat => {
                 newBeatsContainer.appendChild(createBeatCard(beat));
@@ -1939,22 +1919,6 @@
             filteredBeats.forEach(beat => {
                 allBeatsContainer.appendChild(createBeatCard(beat));
             });
-            
-            if (favoritesContainer) {
-                favoriteBeats.forEach(beat => {
-                    favoritesContainer.appendChild(createBeatCard(beat));
-                });
-                
-                if (favoriteBeats.length === 0) {
-                    favoritesContainer.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-heart"></i>
-                            <p>Нет избранных битов</p>
-                            <p style="font-size: 12px; margin-top: 10px;">Добавляй биты в избранное сердечком!</p>
-                        </div>
-                    `;
-                }
-            }
 
             if (filteredBeats.length === 0) {
                 allBeatsContainer.innerHTML = `
@@ -2011,30 +1975,12 @@
             return filtered;
         }
 
-        function displayFilteredBeats(filteredBeats) {
-            const allBeatsContainer = document.getElementById('allBeats');
-            allBeatsContainer.innerHTML = '';
-            
-            filteredBeats.forEach(beat => {
-                allBeatsContainer.appendChild(createBeatCard(beat));
-            });
-            
-            if (filteredBeats.length === 0) {
-                allBeatsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <p>Биты не найдены</p>
-                    </div>
-                `;
-            }
-        }
-
         function createBeatCard(beat) {
             const card = document.createElement('div');
             card.className = 'beat-card fade-in';
             card.innerHTML = `
                 <div class="beat-header">
-                    <div class="beat-image" style="background: linear-gradient(135deg, #667eea, #764ba2)">
+                    <div class="beat-image">
                         <i class="fas fa-music"></i>
                     </div>
                     <div class="beat-info">
@@ -2048,7 +1994,7 @@
                         </div>
                     </div>
                     <div class="beat-actions">
-                        <button class="action-btn favorite ${beat.isFavorite ? 'active' : ''}" 
+                        <button class="action-btn favorite ${userData.favorites.includes(beat.id) ? 'active' : ''}" 
                                 onclick="toggleFavorite(${beat.id})">
                             <i class="fas fa-heart"></i>
                         </button>
@@ -2187,7 +2133,9 @@
 
         // 🔥 ИЗБРАННОЕ И КОРЗИНА
         function toggleFavorite(beatId) {
+            // 🔥 ИСПРАВЛЕН БАГ С НЕСКОЛЬКИМИ ДОБАВЛЕНИЯМИ
             const index = userData.favorites.indexOf(beatId);
+            
             if (index === -1) {
                 userData.favorites.push(beatId);
                 showNotification('❤️ Добавлено в избранное');
@@ -2196,15 +2144,14 @@
                 showNotification('💔 Удалено из избранное');
             }
             
-            const beat = beats.find(b => b.id === beatId);
-            if (beat) {
-                beat.isFavorite = !beat.isFavorite;
-            }
-            
             saveUserData();
-            saveBeatsData();
             updateProfile();
             displayBeats();
+            
+            // Обновляем избранное в профиле если открыто
+            if (document.getElementById('profileScreen').classList.contains('hidden') === false) {
+                displayProfileFavorites();
+            }
         }
 
         function toggleCart(beatId) {
@@ -2291,32 +2238,9 @@
             
             document.querySelector(`.payment-method[onclick="selectPayment('${method}')"]`).classList.add('active');
             document.getElementById(`${method}Details`).classList.add('active');
-            
-            // Обновляем реквизиты из конфига
-            const details = document.getElementById(`${method}Details`);
-            const config = systemConfig.paymentDetails[method];
-            
-            if (method === 'crypto') {
-                details.innerHTML = `
-                    <p><strong>Кошелек:</strong> ${config.wallet}</p>
-                    <p><strong>Сеть:</strong> ${config.network}</p>
-                    <p style="margin-top: 10px; color: var(--accent);">${config.instructions}</p>
-                `;
-            } else if (method === 'umoney') {
-                details.innerHTML = `
-                    <p><strong>Кошелек:</strong> ${config.wallet}</p>
-                    <p style="margin-top: 10px; color: var(--accent);">${config.instructions}</p>
-                `;
-            } else if (method === 'sbp') {
-                details.innerHTML = `
-                    <p><strong>Телефон:</strong> ${config.phone}</p>
-                    <p><strong>Банк:</strong> ${config.bank}</p>
-                    <p style="margin-top: 10px; color: var(--accent);">${config.instructions}</p>
-                `;
-            }
         }
 
-        // 🔥 ЛУДИК С УЛУЧШЕННЫМИ АНИМАЦИЯМИ
+        // 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ
         function setupWheelLabels() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
@@ -2336,6 +2260,7 @@
             document.getElementById('wheelBtn').addEventListener('click', spinWheel);
         }
 
+        // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ С ПРАВИЛЬНЫМИ АНИМАЦИЯМИ
         function spinSlots() {
             if (!userData.isAdmin && userData.slotsAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
@@ -2352,7 +2277,9 @@
             }
             userData.lastSlotsPlay = Date.now();
 
-            // 🔥 УЛУЧШЕННАЯ АНИМАЦИЯ С ПРОКРУТКОЙ
+            const finalSymbols = [];
+            
+            // 🔥 ПРАВИЛЬНАЯ АНИМАЦИЯ С ПЛАВНОЙ ОСТАНОВКОЙ
             slots.forEach((slot, index) => {
                 slot.innerHTML = '';
                 const slotContent = document.createElement('div');
@@ -2361,7 +2288,8 @@
                 const symbolStrip = document.createElement('div');
                 symbolStrip.className = 'symbol-strip';
                 
-                for (let i = 0; i < 20; i++) {
+                // Создаем полосу символов
+                for (let i = 0; i < 30; i++) {
                     const symbol = document.createElement('div');
                     symbol.className = 'slot-symbol';
                     symbol.textContent = systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)];
@@ -2371,47 +2299,66 @@
                 slotContent.appendChild(symbolStrip);
                 slot.appendChild(slotContent);
                 
+                // Генерируем финальный символ для этого слота
+                const finalSymbol = getRandomSlotSymbol();
+                finalSymbols.push(finalSymbol);
+                
+                // 🔥 ПЛАВНАЯ АНИМАЦИЯ ОСТАНОВКИ
                 setTimeout(() => {
-                    const finalSymbol = getRandomSymbol();
-                    const targetPosition = - (19 * 80) + (40);
+                    // Находим позицию где находится нужный символ
+                    const symbolIndex = Math.floor(Math.random() * 10) + 15; // Случайная позиция в нижней части
+                    const targetPosition = - (symbolIndex * 80);
                     
+                    symbolStrip.style.transition = 'transform 3s cubic-bezier(0.1, 0.8, 0.2, 1)';
                     symbolStrip.style.transform = `translateY(${targetPosition}px)`;
                     
+                    // Заменяем последний символ на финальный
+                    setTimeout(() => {
+                        symbolStrip.children[symbolIndex].textContent = finalSymbol;
+                    }, 2500);
+                    
+                    // Полная остановка
                     setTimeout(() => {
                         slot.innerHTML = finalSymbol;
                         
                         if (index === 2) {
-                            checkSlotsWin(slots);
+                            checkSlotsWin(finalSymbols);
                         }
-                    }, 3000 + (index * 500));
+                    }, 3000);
                     
-                }, index * 800);
+                }, index * 1000); // Разная задержка для каждого слота
             });
 
             updateProfile();
             saveUserData();
         }
 
-        function getRandomSymbol() {
+        function getRandomSlotSymbol() {
             const random = Math.random();
-            if (random < 0.01) return '🎵';
-            if (random < 0.03) return '🎹';
-            if (random < 0.06) return '🎤';
-            if (random < 0.10) return '🥁';
-            if (random < 0.15) return '🎧';
+            let cumulativeChance = 0;
+            
+            for (const prize of systemConfig.slotPrizes) {
+                cumulativeChance += prize.chance;
+                if (random <= cumulativeChance) {
+                    return prize.symbols[0]; // Возвращаем первый символ из комбинации
+                }
+            }
+            
             return systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)];
         }
 
-        function checkSlotsWin(slots) {
-            const results = Array.from(slots).map(slot => slot.textContent);
+        function checkSlotsWin(symbols) {
             let isWin = false;
             let winPrize = null;
 
+            // 🔥 ПРОВЕРЯЕМ ВЫИГРЫШНЫЕ КОМБИНАЦИИ
             systemConfig.slotPrizes.forEach(prize => {
-                if (results[0] === prize.symbols[0] && results[1] === prize.symbols[1] && results[2] === prize.symbols[2]) {
+                if (symbols[0] === prize.symbols[0] && symbols[1] === prize.symbols[1] && symbols[2] === prize.symbols[2]) {
                     isWin = true;
                     winPrize = prize;
-                    slots.forEach(slot => slot.classList.add('win'));
+                    
+                    // Подсвечиваем выигравшие слоты
+                    document.querySelectorAll('.slot').forEach(slot => slot.classList.add('win'));
                     
                     if (!userData.prizes) userData.prizes = [];
                     userData.prizes.push({
@@ -2440,6 +2387,7 @@
             saveUserData();
         }
 
+        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО
         function spinWheel() {
             if (!userData.isAdmin && userData.wheelAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
@@ -2458,14 +2406,18 @@
 
             wheel.classList.add('spinning');
 
+            // 🔥 ВЫБОР ПРИЗА С УЧЕТОМ УВЕЛИЧЕННЫХ ШАНСОВ
             const random = Math.random();
             let cumulativeChance = 0;
             let selectedPrize = null;
+            let selectedIndex = 0;
 
-            for (const prize of systemConfig.wheelPrizes) {
+            for (let i = 0; i < systemConfig.wheelPrizes.length; i++) {
+                const prize = systemConfig.wheelPrizes[i];
                 cumulativeChance += prize.chance;
                 if (random <= cumulativeChance) {
                     selectedPrize = prize;
+                    selectedIndex = i;
                     break;
                 }
             }
@@ -2473,6 +2425,12 @@
             if (!selectedPrize) {
                 selectedPrize = systemConfig.wheelPrizes[0];
             }
+
+            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА ДЛЯ ВЫБРАННОГО ПРИЗА
+            const segmentAngle = 360 / systemConfig.wheelPrizes.length;
+            const targetAngle = 1080 + (selectedIndex * segmentAngle) + (segmentAngle / 2) + Math.random() * 10;
+
+            wheel.style.transform = `rotate(${targetAngle}deg)`;
 
             setTimeout(() => {
                 wheel.classList.remove('spinning');
@@ -2487,29 +2445,77 @@
                     claimed: selectedPrize.value !== 'wav' && selectedPrize.value !== 'respect'
                 });
 
+                // 🔥 ПОКАЗЫВАЕМ ТОТ ПРИЗ, КОТОРЫЙ ВЫПАЛ НА КОЛЕСЕ
                 if (selectedPrize.value === 'wav') {
-                    showWinModal('🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!', true);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, true);
                 } else if (selectedPrize.value === 'respect') {
-                    showWinModal('🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!', false);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, false);
                 } else {
                     userData.discount = Math.max(userData.discount, selectedPrize.value);
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, false);
                 }
 
                 updateProfile();
                 saveUserData();
                 wheelBtn.disabled = false;
 
-            }, 5000);
+            }, 4000);
         }
 
-        // 🔥 СИСТЕМА ПРИЗОВ
-        function displayPrizes() {
-            const prizesContainer = document.getElementById('prizesList');
-            prizesContainer.innerHTML = '';
+        // 🔥 СИСТЕМА ПРОФИЛЯ С ВКЛАДКАМИ
+        function showProfileSection(section) {
+            // Скрываем все секции
+            document.querySelectorAll('.profile-section-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            
+            // Убираем активность со всех кнопок
+            document.querySelectorAll('.profile-action-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Показываем выбранную секцию
+            document.getElementById(`profile${section.charAt(0).toUpperCase() + section.slice(1)}`).classList.remove('hidden');
+            
+            // Активируем кнопку
+            document.querySelector(`.profile-action-btn[onclick="showProfileSection('${section}')"]`).classList.add('active');
+            
+            // Загружаем данные для секции
+            if (section === 'favorites') {
+                displayProfileFavorites();
+            } else if (section === 'prizes') {
+                displayProfilePrizes();
+            }
+        }
+
+        function displayProfileFavorites() {
+            const container = document.getElementById('profileFavoriteBeats');
+            container.innerHTML = '';
+            
+            const favoriteBeats = beats.filter(beat => userData.favorites.includes(beat.id));
+            
+            if (favoriteBeats.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p>Нет избранных битов</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Добавляй биты в избранное сердечком!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            favoriteBeats.forEach(beat => {
+                container.appendChild(createBeatCard(beat));
+            });
+        }
+
+        function displayProfilePrizes() {
+            const container = document.getElementById('profilePrizesList');
+            container.innerHTML = '';
 
             if (!userData.prizes || userData.prizes.length === 0) {
-                prizesContainer.innerHTML = `
+                container.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-gift"></i>
                         <p>У вас пока нет выигрышей</p>
@@ -2560,16 +2566,58 @@
                     ${actionHTML}
                 `;
                 
-                prizesContainer.appendChild(prizeCard);
+                container.appendChild(prizeCard);
             });
         }
 
         function claimPrize(prizeIndex) {
             userData.prizes[prizeIndex].claimed = true;
             saveUserData();
-            displayPrizes();
+            displayProfilePrizes();
             closeWinModal(true);
             showNotification('🎵 Теперь выбери бит для WAV лицензии!');
+        }
+
+        // 🔥 АВТОМАТИЧЕСКИЕ НОВОСТИ
+        function loadNews() {
+            const newsContainer = document.getElementById('newsContainer');
+            
+            // 🔥 НОВОСТИ ИЗ МИРА МУЗЫКИ (можно заменить на свои)
+            const musicNews = [
+                {
+                    title: "🎵 Новый альбом Fresso Beats",
+                    content: "Вышел новый сборник эксклюзивных битов 'Urban Dreams'. Доступно для покупки в магазине!",
+                    date: new Date().toLocaleDateString('ru-RU')
+                },
+                {
+                    title: "🔥 Тренды Beatmaking 2024",
+                    content: "Фьюче-фанк и хард-дрилл становятся главными трендами этого года. Успей создать хит!",
+                    date: new Date(Date.now() - 86400000).toLocaleDateString('ru-RU')
+                },
+                {
+                    title: "💎 Скидка 25% на все биты",
+                    content: "Только этой недели скидка 25% на всю коллекцию битов. Успей приобрести!",
+                    date: new Date(Date.now() - 172800000).toLocaleDateString('ru-RU')
+                },
+                {
+                    title: "🎤 Коллаборация с топовыми MC",
+                    content: "Fresso Beats начинает сотрудничество с известными исполнителями. Следи за новостями!",
+                    date: new Date(Date.now() - 259200000).toLocaleDateString('ru-RU')
+                }
+            ];
+            
+            newsContainer.innerHTML = '';
+            
+            musicNews.forEach(news => {
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item fade-in';
+                newsItem.innerHTML = `
+                    <h3>${news.title}</h3>
+                    <p>${news.content}</p>
+                    <div class="news-date">${news.date}</div>
+                `;
+                newsContainer.appendChild(newsItem);
+            });
         }
 
         // 🔥 МОДАЛЬНЫЕ ОКНА
@@ -2599,7 +2647,10 @@
                 </button>`;
             }
             
-            winContent.querySelector('.spin-btn')?.remove();
+            // Удаляем старые кнопки
+            const oldButtons = winContent.querySelectorAll('.spin-btn');
+            oldButtons.forEach(btn => btn.remove());
+            
             winContent.insertAdjacentHTML('beforeend', buttonHTML);
             
             document.getElementById('winModal').style.display = 'flex';
@@ -2698,14 +2749,6 @@
                         handleTelegramAuth(user);
                     } else {
                         showNotification('🔗 Открой в Telegram для авторизации');
-                        setTimeout(() => {
-                            const retryUser = tg.initDataUnsafe?.user;
-                            if (retryUser) {
-                                handleTelegramAuth(retryUser);
-                            } else {
-                                showNotification('❌ Не удалось получить данные Telegram');
-                            }
-                        }, 1000);
                     }
                 } else {
                     showNotification('🔗 Открой в Telegram для полного функционала');
@@ -2819,41 +2862,6 @@
                     notification.remove();
                 }, 300);
             }, 3000);
-        }
-
-        function sendToTelegramBot(data) {
-            if (isTelegram && tg) {
-                try {
-                    const tgUser = tg.initDataUnsafe?.user;
-                    if (tgUser) {
-                        data.telegram_user = {
-                            id: tgUser.id,
-                            first_name: tgUser.first_name,
-                            username: tgUser.username
-                        };
-                    }
-                    
-                    tg.sendData(JSON.stringify(data));
-                    
-                    setTimeout(() => {
-                        if (data.type === 'purchase') {
-                            showNotification('✅ Заказ оформлен! Закрой окно когда прочитаешь сообщение от бота.');
-                        } else {
-                            tg.close();
-                        }
-                    }, 3000);
-                    
-                    return true;
-                } catch (error) {
-                    console.error('❌ Ошибка отправки в Telegram:', error);
-                    showNotification('❌ Ошибка отправки данных');
-                    return false;
-                }
-            } else {
-                console.log("Web App Data:", data);
-                showNotification(`📱 Данные для бота: ${JSON.stringify(data, null, 2)}`);
-                return false;
-            }
         }
 
         function logger(message) {
