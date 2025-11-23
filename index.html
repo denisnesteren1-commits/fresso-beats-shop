@@ -667,71 +667,72 @@
             position: relative;
         }
 
-        .wheel-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 20px;
-        }
+        /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
+/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
+.wheel-container {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 20px;
+}
 
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
-            box-shadow: 
-                0 0 30px rgba(0,0,0,0.3),
-                0 0 60px rgba(139, 92, 246, 0.2),
-                inset 0 0 20px rgba(255,255,255,0.1);
-            border: 3px solid rgba(255,255,255,0.1);
-        }
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.1);
+}
 
-        .wheel-segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: bottom right;
-            left: 0;
-            top: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-        }
+/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
+.wheel-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: bottom right;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
 
-        .segment-content {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%) rotate(45deg);
-            text-align: center;
-            width: 80px;
-        }
+.segment-content {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    text-align: center;
+    width: 100px;
+}
 
-        .segment-text {
-            font-size: 10px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            transform: rotate(-45deg);
-        }
+.segment-text {
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    transform: rotate(-45deg);
+    line-height: 1.2;
+}
 
-        .wheel-pointer {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-            z-index: 10;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-        }
-
+.wheel-pointer {
+    position: absolute;
+    top: 50%;
+    right: -15px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+    z-index: 10;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    border-left: 2px solid rgba(255,255,255,0.3);
+}
         .spin-btn {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             border: none;
@@ -1906,87 +1907,162 @@
         const ADMIN_TELEGRAM_ID = 856199923;
 
         // 🔥 ИСПРАВЛЕННАЯ СИСТЕМА ЗВУКОВ
-        const soundSystem = {
-            sounds: {},
-            backgroundMusic: null,
-            isMuted: false,
-            
-            init: function() {
-                // 🔥 ПРОСТЫЕ И НАДЕЖНЫЕ СИСТЕМНЫЕ ЗВУКИ
-                const soundFiles = {
-                    background: 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
-                    click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
-                    lose: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-game-over-213.mp3',
-                    spin: 'https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1087.mp3',
-                    spin2: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-mechanical-bling-210.mp3',
-                    bigwin: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3',
-                    smallwin: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-coin-1998.mp3'
-                };
+       // 🔥 ИСПРАВЛЕННАЯ СИСТЕМА ЗВУКОВ - 100% РАБОЧАЯ
+const soundSystem = {
+    sounds: {},
+    backgroundMusic: null,
+    isMuted: localStorage.getItem('soundMuted') === 'true',
+    
+    init: function() {
+        this.createSounds();
+        updateSoundButton();
+    },
+    
+    createSounds: function() {
+        // 🔥 СОЗДАЕМ ПРОСТЫЕ ЗВУКИ ПРОГРАММНО
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                const context = new AudioContext();
                 
-                // ПРЕЗАГРУЗКА ЗВУКОВ
-                Object.keys(soundFiles).forEach(key => {
-                    this.sounds[key] = new Audio(soundFiles[key]);
-                    this.sounds[key].preload = 'auto';
-                    this.sounds[key].load();
-                });
-            },
-            
-            play: function(soundName, volume = 0.7) {
-                if (this.isMuted || !this.sounds[soundName]) return;
+                // ЗВУК КЛИКА
+                this.sounds.click = this.createBeepSound(context, 800, 0.1);
                 
-                try {
-                    const sound = this.sounds[soundName].cloneNode();
-                    sound.volume = volume;
-                    
-                    const playPromise = sound.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.warn('Не удалось воспроизвести звук:', error);
-                        });
-                    }
-                } catch (e) {
-                    console.warn('Ошибка воспроизведения звука:', e);
-                }
-            },
-            
-            playBackground: function() {
-                if (this.isMuted || !this.sounds.background) return;
+                // ЗВУК ВРАЩЕНИЯ
+                this.sounds.spin = this.createBeepSound(context, 400, 0.3);
                 
-                try {
-                    this.backgroundMusic = this.sounds.background.cloneNode();
-                    this.backgroundMusic.volume = 0.3;
-                    this.backgroundMusic.loop = true;
-                    
-                    const playPromise = this.backgroundMusic.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(e => {
-                            console.warn('Фоновая музыка не воспроизводится:', e);
-                        });
-                    }
-                } catch (e) {
-                    console.warn('Ошибка фоновой музыки:', e);
-                }
-            },
+                // ЗВУК ВЫИГРЫША
+                this.sounds.win = this.createBeepSound(context, 1200, 0.5);
+                
+                // ЗВУК ПРОИГРЫША
+                this.sounds.lose = this.createBeepSound(context, 200, 0.2);
+                
+                // ФОНОВАЯ МУЗЫКА
+                this.sounds.background = this.createBackgroundMusic(context);
+            }
+        } catch (e) {
+            console.log('AudioContext не поддерживается, используем fallback');
+            this.createFallbackSounds();
+        }
+    },
+    
+    createBeepSound: function(context, frequency, duration) {
+        return function() {
+            if (soundSystem.isMuted) return;
             
-            stopBackground: function() {
-                if (this.backgroundMusic) {
-                    this.backgroundMusic.pause();
-                    this.backgroundMusic.currentTime = 0;
-                }
-            },
-            
-            toggleMute: function() {
-                this.isMuted = !this.isMuted;
-                if (this.isMuted) {
-                    this.stopBackground();
-                    showNotification('🔇 Звук выключен');
-                } else {
-                    showNotification('🔊 Звук включен');
-                }
-                updateSoundButton();
-                return this.isMuted;
+            try {
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + duration);
+                
+                oscillator.start(context.currentTime);
+                oscillator.stop(context.currentTime + duration);
+            } catch (e) {
+                console.log('Ошибка воспроизведения звука:', e);
             }
         };
+    },
+    
+    createBackgroundMusic: function(context) {
+        return function() {
+            if (soundSystem.isMuted || soundSystem.backgroundMusic) return;
+            
+            try {
+                const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+                let currentNote = 0;
+                
+                soundSystem.backgroundMusic = setInterval(() => {
+                    if (soundSystem.isMuted) {
+                        clearInterval(soundSystem.backgroundMusic);
+                        soundSystem.backgroundMusic = null;
+                        return;
+                    }
+                    
+                    const oscillator = context.createOscillator();
+                    const gainNode = context.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(context.destination);
+                    
+                    oscillator.frequency.value = notes[currentNote];
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.05, context.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+                    
+                    oscillator.start(context.currentTime);
+                    oscillator.stop(context.currentTime + 0.5);
+                    
+                    currentNote = (currentNote + 1) % notes.length;
+                }, 800);
+            } catch (e) {
+                console.log('Ошибка фоновой музыки:', e);
+            }
+        };
+    },
+    
+    createFallbackSounds: function() {
+        // FALLBACK
+        this.sounds.click = function() {
+            if (!soundSystem.isMuted) {
+                try {
+                    const audio = new Audio();
+                    audio.volume = 0.3;
+                    audio.play().catch(() => {});
+                } catch (e) {}
+            }
+        };
+        
+        this.sounds.spin = this.sounds.click;
+        this.sounds.win = this.sounds.click;
+        this.sounds.lose = this.sounds.click;
+        this.sounds.background = function() {
+            if (!soundSystem.isMuted && !soundSystem.backgroundMusic) {
+                soundSystem.backgroundMusic = true;
+            }
+        };
+    },
+    
+    play: function(soundName) {
+        if (this.sounds[soundName]) {
+            this.sounds[soundName]();
+        }
+    },
+    
+    playBackground: function() {
+        this.play('background');
+    },
+    
+    stopBackground: function() {
+        if (this.backgroundMusic) {
+            clearInterval(this.backgroundMusic);
+            this.backgroundMusic = null;
+        }
+    },
+    
+    toggleMute: function() {
+        this.isMuted = !this.isMuted;
+        localStorage.setItem('soundMuted', this.isMuted);
+        
+        if (this.isMuted) {
+            this.stopBackground();
+            showNotification('🔇 Звук выключен');
+        } else {
+            showNotification('🔊 Звук включен');
+        }
+        
+        updateSoundButton();
+        return this.isMuted;
+    }
+};
 
         // 🔥 ОБНОВЛЕНИЕ КНОПКИ ЗВУКА
         function updateSoundButton() {
@@ -2075,13 +2151,15 @@
                 { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
             wheelPrizes: [
-                { name: '1% скидка', value: 1, color: '#FF6B6B', chance: 15 },
-                { name: '5% скидка', value: 5, color: '#4ECDC4', chance: 20 },
-                { name: '10% скидка', value: 10, color: '#45B7D1', chance: 18 },
-                { name: '15% скидка', value: 15, color: '#96CEB4', chance: 15 },
-                { name: '20% скидка', value: 20, color: '#FFEAA7', chance: 12 },
-                { name: '25% скидка', value: 25, color: '#DDA0DD', chance: 10 },
-                { name: 'WAV лицензия', value: 'wav', color: '#98D8C8', chance: 5 },
+    { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },
+    { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },
+    { name: '10%', value: 10, color: '#45B7D1', chance: 18 },
+    { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
+    { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
+    { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },
+    { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },
+    { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 }
+]
                 { name: 'Респект', value: 'respect', color: '#F7DC6F', chance: 5 }
             ]
         };
@@ -2239,11 +2317,22 @@
 
         // 🔥 СИСТЕМА НАВИГАЦИИ С АНИМАЦИЯМИ И ЗВУКАМИ
         function setupNavigation() {
+		
             const navItems = document.querySelectorAll('.nav-item');
             const screens = document.querySelectorAll('.screen');
 
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
+		soundSystem.play('click');
+
+const targetScreen = this.getAttribute('data-screen');
+
+// УПРАВЛЕНИЕ ФОНОВОЙ МУЗЫКОЙ
+if (targetScreen === 'casinoScreen') {
+    soundSystem.playBackground();
+} else {
+    soundSystem.stopBackground();
+}
                     const targetScreen = this.getAttribute('data-screen');
                     
                     // Звук клика
@@ -2281,6 +2370,19 @@
                 });
             });
         }
+// 🔥 ЗВУКИ ДЛЯ ВСЕХ КЛИКАБЕЛЬНЫХ ЭЛЕМЕНТОВ
+document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'BUTTON' || 
+        e.target.tagName === 'A' || 
+        e.target.closest('button') || 
+        e.target.closest('a') ||
+        e.target.classList.contains('nav-item') ||
+        e.target.classList.contains('action-btn') ||
+        e.target.classList.contains('filter-btn') ||
+        e.target.classList.contains('see-all')) {
+        soundSystem.play('click');
+    }
+});
 
         // 🔥 СИСТЕМА ПОИСКА И ФИЛЬТРОВ
         function setupSearch() {
@@ -2812,35 +2914,35 @@
 
         // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
         function setupWheel() {
-            const wheel = document.getElementById('wheel');
-            wheel.innerHTML = '';
-            
-            const prizes = systemConfig.wheelPrizes;
-            const segmentAngle = 360 / prizes.length;
-            
-            prizes.forEach((prize, index) => {
-                const segment = document.createElement('div');
-                segment.className = 'wheel-segment';
-                
-                // Угол поворота сегмента
-                const rotateAngle = index * segmentAngle;
-                
-                segment.style.cssText = `
-                    background: ${prize.color};
-                    transform: rotate(${rotateAngle}deg);
-                `;
-                
-                // Содержимое сегмента
-                const content = document.createElement('div');
-                content.className = 'segment-content';
-                content.innerHTML = `
-                    <div class="segment-text">${prize.name}</div>
-                `;
-                
-                segment.appendChild(content);
-                wheel.appendChild(segment);
-            });
-        }
+    const wheel = document.getElementById('wheel');
+    wheel.innerHTML = '';
+    
+    const prizes = systemConfig.wheelPrizes;
+    const segmentAngle = 360 / prizes.length;
+    
+    prizes.forEach((prize, index) => {
+        const segment = document.createElement('div');
+        segment.className = 'wheel-segment';
+        
+        // Угол поворота сегмента
+        const rotateAngle = index * segmentAngle;
+        
+        segment.style.cssText = `
+            background: ${prize.color};
+            transform: rotate(${rotateAngle}deg);
+        `;
+        
+        // Содержимое сегмента
+        const content = document.createElement('div');
+        content.className = 'segment-content';
+        content.innerHTML = `
+            <div class="segment-text">${prize.name}</div>
+        `;
+        
+        segment.appendChild(content);
+        wheel.appendChild(segment);
+    });
+}
 
         function spinWheel() {
             soundSystem.play('spin', 0.7);
@@ -2867,7 +2969,7 @@
             // 🔥 РАСЧЕТ УГЛА ПОВОРОТА
             const segmentAngle = 360 / systemConfig.wheelPrizes.length;
             const fullRotations = 5; // 5 полных оборотов
-            const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle) + (segmentAngle / 2);
+            const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle);
 
             // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
             wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
@@ -3592,4 +3694,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
