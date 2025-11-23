@@ -669,6 +669,7 @@
 
         /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
+/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
 .wheel-container {
     position: relative;
     width: 280px;
@@ -687,7 +688,7 @@
     border: 3px solid rgba(255,255,255,0.1);
 }
 
-/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
+/* 🔥 ИСПРАВЛЕННЫЕ СЕГМЕНТЫ */
 .wheel-segment {
     position: absolute;
     width: 50%;
@@ -702,38 +703,41 @@
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
+/* 🔥 ИСПРАВЛЕННОЕ СОДЕРЖИМОЕ СЕГМЕНТА */
 .segment-content {
     position: absolute;
-    left: 15px;
+    left: 40px; /* Отодвигаем текст от центра */
     top: 50%;
-    transform: translateY(-50%) rotate(45deg);
+    transform: translateY(-50%);
     text-align: center;
-    width: 100px;
+    width: 80px;
 }
 
+/* 🔥 КРАСИВЫЙ ТЕКСТ СЕГМЕНТОВ */
 .segment-text {
     font-size: 11px;
     font-weight: bold;
     color: white;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    transform: rotate(-45deg);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     line-height: 1.2;
+    transform-origin: center;
+    white-space: nowrap;
 }
 
+/* 🔥 СТРЕЛКА УКАЗАТЕЛЬ */
 .wheel-pointer {
     position: absolute;
     top: 50%;
-    right: -15px;
+    right: -10px;
     transform: translateY(-50%);
-    width: 40px;
+    width: 30px;
     height: 40px;
     background: var(--accent);
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
     z-index: 10;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
     border-left: 2px solid rgba(255,255,255,0.3);
-}
-        .spin-btn {
+}        .spin-btn {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             border: none;
             padding: 15px 30px;
@@ -2901,7 +2905,7 @@ document.addEventListener('click', function(e) {
         }
 
         // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
-        function setupWheel() {
+function setupWheel() {
     const wheel = document.getElementById('wheel');
     wheel.innerHTML = '';
     
@@ -2912,8 +2916,8 @@ document.addEventListener('click', function(e) {
         const segment = document.createElement('div');
         segment.className = 'wheel-segment';
         
-        // Угол поворота сегмента
-        const rotateAngle = index * segmentAngle;
+        // Угол поворота сегмента (центрируем)
+        const rotateAngle = (index * segmentAngle) - (segmentAngle / 2);
         
         segment.style.cssText = `
             background: ${prize.color};
@@ -2923,8 +2927,12 @@ document.addEventListener('click', function(e) {
         // Содержимое сегмента
         const content = document.createElement('div');
         content.className = 'segment-content';
+        
+        // 🔥 ПРАВИЛЬНОЕ ПОЗИЦИОНИРОВАНИЕ ТЕКСТА
         content.innerHTML = `
-            <div class="segment-text">${prize.name}</div>
+            <div class="segment-text" style="transform: rotate(${45 - (index * segmentAngle)}deg);">
+                ${prize.name}
+            </div>
         `;
         
         segment.appendChild(content);
@@ -2932,63 +2940,76 @@ document.addEventListener('click', function(e) {
     });
 }
 
-        function spinWheel() {
-            soundSystem.play('spin', 0.7);
-            
-            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
-                showNotification('❌ Попытки закончились! Возвращайся завтра!');
-                return;
-            }
+// 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ
+function spinWheel() {
+    soundSystem.play('spin', 0.7);
+    
+    if (!userData.isAdmin && userData.wheelAttempts <= 0) {
+        showNotification('❌ Попытки закончились! Возвращайся завтра!');
+        return;
+    }
 
-            const wheelBtn = document.getElementById('wheelBtn');
-            const wheel = document.getElementById('wheel');
-            
-            wheelBtn.disabled = true;
-            
-            if (!userData.isAdmin) {
-                userData.wheelAttempts--;
-            }
-            userData.lastWheelPlay = Date.now();
+    const wheelBtn = document.getElementById('wheelBtn');
+    const wheel = document.getElementById('wheel');
+    
+    wheelBtn.disabled = true;
+    
+    if (!userData.isAdmin) {
+        userData.wheelAttempts--;
+    }
+    userData.lastWheelPlay = Date.now();
 
-            // 🔥 ВЫБОР СЛУЧАЙНОГО ПРИЗА
-            const selectedPrize = getRandomWheelPrize();
-            const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
-            
-            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА
-            const segmentAngle = 360 / systemConfig.wheelPrizes.length;
-            const fullRotations = 5; // 5 полных оборотов
-            const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle);
+    // 🔥 ВЫБОР СЛУЧАЙНОГО ПРИЗА ПО ВЕРОЯТНОСТИ
+    const selectedPrize = getRandomWheelPrize();
+    const prizes = systemConfig.wheelPrizes;
+    const segmentAngle = 360 / prizes.length;
+    
+    // 🔥 ПРАВИЛЬНЫЙ РАСЧЕТ УГЛА ДЛЯ СТРЕЛКИ
+    const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
+    
+    // Стрелка указывает на правую сторону, поэтому берем середину сегмента
+    const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2);
+    
+    // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (5 полных оборотов + смещение к нужному сегменту)
+    const fullRotations = 5;
+    const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle);
+    
+    // Сброс предыдущей анимации
+    wheel.style.transition = 'none';
+    wheel.style.transform = 'rotate(0deg)';
+    
+    // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
+    setTimeout(() => {
+        wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
+        wheel.style.transform = `rotate(${targetAngle}deg)`;
+    }, 10);
 
-            // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
-            wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
-            wheel.style.transform = `rotate(${targetAngle}deg)`;
+    setTimeout(() => {
+        soundSystem.play('win', 0.8);
+        
+        userData.prizes.push({
+            type: 'wheel',
+            prize: selectedPrize.name,
+            prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
+            value: selectedPrize.value,
+            date: new Date().toISOString(),
+            used: false
+        });
 
-            setTimeout(() => {
-                soundSystem.play('bigwin', 0.8);
-                
-                userData.prizes.push({
-                    type: 'wheel',
-                    prize: selectedPrize.name,
-                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
-                    value: selectedPrize.value,
-                    date: new Date().toISOString(),
-                    used: false
-                });
-
-                if (selectedPrize.value === 'wav') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-                } else if (selectedPrize.value === 'respect') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
-                } else {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
-                }
-
-                updateProfile();
-                saveUserData();
-                wheelBtn.disabled = false;
-
-            }, 4000);
+        if (selectedPrize.value === 'wav') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
+        } else if (selectedPrize.value === 'respect') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
+        } else {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
         }
+
+        updateProfile();
+        saveUserData();
+        wheelBtn.disabled = false;
+
+    }, 4000);
+}
 
         function getRandomWheelPrize() {
             const random = Math.random() * 100;
