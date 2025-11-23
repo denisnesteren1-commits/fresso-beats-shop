@@ -670,6 +670,7 @@
         /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
+/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ БЕЗ ТЕКСТА */
 .wheel-container {
     position: relative;
     width: 280px;
@@ -688,7 +689,7 @@
     border: 3px solid rgba(255,255,255,0.1);
 }
 
-/* 🔥 ИСПРАВЛЕННЫЕ СЕГМЕНТЫ */
+/* 🔥 ПРОСТЫЕ СЕГМЕНТЫ БЕЗ ТЕКСТА */
 .wheel-segment {
     position: absolute;
     width: 50%;
@@ -696,48 +697,25 @@
     transform-origin: bottom right;
     left: 0;
     top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     overflow: hidden;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
-/* 🔥 ИСПРАВЛЕННОЕ СОДЕРЖИМОЕ СЕГМЕНТА */
-.segment-content {
-    position: absolute;
-    left: 40px; /* Отодвигаем текст от центра */
-    top: 50%;
-    transform: translateY(-50%);
-    text-align: center;
-    width: 80px;
-}
-
-/* 🔥 КРАСИВЫЙ ТЕКСТ СЕГМЕНТОВ */
-.segment-text {
-    font-size: 11px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    line-height: 1.2;
-    transform-origin: center;
-    white-space: nowrap;
-}
-
-/* 🔥 СТРЕЛКА УКАЗАТЕЛЬ */
+/* 🔥 ТОЧНАЯ СТРЕЛКА */
 .wheel-pointer {
     position: absolute;
     top: 50%;
-    right: -10px;
+    right: -8px;
     transform: translateY(-50%);
-    width: 30px;
-    height: 40px;
+    width: 25px;
+    height: 35px;
     background: var(--accent);
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
     z-index: 10;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
     border-left: 2px solid rgba(255,255,255,0.3);
-}        .spin-btn {
+}       
+.spin-btn {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             border: none;
             padding: 15px 30px;
@@ -2154,17 +2132,17 @@ const systemConfig = {
         { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
         { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
     ],
-    wheelPrizes: [  // ← УБРАТЬ ЛИШНЮЮ ЗАКРЫВАЮЩУЮ СКОБКУ ЗДЕСЬ
-        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },
-        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },
-        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },
-        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
-        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
-        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },
-        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },
-        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 }
-    ]  // ← ЗАКРЫВАЮЩАЯ СКОБКА МАССИВА ДОЛЖНА БЫТЬ ЗДЕСЬ
-};  // ← ЗАКРЫВАЮЩАЯ СКОБКА ОБЪЕКТА systemConfig
+    wheelPrizes: [
+        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },        // Красный
+        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },        // Голубой
+        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },      // Синий
+        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },      // Зеленый
+        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },      // Желтый
+        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },      // Фиолетовый
+        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },    // Зеленый (WAV)
+        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 } // Желтый (Респект)
+    ]
+};
 
         // 🔥 ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
         document.addEventListener('DOMContentLoaded', function() {
@@ -2904,7 +2882,7 @@ document.addEventListener('click', function(e) {
             document.getElementById(`${method}Details`).classList.add('active');
         }
 
-        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
+        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ БЕЗ ТЕКСТА
 function setupWheel() {
     const wheel = document.getElementById('wheel');
     wheel.innerHTML = '';
@@ -2916,28 +2894,72 @@ function setupWheel() {
         const segment = document.createElement('div');
         segment.className = 'wheel-segment';
         
-        // Угол поворота сегмента (центрируем)
-        const rotateAngle = (index * segmentAngle) - (segmentAngle / 2);
+        // Угол поворота сегмента
+        const rotateAngle = index * segmentAngle;
         
         segment.style.cssText = `
             background: ${prize.color};
             transform: rotate(${rotateAngle}deg);
         `;
         
-        // Содержимое сегмента
-        const content = document.createElement('div');
-        content.className = 'segment-content';
-        
-        // 🔥 ПРАВИЛЬНОЕ ПОЗИЦИОНИРОВАНИЕ ТЕКСТА
-        content.innerHTML = `
-            <div class="segment-text" style="transform: rotate(${45 - (index * segmentAngle)}deg);">
-                ${prize.name}
-            </div>
-        `;
-        
-        segment.appendChild(content);
         wheel.appendChild(segment);
     });
+    
+    // 🔥 СОЗДАЕМ ЛЕГЕНДУ ЦВЕТОВ ПОД КОЛЕСОМ
+    createColorLegend();
+}
+
+// 🔥 СОЗДАЕМ ЛЕГЕНДУ ЦВЕТОВ
+function createColorLegend() {
+    const wheelMachine = document.querySelector('.wheel-machine');
+    
+    // Удаляем старую легенду если есть
+    const oldLegend = document.getElementById('colorLegend');
+    if (oldLegend) oldLegend.remove();
+    
+    const legend = document.createElement('div');
+    legend.id = 'colorLegend';
+    legend.style.cssText = `
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 15px;
+        padding: 10px;
+        background: rgba(45, 45, 66, 0.6);
+        border-radius: 10px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    `;
+    
+    systemConfig.wheelPrizes.forEach(prize => {
+        const colorItem = document.createElement('div');
+        colorItem.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: var(--text);
+        `;
+        
+        const colorBox = document.createElement('div');
+        colorBox.style.cssText = `
+            width: 12px;
+            height: 12px;
+            background: ${prize.color};
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.3);
+        `;
+        
+        const label = document.createElement('span');
+        label.textContent = prize.name;
+        label.style.fontSize = '10px';
+        
+        colorItem.appendChild(colorBox);
+        colorItem.appendChild(label);
+        legend.appendChild(colorItem);
+    });
+    
+    wheelMachine.appendChild(legend);
 }
 
 // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ
@@ -2964,11 +2986,11 @@ function spinWheel() {
     const prizes = systemConfig.wheelPrizes;
     const segmentAngle = 360 / prizes.length;
     
-    // 🔥 ПРАВИЛЬНЫЙ РАСЧЕТ УГЛА ДЛЯ СТРЕЛКИ
+    // 🔥 НАХОДИМ ИНДЕКС ВЫБРАННОГО ПРИЗА
     const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
     
-    // Стрелка указывает на правую сторону, поэтому берем середину сегмента
-    const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2);
+    // 🔥 РАСЧЕТ УГЛА ДЛЯ СТРЕЛКИ (стрелка справа, поэтому вычитаем 90 градусов)
+    const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2) - 90;
     
     // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (5 полных оборотов + смещение к нужному сегменту)
     const fullRotations = 5;
@@ -3010,6 +3032,21 @@ function spinWheel() {
 
     }, 4000);
 }
+
+// 🔥 ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ ЦВЕТОВ
+const systemConfig = {
+    // ... остальная конфигурация ...
+    wheelPrizes: [
+        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },        // Красный
+        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },        // Голубой
+        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },      // Синий
+        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },      // Зеленый
+        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },      // Желтый
+        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },      // Фиолетовый
+        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },    // Зеленый (WAV)
+        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 } // Желтый (Респект)
+    ]
+};
 
         function getRandomWheelPrize() {
             const random = Math.random() * 100;
