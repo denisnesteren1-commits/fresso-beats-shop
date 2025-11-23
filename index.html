@@ -2123,46 +2123,44 @@ const soundSystem = {
         };
 
         // 🔥 КОНФИГУРАЦИЯ СИСТЕМЫ
-        const systemConfig = {
-            paymentDetails: {
-                crypto: {
-                    wallet: "TBr7p8qLdK8mWZ4sN9tY2Xy1zAbCdEfGh",
-                    network: "TRC-20",
-                    instructions: "После оплаты отправьте скриншот @Fr1sso"
-                },
-                umoney: {
-                    wallet: "4100 1234 5678 9012",
-                    instructions: "После оплаты отправьте скриншот @Fr1sso"
-                },
-                sbp: {
-                    phone: "+7 900 123-45-67",
-                    bank: "Тинькофф",
-                    instructions: "После оплаты отправьте скриншот @Fr1sso"
-                }
-            },
-            musicKeys: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
-            musicGenres: ['Trap', 'Drill', 'Phonk', 'Lo-Fi', 'Hip-Hop', 'R&B', 'Pop', 'Electronic', 'Rock', 'Jazz', 'Classical'],
-            slotSymbols: ['🎵', '🎹', '🎤', '🥁', '🎧', '🎼', '🎷', '🎺'],
-            slotPrizes: [
-                { symbols: ['🎵', '🎵', '🎵'], prize: 'WAV лицензия', type: 'wav', chance: 0.03 },
-                { symbols: ['🎹', '🎹', '🎹'], prize: '50% скидка', type: 'discount', chance: 0.05 },
-                { symbols: ['🎤', '🎤', '🎤'], prize: '25% скидка', type: 'discount', chance: 0.08 },
-                { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
-                { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
-            ],
-            wheelPrizes: [
-    { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },
-    { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },
-    { name: '10%', value: 10, color: '#45B7D1', chance: 18 },
-    { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
-    { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
-    { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },
-    { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },
-    { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 }
-]
-                { name: 'Респект', value: 'respect', color: '#F7DC6F', chance: 5 }
-            ]
-        };
+const systemConfig = {
+    paymentDetails: {
+        crypto: {
+            wallet: "TBr7p8qLdK8mWZ4sN9tY2Xy1zAbCdEfGh",
+            network: "TRC-20",
+            instructions: "После оплаты отправьте скриншот @Fr1sso"
+        },
+        umoney: {
+            wallet: "4100 1234 5678 9012",
+            instructions: "После оплаты отправьте скриншот @Fr1sso"
+        },
+        sbp: {
+            phone: "+7 900 123-45-67",
+            bank: "Тинькофф",
+            instructions: "После оплаты отправьте скриншот @Fr1sso"
+        }
+    },
+    musicKeys: ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
+    musicGenres: ['Trap', 'Drill', 'Phonk', 'Lo-Fi', 'Hip-Hop', 'R&B', 'Pop', 'Electronic', 'Rock', 'Jazz', 'Classical'],
+    slotSymbols: ['🎵', '🎹', '🎤', '🥁', '🎧', '🎼', '🎷', '🎺'],
+    slotPrizes: [
+        { symbols: ['🎵', '🎵', '🎵'], prize: 'WAV лицензия', type: 'wav', chance: 0.03 },
+        { symbols: ['🎹', '🎹', '🎹'], prize: '50% скидка', type: 'discount', chance: 0.05 },
+        { symbols: ['🎤', '🎤', '🎤'], prize: '25% скидка', type: 'discount', chance: 0.08 },
+        { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
+        { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
+    ],
+    wheelPrizes: [  // ← УБРАТЬ ЛИШНЮЮ ЗАКРЫВАЮЩУЮ СКОБКУ ЗДЕСЬ
+        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },
+        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },
+        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },
+        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
+        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
+        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },
+        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },
+        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 }
+    ]  // ← ЗАКРЫВАЮЩАЯ СКОБКА МАССИВА ДОЛЖНА БЫТЬ ЗДЕСЬ
+};  // ← ЗАКРЫВАЮЩАЯ СКОБКА ОБЪЕКТА systemConfig
 
         // 🔥 ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
         document.addEventListener('DOMContentLoaded', function() {
@@ -2333,17 +2331,7 @@ if (targetScreen === 'casinoScreen') {
 } else {
     soundSystem.stopBackground();
 }
-                    const targetScreen = this.getAttribute('data-screen');
                     
-                    // Звук клика
-                    soundSystem.play('click', 0.5);
-                    
-                    // Управление фоновой музыкой
-                    if (targetScreen === 'casinoScreen') {
-                        soundSystem.playBackground();
-                    } else {
-                        soundSystem.stopBackground();
-                    }
                     
                     // Анимация перехода
                     const currentScreen = document.querySelector('.screen:not(.hidden)');
