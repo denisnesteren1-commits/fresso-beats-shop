@@ -182,29 +182,6 @@
             position: relative;
         }
 
-        /* 🔥 КНОПКА ЗВУКА ПЕРЕМЕЩЕНА В ЛУДИК */
-        #muteButton {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--primary);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: var(--glow);
-            z-index: 100;
-            transition: all 0.3s ease;
-        }
-
-        #muteButton:hover {
-            transform: scale(1.1);
-            background: var(--primary-dark);
-        }
-
         /* 🔥 УЛУЧШЕННЫЙ ПОИСК И ФИЛЬТРЫ */
         .search-section {
             margin-bottom: 25px;
@@ -679,7 +656,7 @@
             50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
         }
 
-        /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО - КРУГЛОЕ И С ПРАВИЛЬНОЙ СТРЕЛКОЙ */
+        /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
         .wheel-machine {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 20px;
@@ -702,75 +679,86 @@
             height: 100%;
             border-radius: 50%;
             position: relative;
+            overflow: hidden;
             transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
             box-shadow: 
                 0 0 30px rgba(0,0,0,0.3),
                 0 0 60px rgba(139, 92, 246, 0.2),
                 inset 0 0 20px rgba(255,255,255,0.1);
             border: 3px solid rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
-
-        .wheel.spinning {
-            animation: wheelSpin 4s cubic-bezier(0.1, 0.8, 0.2, 1);
-        }
-
-        @keyframes wheelSpin {
-            0% { 
-                transform: rotate(0deg);
-                box-shadow: 0 0 30px rgba(0,0,0,0.3);
-            }
-            50% {
-                box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
-            }
-            100% { 
-                transform: rotate(1080deg);
-                box-shadow: 0 0 30px rgba(0,0,0,0.3);
-            }
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: 50%;
-            right: -15px;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
-            z-index: 2;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            border-left: 2px solid rgba(255,255,255,0.3);
         }
 
         .wheel-segment {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-origin: center;
-            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 50% 100%);
+            width: 50%;
+            height: 50%;
+            transform-origin: bottom right;
+            left: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
         }
 
-        .wheel-label {
+        .segment-content {
             position: absolute;
+            right: 10px;
             top: 50%;
-            left: 50%;
-            transform-origin: center;
+            transform: translateY(-50%) rotate(45deg);
             text-align: center;
+            width: 80px;
+        }
+
+        .segment-text {
             font-size: 10px;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            width: 60px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.6);
-            border-radius: 8px;
-            padding: 2px 4px;
-            z-index: 1;
-            border: 1px solid rgba(255,255,255,0.2);
+            transform: rotate(-45deg);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+            z-index: 10;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .spin-btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .attempts-counter {
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
         /* 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА */
@@ -991,6 +979,35 @@
         .stat-label {
             font-size: 12px;
             color: var(--text-secondary);
+        }
+
+        /* 🔥 КНОПКА ЗВУКА В ПРОФИЛЕ */
+        .sound-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .sound-icon {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .sound-text {
+            flex: 1;
+            font-weight: 500;
         }
 
         /* 🔥 СТАТИСТИКА ПРОДАЖ ДЛЯ АДМИНА */
@@ -1327,35 +1344,6 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
-        .spin-btn {
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .spin-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--glow);
-        }
-
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .attempts-counter {
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
         /* АНИМАЦИИ */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(30px); }
@@ -1523,11 +1511,8 @@
             </div>
         </div>
 
-        <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ И СИНХРОНИЗАЦИЕЙ -->
+        <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМ КОЛЕСОМ -->
         <div id="casinoScreen" class="screen hidden">
-            <!-- 🔥 КНОПКА ЗВУКА ПЕРЕМЕЩЕНА СЮДА -->
-            <button id="muteButton">🔊</button>
-            
             <div class="casino-section">
                 <!-- СЛОТЫ -->
                 <div class="slots-machine">
@@ -1643,7 +1628,7 @@
             </div>
         </div>
 
-        <!-- 🔥 ПРОФИЛЬ С ВКЛАДКАМИ -->
+        <!-- 🔥 ПРОФИЛЬ С КНОПКОЙ ЗВУКА -->
         <div id="profileScreen" class="screen hidden">
             <div class="profile-section">
                 <!-- ИНФОРМАЦИЯ ПОЛЬЗОВАТЕЛЯ -->
@@ -1654,6 +1639,12 @@
                             <h2 id="userName">Гость</h2>
                             <p id="userStatus">Не авторизован</p>
                         </div>
+                    </div>
+
+                    <!-- 🔥 КНОПКА ЗВУКА В ПРОФИЛЕ -->
+                    <div class="sound-toggle" onclick="toggleSound()">
+                        <div class="sound-icon" id="soundIcon">🔊</div>
+                        <div class="sound-text" id="soundText">Звук включен</div>
                     </div>
 
                     <div class="stats-grid">
@@ -1914,14 +1905,14 @@
         let isTelegram = false;
         const ADMIN_TELEGRAM_ID = 856199923;
 
-        // 🔥 ИСПРАВЛЕННАЯ СИСТЕМА ЗВУКОВ - ТЕПЕРЬ С СИСТЕМНЫМИ ЗВУКАМИ
+        // 🔥 ИСПРАВЛЕННАЯ СИСТЕМА ЗВУКОВ
         const soundSystem = {
             sounds: {},
             backgroundMusic: null,
             isMuted: false,
             
             init: function() {
-                // 🔥 СИСТЕМНЫЕ ЗВУКИ КОТОРЫЕ РАБОТАЮТ 100%
+                // 🔥 ПРОСТЫЕ И НАДЕЖНЫЕ СИСТЕМНЫЕ ЗВУКИ
                 const soundFiles = {
                     background: 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
                     click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
@@ -1932,10 +1923,9 @@
                     smallwin: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-coin-1998.mp3'
                 };
                 
-                // 🔥 ПРЕЗАГРУЗКА ЗВУКОВ
+                // ПРЕЗАГРУЗКА ЗВУКОВ
                 Object.keys(soundFiles).forEach(key => {
-                    this.sounds[key] = new Audio();
-                    this.sounds[key].src = soundFiles[key];
+                    this.sounds[key] = new Audio(soundFiles[key]);
                     this.sounds[key].preload = 'auto';
                     this.sounds[key].load();
                 });
@@ -1993,17 +1983,28 @@
                 } else {
                     showNotification('🔊 Звук включен');
                 }
-                updateMuteButton();
+                updateSoundButton();
                 return this.isMuted;
             }
         };
 
         // 🔥 ОБНОВЛЕНИЕ КНОПКИ ЗВУКА
-        function updateMuteButton() {
-            const muteButton = document.getElementById('muteButton');
-            if (muteButton) {
-                muteButton.textContent = soundSystem.isMuted ? '🔇' : '🔊';
+        function updateSoundButton() {
+            const soundIcon = document.getElementById('soundIcon');
+            const soundText = document.getElementById('soundText');
+            
+            if (soundSystem.isMuted) {
+                soundIcon.textContent = '🔇';
+                soundText.textContent = 'Звук выключен';
+            } else {
+                soundIcon.textContent = '🔊';
+                soundText.textContent = 'Звук включен';
             }
+        }
+
+        function toggleSound() {
+            soundSystem.play('click', 0.5);
+            soundSystem.toggleMute();
         }
 
         // 🔥 ДАННЫЕ СИСТЕМЫ
@@ -2074,14 +2075,14 @@
                 { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
             wheelPrizes: [
-                { name: '1% скидка', value: 1, color: '#FF6B6B', chance: 0.15 },
-                { name: '5% скидка', value: 5, color: '#4ECDC4', chance: 0.20 },
-                { name: '10% скидка', value: 10, color: '#45B7D1', chance: 0.18 },
-                { name: '15% скидка', value: 15, color: '#96CEB4', chance: 0.15 },
-                { name: '20% скидка', value: 20, color: '#FFEAA7', chance: 0.12 },
-                { name: '25% скидка', value: 25, color: '#DDA0DD', chance: 0.10 },
-                { name: 'WAV лицензия', value: 'wav', color: '#98D8C8', chance: 0.05 },
-                { name: 'Респект', value: 'respect', color: '#F7DC6F', chance: 0.05 }
+                { name: '1% скидка', value: 1, color: '#FF6B6B', chance: 15 },
+                { name: '5% скидка', value: 5, color: '#4ECDC4', chance: 20 },
+                { name: '10% скидка', value: 10, color: '#45B7D1', chance: 18 },
+                { name: '15% скидка', value: 15, color: '#96CEB4', chance: 15 },
+                { name: '20% скидка', value: 20, color: '#FFEAA7', chance: 12 },
+                { name: '25% скидка', value: 25, color: '#DDA0DD', chance: 10 },
+                { name: 'WAV лицензия', value: 'wav', color: '#98D8C8', chance: 5 },
+                { name: 'Респект', value: 'respect', color: '#F7DC6F', chance: 5 }
             ]
         };
 
@@ -2809,7 +2810,7 @@
             document.getElementById(`${method}Details`).classList.add('active');
         }
 
-        // 🔥 ПРОСТОЕ КОЛЕСО КАК В КАЗИНО
+        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
         function setupWheel() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
@@ -2818,31 +2819,31 @@
             const segmentAngle = 360 / prizes.length;
             
             prizes.forEach((prize, index) => {
-                const startAngle = index * segmentAngle;
-                
-                // СЕГМЕНТ КОЛЕСА
                 const segment = document.createElement('div');
                 segment.className = 'wheel-segment';
+                
+                // Угол поворота сегмента
+                const rotateAngle = index * segmentAngle;
+                
                 segment.style.cssText = `
                     background: ${prize.color};
-                    transform: rotate(${startAngle}deg);
+                    transform: rotate(${rotateAngle}deg);
                 `;
-                wheel.appendChild(segment);
                 
-                // ТЕКСТ ПРИЗА
-                const label = document.createElement('div');
-                label.className = 'wheel-label';
-                label.textContent = prize.name;
-                label.style.cssText = `
-                    transform: translate(-50%, -50%) rotate(${startAngle + segmentAngle/2}deg) translateY(-90px) rotate(-${startAngle + segmentAngle/2}deg);
-                    font-size: ${prize.name.length > 8 ? '8px' : '10px'};
+                // Содержимое сегмента
+                const content = document.createElement('div');
+                content.className = 'segment-content';
+                content.innerHTML = `
+                    <div class="segment-text">${prize.name}</div>
                 `;
-                wheel.appendChild(label);
+                
+                segment.appendChild(content);
+                wheel.appendChild(segment);
             });
         }
 
         function spinWheel() {
-            soundSystem.play('spin2', 0.7);
+            soundSystem.play('spin', 0.7);
             
             if (!userData.isAdmin && userData.wheelAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
@@ -2859,21 +2860,21 @@
             }
             userData.lastWheelPlay = Date.now();
 
-            // 🔥 ВЫБИРАЕМ СЛУЧАЙНЫЙ ПРИЗ
+            // 🔥 ВЫБОР СЛУЧАЙНОГО ПРИЗА
             const selectedPrize = getRandomWheelPrize();
             const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
             
-            wheel.classList.add('spinning');
-
-            // 🔥 ПРОСТАЯ И ПОНЯТНАЯ АНИМАЦИЯ
+            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА
             const segmentAngle = 360 / systemConfig.wheelPrizes.length;
             const fullRotations = 5; // 5 полных оборотов
             const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle) + (segmentAngle / 2);
 
+            // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
+            wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
             wheel.style.transform = `rotate(${targetAngle}deg)`;
 
             setTimeout(() => {
-                wheel.classList.remove('spinning');
+                soundSystem.play('bigwin', 0.8);
                 
                 userData.prizes.push({
                     type: 'wheel',
@@ -2883,13 +2884,6 @@
                     date: new Date().toISOString(),
                     used: false
                 });
-
-                // 🔥 ЗВУК ВЫИГРЫША
-                if (selectedPrize.value === 'wav') {
-                    soundSystem.play('bigwin', 0.8);
-                } else {
-                    soundSystem.play('smallwin', 0.6);
-                }
 
                 if (selectedPrize.value === 'wav') {
                     showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
@@ -2907,7 +2901,7 @@
         }
 
         function getRandomWheelPrize() {
-            const random = Math.random();
+            const random = Math.random() * 100;
             let cumulativeChance = 0;
             
             for (const prize of systemConfig.wheelPrizes) {
@@ -3598,4 +3592,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
