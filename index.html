@@ -671,6 +671,7 @@
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ СО СТРЕЛКОЙ СПРАВА */
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
 /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ БЕЗ ТЕКСТА */
+/* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
 .wheel-container {
     position: relative;
     width: 280px;
@@ -687,18 +688,18 @@
     transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
     box-shadow: 0 0 30px rgba(0,0,0,0.3);
     border: 3px solid rgba(255,255,255,0.1);
+    background: var(--bg-darker);
 }
 
-/* 🔥 ПРОСТЫЕ СЕГМЕНТЫ БЕЗ ТЕКСТА */
+/* 🔥 ПРАВИЛЬНЫЕ СЕГМЕНТЫ */
 .wheel-segment {
     position: absolute;
-    width: 50%;
-    height: 50%;
-    transform-origin: bottom right;
+    width: 100%;
+    height: 100%;
+    transform-origin: 100% 100%;
     left: 0;
     top: 0;
-    overflow: hidden;
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
 }
 
 /* 🔥 ТОЧНАЯ СТРЕЛКА */
@@ -714,8 +715,7 @@
     z-index: 10;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
     border-left: 2px solid rgba(255,255,255,0.3);
-}       
-.spin-btn {
+}.spin-btn {
             background: linear-gradient(45deg, var(--primary), var(--primary-dark));
             border: none;
             padding: 15px 30px;
@@ -2132,16 +2132,17 @@ const systemConfig = {
         { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
         { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
     ],
-    wheelPrizes: [
-        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },        // Красный
-        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },        // Голубой
-        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },      // Синий
-        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },      // Зеленый
-        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },      // Желтый
-        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },      // Фиолетовый
-        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },    // Зеленый (WAV)
-        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 } // Желтый (Респект)
-    ]
+    // 🔥 ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ ПРИЗОВ КОЛЕСА
+systemConfig.wheelPrizes = [
+    { name: '1%', value: 1, color: '#FF6B6B', chance: 5 },        // Красный
+    { name: '5%', value: 5, color: '#4ECDC4', chance: 10 },       // Голубой
+    { name: '10%', value: 10, color: '#45B7D1', chance: 15 },     // Синий
+    { name: '15%', value: 15, color: '#96CEB4', chance: 20 },     // Зеленый
+    { name: '20%', value: 20, color: '#FFEAA7', chance: 20 },     // Желтый
+    { name: '25%', value: 25, color: '#DDA0DD', chance: 15 },     // Фиолетовый
+    { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 10 },  // Светло-зеленый
+    { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 } // Золотой
+];
 };
 
         // 🔥 ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
@@ -2882,7 +2883,7 @@ document.addEventListener('click', function(e) {
             document.getElementById(`${method}Details`).classList.add('active');
         }
 
-        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ БЕЗ ТЕКСТА
+        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
 function setupWheel() {
     const wheel = document.getElementById('wheel');
     wheel.innerHTML = '';
@@ -2893,71 +2894,24 @@ function setupWheel() {
     prizes.forEach((prize, index) => {
         const segment = document.createElement('div');
         segment.className = 'wheel-segment';
+        segment.dataset.prizeIndex = index;
         
         const rotateAngle = index * segmentAngle;
         
         segment.style.cssText = `
             background: ${prize.color};
             transform: rotate(${rotateAngle}deg);
-            clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
+            transform-origin: 100% 100%;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
         `;
         
         wheel.appendChild(segment);
     });
     
     createColorLegend();
-}
-
-// 🔥 СОЗДАЕМ ЛЕГЕНДУ ЦВЕТОВ
-function createColorLegend() {
-    const wheelMachine = document.querySelector('.wheel-machine');
-    
-    const oldLegend = document.getElementById('colorLegend');
-    if (oldLegend) oldLegend.remove();
-    
-    const legend = document.createElement('div');
-    legend.id = 'colorLegend';
-    legend.style.cssText = `
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-        margin-top: 15px;
-        padding: 10px;
-        background: rgba(45, 45, 66, 0.6);
-        border-radius: 10px;
-        border: 1px solid rgba(139, 92, 246, 0.3);
-    `;
-    
-    systemConfig.wheelPrizes.forEach(prize => {
-        const colorItem = document.createElement('div');
-        colorItem.style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 10px;
-            color: var(--text);
-        `;
-        
-        const colorBox = document.createElement('div');
-        colorBox.style.cssText = `
-            width: 12px;
-            height: 12px;
-            background: ${prize.color};
-            border-radius: 2px;
-            border: 1px solid rgba(255,255,255,0.3);
-        `;
-        
-        const label = document.createElement('span');
-        label.textContent = prize.name;
-        label.style.fontSize = '10px';
-        
-        colorItem.appendChild(colorBox);
-        colorItem.appendChild(label);
-        legend.appendChild(colorItem);
-    });
-    
-    wheelMachine.appendChild(legend);
 }
 
 // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ
@@ -2979,19 +2933,38 @@ function spinWheel() {
     }
     userData.lastWheelPlay = Date.now();
 
+    // 🔥 ВЫБОР ПРИЗА ДО ВРАЩЕНИЯ
     const selectedPrize = getRandomWheelPrize();
     const prizes = systemConfig.wheelPrizes;
+    const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
+    
+    console.log('Выбранный приз:', selectedPrize.name, 'Индекс:', selectedIndex);
+    
+    // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (стрелка справа)
     const segmentAngle = 360 / prizes.length;
     
-    const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
-    const targetAngle = 1800 + (selectedIndex * segmentAngle); // 5 полных оборотов + смещение
+    // Угол сегмента, на который должна указать стрелка
+    const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2);
     
-    wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
-    wheel.style.transform = `rotate(${targetAngle}deg)`;
+    // Полные обороты + смещение к нужному сегменту
+    // Стрелка справа, поэтому вычитаем 90 градусов
+    const fullRotations = 5;
+    const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle - 90);
+    
+    // Сброс анимации
+    wheel.style.transition = 'none';
+    wheel.style.transform = 'rotate(0deg)';
+    
+    // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
+    setTimeout(() => {
+        wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
+        wheel.style.transform = `rotate(${targetAngle}deg)`;
+    }, 10);
 
     setTimeout(() => {
         soundSystem.play('win', 0.8);
         
+        // 🔥 СОХРАНЯЕМ ВЫИГРАННЫЙ ПРИЗ
         userData.prizes.push({
             type: 'wheel',
             prize: selectedPrize.name,
@@ -3001,6 +2974,7 @@ function spinWheel() {
             used: false
         });
 
+        // 🔥 СООБЩЕНИЕ О ВЫИГРЫШЕ
         if (selectedPrize.value === 'wav') {
             showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
         } else if (selectedPrize.value === 'respect') {
@@ -3016,8 +2990,10 @@ function spinWheel() {
     }, 4000);
 }
 
+// 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВЫБОРА ПРИЗА
 function getRandomWheelPrize() {
-    const random = Math.random() * 100;
+    const totalChance = systemConfig.wheelPrizes.reduce((sum, prize) => sum + prize.chance, 0);
+    const random = Math.random() * totalChance;
     let cumulativeChance = 0;
     
     for (const prize of systemConfig.wheelPrizes) {
@@ -3027,7 +3003,7 @@ function getRandomWheelPrize() {
         }
     }
     
-    return systemConfig.wheelPrizes[0];
+    return systemConfig.wheelPrizes[systemConfig.wheelPrizes.length - 1];
 }
 
         // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ
