@@ -2894,18 +2894,17 @@ function setupWheel() {
         const segment = document.createElement('div');
         segment.className = 'wheel-segment';
         
-        // Угол поворота сегмента
         const rotateAngle = index * segmentAngle;
         
         segment.style.cssText = `
             background: ${prize.color};
             transform: rotate(${rotateAngle}deg);
+            clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
         `;
         
         wheel.appendChild(segment);
     });
     
-    // 🔥 СОЗДАЕМ ЛЕГЕНДУ ЦВЕТОВ ПОД КОЛЕСОМ
     createColorLegend();
 }
 
@@ -2913,7 +2912,6 @@ function setupWheel() {
 function createColorLegend() {
     const wheelMachine = document.querySelector('.wheel-machine');
     
-    // Удаляем старую легенду если есть
     const oldLegend = document.getElementById('colorLegend');
     if (oldLegend) oldLegend.remove();
     
@@ -2981,30 +2979,15 @@ function spinWheel() {
     }
     userData.lastWheelPlay = Date.now();
 
-    // 🔥 ВЫБОР СЛУЧАЙНОГО ПРИЗА ПО ВЕРОЯТНОСТИ
     const selectedPrize = getRandomWheelPrize();
     const prizes = systemConfig.wheelPrizes;
     const segmentAngle = 360 / prizes.length;
     
-    // 🔥 НАХОДИМ ИНДЕКС ВЫБРАННОГО ПРИЗА
     const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
+    const targetAngle = 1800 + (selectedIndex * segmentAngle); // 5 полных оборотов + смещение
     
-    // 🔥 РАСЧЕТ УГЛА ДЛЯ СТРЕЛКИ (стрелка справа, поэтому вычитаем 90 градусов)
-    const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2) - 90;
-    
-    // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (5 полных оборотов + смещение к нужному сегменту)
-    const fullRotations = 5;
-    const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle);
-    
-    // Сброс предыдущей анимации
-    wheel.style.transition = 'none';
-    wheel.style.transform = 'rotate(0deg)';
-    
-    // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
-    setTimeout(() => {
-        wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
-        wheel.style.transform = `rotate(${targetAngle}deg)`;
-    }, 10);
+    wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
+    wheel.style.transform = `rotate(${targetAngle}deg)`;
 
     setTimeout(() => {
         soundSystem.play('win', 0.8);
@@ -3033,34 +3016,19 @@ function spinWheel() {
     }, 4000);
 }
 
-// 🔥 ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ ЦВЕТОВ
-const systemConfig = {
-    // ... остальная конфигурация ...
-    wheelPrizes: [
-        { name: '1%', value: 1, color: '#FF6B6B', chance: 15 },        // Красный
-        { name: '5%', value: 5, color: '#4ECDC4', chance: 20 },        // Голубой
-        { name: '10%', value: 10, color: '#45B7D1', chance: 18 },      // Синий
-        { name: '15%', value: 15, color: '#96CEB4', chance: 15 },      // Зеленый
-        { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },      // Желтый
-        { name: '25%', value: 25, color: '#DDA0DD', chance: 10 },      // Фиолетовый
-        { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 5 },    // Зеленый (WAV)
-        { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 } // Желтый (Респект)
-    ]
-};
-
-        function getRandomWheelPrize() {
-            const random = Math.random() * 100;
-            let cumulativeChance = 0;
-            
-            for (const prize of systemConfig.wheelPrizes) {
-                cumulativeChance += prize.chance;
-                if (random <= cumulativeChance) {
-                    return prize;
-                }
-            }
-            
-            return systemConfig.wheelPrizes[0];
+function getRandomWheelPrize() {
+    const random = Math.random() * 100;
+    let cumulativeChance = 0;
+    
+    for (const prize of systemConfig.wheelPrizes) {
+        cumulativeChance += prize.chance;
+        if (random <= cumulativeChance) {
+            return prize;
         }
+    }
+    
+    return systemConfig.wheelPrizes[0];
+}
 
         // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ
         function spinSlots() {
