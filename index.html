@@ -1333,7 +1333,7 @@
             </div>
         </div>
 
-        <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ -->
+                <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ И СИНХРОНИЗАЦИЕЙ -->
         <div id="casinoScreen" class="screen hidden">
             <div class="casino-section">
                 <!-- СЛОТЫ -->
@@ -1355,7 +1355,7 @@
                     <div class="attempts-counter" id="slotsTimer"></div>
                 </div>
 
-                <!-- КОЛЕСО ФОРТУНЫ -->
+                <!-- 🔥 КРАСИВОЕ КОЛЕСО ФОРТУНЫ -->
                 <div class="wheel-machine">
                     <h2 class="section-title">🎡 КОЛЕСО ФОРТУНЫ</h2>
                     <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
@@ -1364,7 +1364,9 @@
                     
                     <div class="wheel-container">
                         <div class="wheel-pointer"></div>
-                        <div class="wheel" id="wheel"></div>
+                        <div class="wheel" id="wheel">
+                            <!-- Колесо генерируется динамически -->
+                        </div>
                     </div>
                     
                     <button class="spin-btn" id="wheelBtn">
@@ -2407,27 +2409,81 @@
             document.getElementById(`${method}Details`).classList.add('active');
         }
 
-        // 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ
+                // 🔥 КРАСИВОЕ КОЛЕСО С ПРАВИЛЬНЫМИ ПРИЗАМИ
         function setupWheelLabels() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
             
-            systemConfig.wheelPrizes.forEach((prize, index) => {
-                const angle = (360 / systemConfig.wheelPrizes.length) * index;
+            // 🔥 ТОЛЬКО ЦИФРЫ СКИДОК И WAV/RESPECT
+            const prizes = [
+                { name: '1%', value: 1, color: '#FF6B6B' },
+                { name: '5%', value: 5, color: '#4ECDC4' },
+                { name: '10%', value: 10, color: '#45B7D1' },
+                { name: '15%', value: 15, color: '#96CEB4' },
+                { name: '20%', value: 20, color: '#FFEAA7' },
+                { name: '25%', value: 25, color: '#DDA0DD' },
+                { name: 'WAV', value: 'wav', color: '#98D8C8' },
+                { name: 'RESPECT', value: 'respect', color: '#F7DC6F' }
+            ];
+            
+            const segmentAngle = 360 / prizes.length;
+            
+            prizes.forEach((prize, index) => {
+                const startAngle = index * segmentAngle;
+                const endAngle = (index + 1) * segmentAngle;
+                
+                // Создаем сегмент колеса
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.cssText = `
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    clip-path: polygon(50% 50%, 
+                        ${50 + 50 * Math.cos(startAngle * Math.PI / 180)}% ${50 + 50 * Math.sin(startAngle * Math.PI / 180)}%,
+                        ${50 + 50 * Math.cos(endAngle * Math.PI / 180)}% ${50 + 50 * Math.sin(endAngle * Math.PI / 180)}%);
+                    background: ${prize.color};
+                    transform-origin: center;
+                `;
+                wheel.appendChild(segment);
+                
+                // Создаем текст
                 const label = document.createElement('div');
                 label.className = 'wheel-label';
-                label.style.setProperty('--angle', `${angle}deg`);
                 label.textContent = prize.name;
+                label.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform-origin: center;
+                    text-align: center;
+                    font-size: ${prize.name.length > 3 ? '10px' : '14px'};
+                    font-weight: bold;
+                    color: white;
+                    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+                    width: 60px;
+                    height: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgba(0,0,0,0.6);
+                    border-radius: 8px;
+                    padding: 2px 4px;
+                    z-index: 1;
+                    transform: translate(-50%, -50%) rotate(${startAngle + segmentAngle/2}deg) translateY(-90px) rotate(-${startAngle + segmentAngle/2}deg);
+                    border: 1px solid rgba(255,255,255,0.3);
+                `;
                 wheel.appendChild(label);
             });
+            
+            // Сохраняем призы для использования в spinWheel
+            systemConfig.wheelPrizes = prizes.map((prize, index) => ({
+                ...prize,
+                chance: index < 6 ? 0.14 : 0.08 // 6 скидок по 14%, 2 спец приза по 8%
+            }));
         }
 
-        function setupCasinoEvents() {
-            document.getElementById('spinBtn').addEventListener('click', spinSlots);
-            document.getElementById('wheelBtn').addEventListener('click', spinWheel);
-        }
-
-        // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ С ПРАВИЛЬНЫМИ АНИМАЦИЯМИ
+        // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ С ТОЧНОЙ СИНХРОНИЗАЦИЕЙ
         function spinSlots() {
             if (!userData.isAdmin && userData.slotsAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
@@ -2444,9 +2500,9 @@
             }
             userData.lastSlotsPlay = Date.now();
 
-            const finalSymbols = [];
+            // 🔥 ЗАРАНЕЕ ОПРЕДЕЛЯЕМ РЕЗУЛЬТАТ
+            const finalSymbols = generateSlotResult();
             
-            // 🔥 ПРАВИЛЬНАЯ АНИМАЦИЯ С ПЛАВНОЙ ОСТАНОВКОЙ
             slots.forEach((slot, index) => {
                 slot.innerHTML = '';
                 const slotContent = document.createElement('div');
@@ -2455,38 +2511,29 @@
                 const symbolStrip = document.createElement('div');
                 symbolStrip.className = 'symbol-strip';
                 
-                // Создаем полосу символов
+                // Создаем полосу символов с ФИНАЛЬНЫМ символом в определенной позиции
+                const targetPosition = 15; // Позиция где будет финальный символ
                 for (let i = 0; i < 30; i++) {
                     const symbol = document.createElement('div');
                     symbol.className = 'slot-symbol';
-                    symbol.textContent = systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)];
+                    // На позиции targetPosition ставим ФИНАЛЬНЫЙ символ
+                    symbol.textContent = i === targetPosition ? finalSymbols[index] : systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)];
                     symbolStrip.appendChild(symbol);
                 }
                 
                 slotContent.appendChild(symbolStrip);
                 slot.appendChild(slotContent);
                 
-                // Генерируем финальный символ для этого слота
-                const finalSymbol = getRandomSlotSymbol();
-                finalSymbols.push(finalSymbol);
-                
-                // 🔥 ПЛАВНАЯ АНИМАЦИЯ ОСТАНОВКИ
+                // 🔥 АНИМАЦИЯ С ТОЧНОЙ ОСТАНОВКОЙ НА НУЖНОМ СИМВОЛЕ
                 setTimeout(() => {
-                    // Находим позицию где находится нужный символ
-                    const symbolIndex = Math.floor(Math.random() * 10) + 15; // Случайная позиция в нижней части
-                    const targetPosition = - (symbolIndex * 80);
+                    const targetY = - (targetPosition * 80);
                     
                     symbolStrip.style.transition = 'transform 3s cubic-bezier(0.1, 0.8, 0.2, 1)';
-                    symbolStrip.style.transform = `translateY(${targetPosition}px)`;
+                    symbolStrip.style.transform = `translateY(${targetY}px)`;
                     
-                    // Заменяем последний символ на финальный
+                    // После остановки показываем именно тот символ, который выпал
                     setTimeout(() => {
-                        symbolStrip.children[symbolIndex].textContent = finalSymbol;
-                    }, 2500);
-                    
-                    // Полная остановка
-                    setTimeout(() => {
-                        slot.innerHTML = finalSymbol;
+                        slot.innerHTML = finalSymbols[index];
                         slot.style.transform = 'scale(1.1)';
                         setTimeout(() => slot.style.transform = 'scale(1)', 200);
                         
@@ -2495,32 +2542,38 @@
                         }
                     }, 3000);
                     
-                }, index * 1000); // Разная задержка для каждого слота
+                }, index * 1000);
             });
 
             updateProfile();
             saveUserData();
         }
 
-        function getRandomSlotSymbol() {
+        function generateSlotResult() {
             const random = Math.random();
             let cumulativeChance = 0;
             
+            // 🔥 ПРОВЕРЯЕМ ВЫИГРЫШНЫЕ КОМБИНАЦИИ
             for (const prize of systemConfig.slotPrizes) {
                 cumulativeChance += prize.chance;
                 if (random <= cumulativeChance) {
-                    return prize.symbols[0]; // Возвращаем первый символ из комбинации
+                    return [...prize.symbols]; // Возвращаем выигрышную комбинацию
                 }
             }
             
-            return systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)];
+            // 🔥 ЕСЛИ НЕ ВЫИГРАЛИ - СЛУЧАЙНЫЕ СИМВОЛЫ
+            return [
+                systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)],
+                systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)],
+                systemConfig.slotSymbols[Math.floor(Math.random() * systemConfig.slotSymbols.length)]
+            ];
         }
 
         function checkSlotsWin(symbols) {
             let isWin = false;
             let winPrize = null;
 
-            // 🔥 ПРОВЕРЯЕМ ВЫИГРЫШНЫЕ КОМБИНАЦИИ
+            // 🔥 ПРОВЕРЯЕМ КОМБИНАЦИИ - ТОЧНО ТЕ ЖЕ СИМВОЛЫ ЧТО ПОКАЗАЛИСЬ
             systemConfig.slotPrizes.forEach(prize => {
                 if (symbols[0] === prize.symbols[0] && symbols[1] === prize.symbols[1] && symbols[2] === prize.symbols[2]) {
                     isWin = true;
@@ -2555,7 +2608,7 @@
             saveUserData();
         }
 
-        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО С ПРАВИЛЬНЫМ ВЫБОРОМ ПРИЗА
+        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО С ТОЧНОЙ СИНХРОНИЗАЦИЕЙ
         function spinWheel() {
             if (!userData.isAdmin && userData.wheelAttempts <= 0) {
                 showNotification('❌ Попытки закончились! Возвращайся завтра!');
@@ -2572,31 +2625,15 @@
             }
             userData.lastWheelPlay = Date.now();
 
+            // 🔥 ЗАРАНЕЕ ОПРЕДЕЛЯЕМ РЕЗУЛЬТАТ
+            const selectedPrize = getRandomWheelPrize();
+            const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
+            
             wheel.classList.add('spinning');
 
-            // 🔥 ВЫБОР ПРИЗА С УЧЕТОМ УВЕЛИЧЕННЫХ ШАНСОВ
-            const random = Math.random();
-            let cumulativeChance = 0;
-            let selectedPrize = null;
-            let selectedIndex = 0;
-
-            for (let i = 0; i < systemConfig.wheelPrizes.length; i++) {
-                const prize = systemConfig.wheelPrizes[i];
-                cumulativeChance += prize.chance;
-                if (random <= cumulativeChance) {
-                    selectedPrize = prize;
-                    selectedIndex = i;
-                    break;
-                }
-            }
-
-            if (!selectedPrize) {
-                selectedPrize = systemConfig.wheelPrizes[0];
-            }
-
-            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА ДЛЯ ВЫБРАННОГО ПРИЗА
+            // 🔥 РАСЧЕТ УГЛА ДЛЯ ТОЧНОЙ ОСТАНОВКИ НА ВЫБРАННОМ ПРИЗЕ
             const segmentAngle = 360 / systemConfig.wheelPrizes.length;
-            const targetAngle = 1080 + (selectedIndex * segmentAngle) + (segmentAngle / 2) + Math.random() * 10;
+            const targetAngle = 1080 + (selectedIndex * segmentAngle) + (segmentAngle / 2);
 
             wheel.style.transform = `rotate(${targetAngle}deg)`;
 
@@ -2613,13 +2650,13 @@
                     used: false
                 });
 
-                // 🔥 ПОКАЗЫВАЕМ ТОТ ПРИЗ, КОТОРЫЙ ВЫПАЛ НА КОЛЕСЕ
+                // 🔥 ПОКАЗЫВАЕМ ТОЧНО ТОТ ПРИЗ, КОТОРЫЙ ВЫПАЛ
                 if (selectedPrize.value === 'wav') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, true);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
                 } else if (selectedPrize.value === 'respect') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, false);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
                 } else {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.name.toUpperCase()}!`, false);
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
                 }
 
                 updateProfile();
@@ -2627,6 +2664,20 @@
                 wheelBtn.disabled = false;
 
             }, 4000);
+        }
+
+        function getRandomWheelPrize() {
+            const random = Math.random();
+            let cumulativeChance = 0;
+            
+            for (const prize of systemConfig.wheelPrizes) {
+                cumulativeChance += prize.chance;
+                if (random <= cumulativeChance) {
+                    return prize;
+                }
+            }
+            
+            return systemConfig.wheelPrizes[0];
         }
 
         // 🔥 СИСТЕМА ПРОФИЛЯ С ВКЛАДКАМИ
