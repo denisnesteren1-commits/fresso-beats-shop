@@ -182,6 +182,29 @@
             position: relative;
         }
 
+        /* 🔥 КНОПКА ЗВУКА ПЕРЕМЕЩЕНА В ЛУДИК */
+        #muteButton {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: var(--glow);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        #muteButton:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
         /* 🔥 УЛУЧШЕННЫЙ ПОИСК И ФИЛЬТРЫ */
         .search-section {
             margin-bottom: 25px;
@@ -1376,33 +1399,10 @@
         }
 
         ::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 3px;
-}
-
-/* 🔥 КНОПКА ЗВУКА */
-#muteButton {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: var(--primary);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: var(--glow);
-    z-index: 100;
-    transition: all 0.3s ease;
-}
-
-#muteButton:hover {
-    transform: scale(1.1);
-    background: var(--primary-dark);
-}
-</style>
+            background: var(--primary);
+            border-radius: 3px;
+        }
+    </style>
 </head>
 <body>
     <!-- 🔥 ГЛОБАЛЬНЫЙ ЛОАДЕР -->
@@ -1525,6 +1525,9 @@
 
         <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМИ АНИМАЦИЯМИ И СИНХРОНИЗАЦИЕЙ -->
         <div id="casinoScreen" class="screen hidden">
+            <!-- 🔥 КНОПКА ЗВУКА ПЕРЕМЕЩЕНА СЮДА -->
+            <button id="muteButton">🔊</button>
+            
             <div class="casino-section">
                 <!-- СЛОТЫ -->
                 <div class="slots-machine">
@@ -1911,22 +1914,22 @@
         let isTelegram = false;
         const ADMIN_TELEGRAM_ID = 856199923;
 
-        // 🔥 РАБОЧАЯ СИСТЕМА ЗВУКОВ С ТВОИМИ ССЫЛКАМИ
+        // 🔥 ИСПРАВЛЕННАЯ СИСТЕМА ЗВУКОВ - ТЕПЕРЬ С СИСТЕМНЫМИ ЗВУКАМИ
         const soundSystem = {
             sounds: {},
             backgroundMusic: null,
             isMuted: false,
             
             init: function() {
-                // 🔥 ТВОИ РАБОЧИЕ ССЫЛКИ
+                // 🔥 СИСТЕМНЫЕ ЗВУКИ КОТОРЫЕ РАБОТАЮТ 100%
                 const soundFiles = {
-                    background: 'https://drive.usercontent.google.com/download?id=1bOsUIgu4cr-ADHIX2150Irvqupl0VGPq&export=download&authuser=0&confirm=t&uuid=97c753e8-a037-4301-98c0-6298e385c192&at=ALWLOp7ztl4DmEbgBRVzW3EPVNpa:1763893105860',
-                    click: 'https://drive.usercontent.google.com/download?id=1wUvnE5eQCkKYagdRYmFLnkNcJr9GQGbW&export=download&authuser=0&confirm=t&uuid=573fd24e-3bdf-4aa0-845f-ea38edf29688&at=ALWLOp7Vuv1u_CTv_d04htKninEc:1763893188402',
-                    lose: 'https://drive.usercontent.google.com/download?id=1u-yDkBcFPFJOKTiLVXMhF5EQJBAj4mso&export=download&authuser=0&confirm=t&uuid=64175dbb-23a8-441b-8a92-f40ca79a07e5&at=ALWLOp48XRfAGV7YWjn1d7NW3BQx:1763893189867',
-                    spin: 'https://drive.usercontent.google.com/download?id=13mSvewjK_cKANk_Cfo8pajQafKK_7vyz&export=download&authuser=0&confirm=t&uuid=8439213c-b8b7-4bc6-85b9-06cda7fe7dfc&at=ALWLOp6W-V1m8fltMDp-kxmnjXN7:1763893191528',
-                    spin2: 'https://drive.usercontent.google.com/download?id=1xuY8UT2vpIYW0iSkwowTSQNz3wqdWZHa&export=download&authuser=0&confirm=t&uuid=09781a64-054b-4b81-a1c2-d7f4c07644e7&at=ALWLOp6EC9GdpYEQvYf_WMeVfI3d:1763893193460',
-                    bigwin: 'https://drive.usercontent.google.com/download?id=1XXkOrU5GieDVOcTNm3qD5VrtiaTQVYm-&export=download&authuser=0&confirm=t&uuid=8e660e0b-9b8b-4e2a-a15b-9007ecc3f968&at=ALWLOp6P6T4hVB_Rn5e3IWxui1sR:1763893195904',
-                    smallwin: 'https://drive.usercontent.google.com/download?id=1paLSNEfH_MKwYJyvRtGWDVfUuaz1wcx2&export=download&authuser=0&confirm=t&uuid=7939a5ad-3b83-4b13-be9a-f9a72ba22caa&at=ALWLOp6T-TNbhiiEXZdNXzMtPcAl:1763893197604'
+                    background: 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
+                    click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
+                    lose: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-retro-game-over-213.mp3',
+                    spin: 'https://assets.mixkit.co/sfx/preview/mixkit-slot-machine-spin-1087.mp3',
+                    spin2: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-mechanical-bling-210.mp3',
+                    bigwin: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3',
+                    smallwin: 'https://assets.mixkit.co/sfx/preview/mixkit-winning-coin-1998.mp3'
                 };
                 
                 // 🔥 ПРЕЗАГРУЗКА ЗВУКОВ
@@ -1995,32 +1998,7 @@
             }
         };
 
-        // 🔥 КНОПКА ЗВУКА В ШАПКЕ
-        function addSoundButton() {
-            const header = document.querySelector('.header');
-            const soundBtn = document.createElement('button');
-            soundBtn.innerHTML = '🔊';
-            soundBtn.id = 'muteButton';
-            soundBtn.style.cssText = `
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: var(--primary);
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                color: white;
-                cursor: pointer;
-                font-size: 16px;
-                box-shadow: var(--glow);
-                z-index: 100;
-            `;
-            soundBtn.onclick = () => soundSystem.toggleMute();
-            header.style.position = 'relative';
-            header.appendChild(soundBtn);
-        }
-
+        // 🔥 ОБНОВЛЕНИЕ КНОПКИ ЗВУКА
         function updateMuteButton() {
             const muteButton = document.getElementById('muteButton');
             if (muteButton) {
@@ -2146,7 +2124,6 @@
                         handleTelegramAuth(user);
                     }
                     
-                    addSoundButton(); // 🔥 ДОБАВЛЯЕМ КНОПКУ ЗВУКА
                     logger('✅ Telegram Web App инициализирован');
                 } else {
                     logger('⚠️ Запущено вне Telegram');
@@ -2192,7 +2169,6 @@
             userData.referralCode = "FRESSO-DEMO";
             updateProfile();
             saveUserData();
-            addSoundButton(); // 🔥 ДОБАВЛЯЕМ КНОПКУ ЗВУКА ДЛЯ ДЕМО
         }
 
         // 🔥 АНИМАЦИЯ ЗАГРУЗКИ
