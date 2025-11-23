@@ -1878,74 +1878,75 @@
         const ADMIN_TELEGRAM_ID = 856199923;
 
         // 🔥 СИСТЕМА ЗВУКОВ
-        const soundSystem = {
-            audioContext: null,
-            sounds: {},
-            backgroundMusic: null,
-            isMuted: false,
-            
-            init: function() {
-                try {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    this.preloadSounds();
-                } catch (e) {
-                    console.warn('AudioContext не поддерживается:', e);
-                }
-            },
-            
-            preloadSounds: function() {
-                const soundFiles = {
-                    click: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#click.mp3',
-                    spin: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#spin.mp3',
-                    spin2: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#spin2.mp3',
-                    win: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#win.mp3',
-                    lose: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#lose.mp3',
-                    background: 'https://disk.yandex.ru/d/h74lgwRBzYT3WQ?w=1&nomobile=1#background.mp3'
-                };
-                
-                Object.keys(soundFiles).forEach(key => {
-                    this.sounds[key] = new Audio();
-                    this.sounds[key].src = soundFiles[key];
-                    this.sounds[key].preload = 'auto';
-                });
-            },
-            
-            play: function(soundName, volume = 0.7) {
-                if (this.isMuted || !this.sounds[soundName]) return;
-                
-                try {
-                    const sound = this.sounds[soundName].cloneNode();
-                    sound.volume = volume;
-                    sound.play().catch(e => console.warn('Не удалось воспроизвести звук:', e));
-                } catch (e) {
-                    console.warn('Ошибка воспроизведения звука:', e);
-                }
-            },
-            
-            playBackground: function() {
-                if (this.isMuted || !this.sounds.background) return;
-                
-                this.backgroundMusic = this.sounds.background.cloneNode();
-                this.backgroundMusic.volume = 0.3;
-                this.backgroundMusic.loop = true;
-                this.backgroundMusic.play().catch(e => console.warn('Фоновая музыка не воспроизводится:', e));
-            },
-            
-            stopBackground: function() {
-                if (this.backgroundMusic) {
-                    this.backgroundMusic.pause();
-                    this.backgroundMusic.currentTime = 0;
-                }
-            },
-            
-            toggleMute: function() {
-                this.isMuted = !this.isMuted;
-                if (this.isMuted) {
-                    this.stopBackground();
-                }
-                return this.isMuted;
-            }
+const soundSystem = {
+    audioContext: null,
+    sounds: {},
+    backgroundMusic: null,
+    isMuted: false,
+    
+    init: function() {
+        try {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.preloadSounds();
+        } catch (e) {
+            console.warn('AudioContext не поддерживается:', e);
+        }
+    },
+    
+    preloadSounds: function() {
+        // 🔥 ЗАМЕНИ ЭТИ ССЫЛКИ НА СВОИ ФАЙЛЫ С GOOGLE DRIVE
+        const soundFiles = {
+            click: 'https://drive.google.com/file/d/1wUvnE5eQCkKYagdRYmFLnkNcJr9GQGbW/view?usp=drive_link',
+            spin: 'https://drive.google.com/file/d/13mSvewjK_cKANk_Cfo8pajQafKK_7vyz/view?usp=drive_link', 
+            spin2: 'https://drive.google.com/file/d/1xuY8UT2vpIYW0iSkwowTSQNz3wqdWZHa/view?usp=drive_link',
+            win: 'https://drive.google.com/file/d/1XXkOrU5GieDVOcTNm3qD5VrtiaTQVYm-/view?usp=drive_link',
+            lose: 'https://drive.google.com/file/d/1u-yDkBcFPFJOKTiLVXMhF5EQJBAj4mso/view?usp=drive_link',
+            background: 'https://drive.google.com/file/d/1bOsUIgu4cr-ADHIX2150Irvqupl0VGPq/view?usp=drive_link'
         };
+        
+        Object.keys(soundFiles).forEach(key => {
+            this.sounds[key] = new Audio();
+            this.sounds[key].src = soundFiles[key];
+            this.sounds[key].preload = 'auto';
+        });
+    },
+    
+    play: function(soundName, volume = 0.7) {
+        if (this.isMuted || !this.sounds[soundName]) return;
+        
+        try {
+            const sound = this.sounds[soundName].cloneNode();
+            sound.volume = volume;
+            sound.play().catch(e => console.warn('Не удалось воспроизвести звук:', e));
+        } catch (e) {
+            console.warn('Ошибка воспроизведения звука:', e);
+        }
+    },
+    
+    playBackground: function() {
+        if (this.isMuted || !this.sounds.background) return;
+        
+        this.backgroundMusic = this.sounds.background.cloneNode();
+        this.backgroundMusic.volume = 0.3;
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.play().catch(e => console.warn('Фоновая музыка не воспроизводится:', e));
+    },
+    
+    stopBackground: function() {
+        if (this.backgroundMusic) {
+            this.backgroundMusic.pause();
+            this.backgroundMusic.currentTime = 0;
+        }
+    },
+    
+    toggleMute: function() {
+        this.isMuted = !this.isMuted;
+        if (this.isMuted) {
+            this.stopBackground();
+        }
+        return this.isMuted;
+    }
+};
 
         // 🔥 ДАННЫЕ СИСТЕМЫ
         let userData = {
@@ -2918,71 +2919,79 @@
             saveUserData();
         }
 
-        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО С ПРАВИЛЬНЫМ ОПРЕДЕЛЕНИЕМ ПРИЗА
-        function spinWheel() {
-            soundSystem.play('spin2', 0.7);
-            
-            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
-                showNotification('❌ Попытки закончились! Возвращайся завтра!');
-                return;
-            }
+      // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО С РАНДОМНОЙ ОСТАНОВКОЙ
+function spinWheel() {
+    soundSystem.play('spin2', 0.7);
+    
+    if (!userData.isAdmin && userData.wheelAttempts <= 0) {
+        showNotification('❌ Попытки закончились! Возвращайся завтра!');
+        return;
+    }
 
-            const wheelBtn = document.getElementById('wheelBtn');
-            const wheel = document.getElementById('wheel');
-            
-            wheelBtn.disabled = true;
-            
-            if (!userData.isAdmin) {
-                userData.wheelAttempts--;
-            }
-            userData.lastWheelPlay = Date.now();
+    const wheelBtn = document.getElementById('wheelBtn');
+    const wheel = document.getElementById('wheel');
+    
+    wheelBtn.disabled = true;
+    
+    if (!userData.isAdmin) {
+        userData.wheelAttempts--;
+    }
+    userData.lastWheelPlay = Date.now();
 
-            const selectedPrize = getRandomWheelPrize();
-            const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
-            
-            wheel.classList.add('spinning');
+    // 🔥 ВЫБИРАЕМ СЛУЧАЙНЫЙ ПРИЗ
+    const selectedPrize = getRandomWheelPrize();
+    const selectedIndex = systemConfig.wheelPrizes.findIndex(p => p.value === selectedPrize.value);
+    
+    wheel.classList.add('spinning');
 
-            // 🔥 ТОЧНЫЙ РАСЧЕТ УГЛА ДЛЯ ПРАВИЛЬНОЙ ОСТАНОВКИ ПОД СТРЕЛКОЙ
-            const segmentAngle = 360 / systemConfig.wheelPrizes.length;
-            // Стрелка справа, поэтому приз должен оказаться слева от стрелки (180 градусов разницы)
-            const targetAngle = 1080 + (selectedIndex * segmentAngle) + (segmentAngle / 2) - 180;
+    // 🔥 РАНДОМНАЯ СИЛА ВРАЩЕНИЯ И ТОЧНАЯ ОСТАНОВКА ПОД СТРЕЛКОЙ
+    const segmentAngle = 360 / systemConfig.wheelPrizes.length;
+    
+    // Случайное количество полных оборотов (3-5)
+    const fullRotations = 3 + Math.floor(Math.random() * 3);
+    
+    // Случайное смещение для реалистичности
+    const randomOffset = Math.random() * segmentAngle * 0.3;
+    
+    // Стрелка справа (0°), поэтому приз должен оказаться слева от стрелки (180° разницы)
+    const targetAngle = (fullRotations * 360) + (selectedIndex * segmentAngle) + (segmentAngle / 2) - 180 + randomOffset;
 
-            wheel.style.transform = `rotate(${targetAngle}deg)`;
+    wheel.style.transform = `rotate(${targetAngle}deg)`;
 
-            setTimeout(() => {
-                wheel.classList.remove('spinning');
-                
-                if (!userData.prizes) userData.prizes = [];
-                userData.prizes.push({
-                    type: 'wheel',
-                    prize: selectedPrize.name,
-                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
-                    value: selectedPrize.value,
-                    date: new Date().toISOString(),
-                    used: false
-                });
+    setTimeout(() => {
+        wheel.classList.remove('spinning');
+        
+        if (!userData.prizes) userData.prizes = [];
+        userData.prizes.push({
+            type: 'wheel',
+            prize: selectedPrize.name,
+            prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
+            value: selectedPrize.value,
+            date: new Date().toISOString(),
+            used: false
+        });
 
-                // Звук выигрыша
-                if (selectedPrize.value === 'wav' || selectedPrize.value >= 20) {
-                    soundSystem.play('win', 0.8);
-                } else {
-                    soundSystem.play('win', 0.6);
-                }
-
-                if (selectedPrize.value === 'wav') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-                } else if (selectedPrize.value === 'respect') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
-                } else {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
-                }
-
-                updateProfile();
-                saveUserData();
-                wheelBtn.disabled = false;
-
-            }, 4000);
+        // Звук выигрыша
+        if (selectedPrize.value === 'wav' || selectedPrize.value >= 20) {
+            soundSystem.play('win', 0.8);
+        } else {
+            soundSystem.play('win', 0.6);
         }
+
+        if (selectedPrize.value === 'wav') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
+        } else if (selectedPrize.value === 'respect') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
+        } else {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
+        }
+
+        updateProfile();
+        saveUserData();
+        wheelBtn.disabled = false;
+
+    }, 4000);
+}
 
         function getRandomWheelPrize() {
             const random = Math.random();
@@ -3537,3 +3546,4 @@
     </script>
 </body>
 </html>
+
