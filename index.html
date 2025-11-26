@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresso Beats</title>
+    <title>Fresso Beats - Эксклюзивные биты для профессионалов</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -132,23 +132,6 @@
             padding: 8px 12px;
             border-radius: 15px;
             font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .nav-item:hover::before {
-            left: 100%;
         }
 
         .nav-item.active {
@@ -166,12 +149,6 @@
 
         .nav-item.active .nav-icon {
             transform: scale(1.2);
-        }
-
-        /* Анимация нажатия кнопок */
-        .nav-item:active {
-            transform: scale(0.95);
-            transition: transform 0.1s ease;
         }
 
         /* ШАПКА */
@@ -247,10 +224,37 @@
             cursor: pointer;
         }
 
-        .filters-container {
+        .advanced-search-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 15px;
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .advanced-search-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .filters-container {
+            display: none;
             flex-direction: column;
             gap: 15px;
+            margin-top: 15px;
+        }
+
+        .filters-container.active {
+            display: flex;
         }
 
         .filter-group {
@@ -455,30 +459,6 @@
             font-size: 20px;
             margin-right: 12px;
             flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .beat-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .beat-card.playing .beat-image::after {
-            opacity: 1;
-            animation: rotateDisk 3s linear infinite;
-        }
-
-        @keyframes rotateDisk {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .beat-header {
@@ -532,33 +512,12 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .action-btn:hover::before {
-            left: 100%;
         }
 
         .action-btn:hover {
             background: rgba(139, 92, 246, 0.3);
             color: var(--text);
             transform: scale(1.1);
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
         }
 
         .action-btn.favorite.active {
@@ -601,24 +560,6 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .play-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .play-btn:active::before {
-            opacity: 1;
         }
 
         .play-btn:hover {
@@ -742,100 +683,126 @@
             50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
         }
 
-       /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
-.wheel-machine {
-    background: rgba(45, 45, 66, 0.6);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(139, 92, 246, 0.2);
-    margin-bottom: 20px;
-    backdrop-filter: blur(10px);
-    position: relative;
-}
+        /* 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО ФОРТУНЫ */
+        .wheel-machine {
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
 
-.wheel-container {
-    position: relative;
-    width: 280px;
-    height: 280px;
-    margin: 0 auto 20px;
-}
+        .wheel-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 20px;
+        }
 
-.wheel {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    position: relative;
-    overflow: hidden;
-    transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
-    box-shadow: 0 0 30px rgba(0,0,0,0.3);
-    border: 3px solid rgba(255,255,255,0.1);
-    background: var(--bg-darker);
-}
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+            border: 3px solid rgba(255,255,255,0.1);
+            background: var(--bg-darker);
+        }
 
-/* 🔥 ПРАВИЛЬНЫЕ СЕГМЕНТЫ */
-.wheel-segment {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    transform-origin: 100% 100%;
-    left: 50%;
-    top: 0;
-    overflow: hidden;
-}
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            left: 50%;
+            top: 0;
+            overflow: hidden;
+        }
 
-.segment-content {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    transform-origin: 0% 0%;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
-    box-sizing: border-box;
-}
+        .segment-content {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            transform-origin: 0% 0%;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            box-sizing: border-box;
+        }
 
-.segment-text {
-    transform: rotate(45deg);
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    white-space: nowrap;
-}
+        .segment-text {
+            transform: rotate(45deg);
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            white-space: nowrap;
+        }
 
-/* 🔥 ЦЕНТРАЛЬНАЯ ЧАСТЬ */
-.wheel-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
-    background: var(--accent);
-    border-radius: 50%;
-    border: 3px solid white;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: white;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-}
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid white;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
 
-/* 🔥 СТРЕЛКА СВЕРХУ */
-.wheel-pointer {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 25px;
-    height: 35px;
-    background: var(--accent);
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    z-index: 20;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 35px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            z-index: 20;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .spin-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        }
+
+        .spin-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА */
         .cart-section {
@@ -1467,69 +1434,219 @@
             border-radius: 3px;
         }
 
-        /* 🔥 АНИМАЦИЯ НАЖАТИЯ */
-        .click-animation {
-            animation: clickEffect 0.3s ease;
+        /* 🔥 АРХИВ БИТОВ */
+        .archive-section {
+            margin-top: 20px;
         }
 
-        @keyframes clickEffect {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
-
-        /* 🔥 ЗАЩИТА ОТ DDoS */
-        .security-shield {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .archive-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             width: 100%;
-            height: 100%;
-            background: var(--bg-dark);
+            justify-content: center;
+        }
+
+        .archive-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        /* 🔥 КНОПКА ДОБАВЛЕНИЯ НОВОСТИ */
+        .add-news-btn {
+            background: var(--primary);
+            border: none;
+            border-radius: 15px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .add-news-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* 🔥 УПРАВЛЕНИЕ БИТОМ */
+        .beat-options {
+            position: relative;
+        }
+
+        .beat-menu-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 99999;
-            flex-direction: column;
-            gap: 20px;
         }
 
-        .shield-icon {
-            font-size: 64px;
-            color: var(--primary);
-            animation: shieldPulse 2s infinite;
-        }
-
-        @keyframes shieldPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .security-message {
-            text-align: center;
+        .beat-menu-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
             color: var(--text);
+        }
+
+        .beat-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(45, 45, 66, 0.9);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 8px;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 120px;
+            backdrop-filter: blur(10px);
+        }
+
+        .beat-menu.active {
+            display: flex;
+        }
+
+        .beat-menu-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .beat-menu-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .beat-menu-item.delete {
+            color: var(--danger);
+        }
+
+        /* 🔥 КНОПКИ АВТОРИЗАЦИИ */
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .google-auth-btn {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            color: #333;
             font-size: 16px;
-            max-width: 300px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .google-auth-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+
+        .telegram-auth-btn {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 15px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .telegram-auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        }
+
+        /* 🔥 ВЫБОР ЛИЦЕНЗИИ */
+        .license-selection {
+            display: grid;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .license-option {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .license-option:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .license-option.active {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: var(--primary);
+        }
+
+        .license-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .license-price {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .license-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- 🔥 ЗАЩИТА ОТ DDoS АТАК -->
-    <div id="securityShield" class="security-shield" style="display: none;">
-        <div class="shield-icon">🛡️</div>
-        <div class="security-message">
-            <h3>Проверка безопасности</h3>
-            <p>Защита от DDoS атак активирована</p>
-            <p style="font-size: 12px; margin-top: 10px; color: var(--text-secondary);">Пожалуйста, подождите...</p>
-        </div>
-    </div>
-
     <!-- 🔥 ГЛОБАЛЬНЫЙ ЛОАДЕР -->
     <div id="globalLoader">
         <div style="text-align: center;">
             <div class="loading-spinner"></div>
             <h3 style="color: var(--text); margin-bottom: 10px;">🎵 Fresso Beats</h3>
-            <p style="color: var(--text-secondary);">Загрузка...</p>
+            <p style="color: var(--text-secondary);">Загрузка вашего музыкального пространства...</p>
         </div>
     </div>
 
@@ -1546,11 +1663,16 @@
             <!-- 🔥 УЛУЧШЕННЫЙ ПОИСК И ФИЛЬТРЫ -->
             <div class="search-section">
                 <div class="search-container">
-                    <input type="text" class="search-input" placeholder="Поиск по названию, жанру, тегам..." id="searchInput">
+                    <input type="text" class="search-input" placeholder="Найди свой идеальный бит..." id="searchInput">
                     <i class="fas fa-search search-icon" onclick="performSearch()"></i>
                 </div>
                 
-                <div class="filters-container">
+                <button class="advanced-search-btn" onclick="toggleAdvancedSearch()">
+                    <i class="fas fa-sliders-h"></i>
+                    Расширенные параметры поиска
+                </button>
+                
+                <div class="filters-container" id="filtersContainer">
                     <!-- Фильтр по тональности -->
                     <div class="filter-group">
                         <div class="filter-title">
@@ -1600,24 +1722,33 @@
                     <div class="filter-group">
                         <div class="filter-title">
                             <i class="fas fa-tags"></i>
-                            Теги
+                            Настроение
                         </div>
                         <div class="filter-options" id="tagFilters">
-                            <button class="filter-btn" data-tag="dark">Dark</button>
-                            <button class="filter-btn" data-tag="chill">Chill</button>
-                            <button class="filter-btn" data-tag="energetic">Energetic</button>
-                            <button class="filter-btn" data-tag="dreamy">Dreamy</button>
-                            <button class="filter-btn" data-tag="aggressive">Aggressive</button>
+                            <button class="filter-btn" data-tag="dark">Темное</button>
+                            <button class="filter-btn" data-tag="chill">Расслабляющее</button>
+                            <button class="filter-btn" data-tag="energetic">Энергичное</button>
+                            <button class="filter-btn" data-tag="dreamy">Мечтательное</button>
+                            <button class="filter-btn" data-tag="aggressive">Агрессивное</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 🔥 ОДНА СЕКЦИЯ BEATS ВМЕСТО ДВУХ -->
+            <!-- НОВЫЕ БИТЫ -->
             <div class="section">
                 <div class="section-header">
-                    <h2 class="section-title">BEATS</h2>
-                    <span class="see-all" onclick="showAllBeats()">Все →</span>
+                    <h2 class="section-title">НОВЫЕ БИТЫ</h2>
+                    <span class="see-all" onclick="showAllBeats('new')">Все →</span>
+                </div>
+                <div class="beats-grid" id="newBeats"></div>
+            </div>
+
+            <!-- ВСЕ БИТЫ -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">ВСЕ БИТЫ</h2>
+                    <span class="see-all" onclick="showAllBeats('all')">Все →</span>
                 </div>
                 <div class="beats-grid" id="allBeats"></div>
             </div>
@@ -1626,67 +1757,77 @@
         <!-- 🔥 НОВОСТИ С АВТОМАТИЧЕСКИМ ОБНОВЛЕНИЕМ -->
         <div id="newsScreen" class="screen hidden">
             <div class="section">
-                <h2 class="section-title">НОВОСТИ</h2>
+                <h2 class="section-title">НОВОСТИ И ОБНОВЛЕНИЯ</h2>
+                <button class="add-news-btn" id="addNewsBtn" style="display: none;" onclick="showAddNewsForm()">
+                    <i class="fas fa-plus"></i>
+                    Добавить новость
+                </button>
                 <div id="newsContainer">
                     <!-- Новости загружаются автоматически -->
                 </div>
             </div>
         </div>
 
-        <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМ КОЛЕСОМ -->
-<div id="casinoScreen" class="screen hidden">
-    <div class="casino-section">
-        <!-- СЛОТЫ -->
-        <div class="slots-machine">
-            <h2 class="section-title">🎰 СЛОТ-МАШИНА</h2>
-            <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                Испытай удачу! Выигрывай скидки и призы!
-            </p>
-            
-            <div class="slots-display">
-                <div class="slot" id="slot1">🎵</div>
-                <div class="slot" id="slot2">🎹</div>
-                <div class="slot" id="slot3">🎤</div>
-            </div>
-            
-            <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
-                🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
-            </button>
-            <div class="attempts-counter" id="slotsTimer"></div>
-        </div>
+        <!-- 🔥 ЛУДИК С ПЕРЕРАБОТАННЫМ КОЛЕСОМ -->
+        <div id="casinoScreen" class="screen hidden">
+            <div class="casino-section">
+                <!-- СЛОТЫ -->
+                <div class="slots-machine">
+                    <h2 class="section-title">🎰 УДАЧА ВАМ УЛЫБНЕТСЯ!</h2>
+                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                        Испытай удачу и получи эксклюзивные призы!
+                    </p>
+                    
+                    <div class="slots-display">
+                        <div class="slot" id="slot1"></div>
+                        <div class="slot" id="slot2"></div>
+                        <div class="slot" id="slot3"></div>
+                    </div>
+                    
+                    <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
+                        🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
+                    </button>
+                    <div class="attempts-counter" id="slotsTimer"></div>
+                </div>
 
-        <!-- 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ -->
-        <div class="wheel-machine">
-            <h2 class="section-title">🎡 КОЛЕСО ФОРТУНЫ</h2>
-            <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                Крути и получай призы!
-            </p>
-            
-            <div class="wheel-container">
-                <div class="wheel-pointer"></div>
-                <div class="wheel" id="wheel">
-                    <!-- Колесо генерируется динамически -->
+                <!-- 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО ФОРТУНЫ -->
+                <div class="wheel-machine">
+                    <h2 class="section-title">🎡 КОЛЕСО УДАЧИ</h2>
+                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                        Крути колесо и получай эксклюзивные скидки и призы!
+                    </p>
+                    
+                    <div class="wheel-container">
+                        <div class="wheel-pointer"></div>
+                        <div class="wheel" id="wheel">
+                            <!-- Колесо генерируется динамически -->
+                        </div>
+                    </div>
+                    
+                    <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
+                        🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
+                    </button>
+                    <div class="attempts-counter" id="wheelTimer"></div>
                 </div>
             </div>
-            
-            <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
-                🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
-            </button>
-            <div class="attempts-counter" id="wheelTimer"></div>
         </div>
-    </div>
-</div>
 
         <!-- 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА -->
         <div id="cartScreen" class="screen hidden">
             <div class="cart-section">
-                <h2 class="section-title">🛒 КОРЗИНА</h2>
+                <h2 class="section-title">🛒 ВАША КОРЗИНА</h2>
                 <div id="cartItems"></div>
                 <div id="cartEmpty" class="empty-state">
                     <i class="fas fa-shopping-cart"></i>
-                    <p>Корзина пуста</p>
+                    <p>Ваша корзина пуста</p>
+                    <p style="font-size: 12px; margin-top: 10px;">Добавьте биты для покупки</p>
                 </div>
                 <div id="cartTotal" style="display: none;">
+                    <!-- 🔥 ВЫБОР ЛИЦЕНЗИИ -->
+                    <div class="license-selection" id="licenseSelection">
+                        <!-- Лицензии загружаются динамически -->
+                    </div>
+
                     <!-- 🔥 СЕКЦИЯ БОНУСОВ -->
                     <div class="bonus-section">
                         <div class="bonus-toggle" onclick="toggleBonusSection()">
@@ -1831,17 +1972,21 @@
                             <i class="fas fa-plus-circle"></i>
                             <span>Добавить бит</span>
                         </div>
+                        <div class="profile-action-btn" onclick="toggleProfileSection('archive')" id="archiveBtn" style="display: none;">
+                            <i class="fas fa-archive"></i>
+                            <span>Архив битов</span>
+                        </div>
                     </div>
 
                     <!-- 🔥 СЕКЦИЯ ИЗБРАННОГО -->
                     <div id="profileFavorites" class="profile-section-content">
-                        <h2 class="section-title">❤️ ИЗБРАННОЕ</h2>
+                        <h2 class="section-title">❤️ ВАШЕ ИЗБРАННОЕ</h2>
                         <div class="beats-grid" id="profileFavoriteBeats"></div>
                     </div>
 
                     <!-- 🔥 СЕКЦИЯ ПРИЗОВ -->
                     <div id="profilePrizes" class="profile-section-content hidden">
-                        <h2 class="section-title">🎁 МОИ ПРИЗЫ</h2>
+                        <h2 class="section-title">🎁 ВАШИ ПРИЗЫ</h2>
                         <div class="beats-grid" id="profilePrizesList"></div>
                     </div>
 
@@ -1880,64 +2025,63 @@
                     <!-- 🔥 СЕКЦИЯ ДОБАВЛЕНИЯ БИТА -->
                     <div id="profileAddBeat" class="profile-section-content hidden">
                         <div class="add-beat-form">
-                            <h2 class="section-title">🎵 Добавить новый бит</h2>
+                            <h2 class="section-title">🎵 ДОБАВИТЬ НОВЫЙ БИТ</h2>
                             
                             <div class="form-group">
-                                <label class="form-label">Название бита</label>
-                                <input type="text" class="form-input" id="beatTitle" placeholder="Введите название">
+                                <label class="form-label">Название бита *</label>
+                                <input type="text" class="form-input" id="beatTitle" placeholder="Введите креативное название">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Ссылка на файл (Яндекс.Диск)</label>
-                                <input type="url" class="form-input" id="beatFileUrl" placeholder="https://disk.yandex.ru/...">
-                                <div class="form-hint">Убедитесь, что файл доступен для скачивания</div>
+                                <label class="form-label">Ссылка на папку с битом (Яндекс.Диск) *</label>
+                                <input type="url" class="form-input" id="beatFolderUrl" placeholder="https://disk.yandex.ru/...">
+                                <div class="form-hint">Папка должна содержать MP3, WAV файлы и папку TRACKOUT</div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">BPM</label>
+                                <label class="form-label">BPM *</label>
                                 <input type="number" class="form-input" id="beatBpm" placeholder="140" min="60" max="200">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Тональность</label>
+                                <label class="form-label">Тональность *</label>
                                 <select class="form-select" id="beatKey">
                                     <option value="">Выберите тональность</option>
                                 </select>
-                                <div class="form-hint">Доступные тональности: C, C#, D, D#, E, F, F#, G, G#, A, A#, B</div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Жанр</label>
+                                <label class="form-label">Жанр *</label>
                                 <select class="form-select" id="beatGenre">
                                     <option value="">Выберите жанр</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Настроение</label>
+                                <label class="form-label">Настроение *</label>
                                 <select class="form-select" id="beatMood">
                                     <option value="">Выберите настроение</option>
-                                    <option value="Dark">Dark</option>
-                                    <option value="Chill">Chill</option>
-                                    <option value="Energetic">Energetic</option>
-                                    <option value="Dreamy">Dreamy</option>
-                                    <option value="Aggressive">Aggressive</option>
-                                    <option value="Vibey">Vibey</option>
-                                    <option value="Relaxed">Relaxed</option>
-                                    <option value="Mysterious">Mysterious</option>
+                                    <option value="Dark">Темное</option>
+                                    <option value="Chill">Расслабляющее</option>
+                                    <option value="Energetic">Энергичное</option>
+                                    <option value="Dreamy">Мечтательное</option>
+                                    <option value="Aggressive">Агрессивное</option>
+                                    <option value="Vibey">Атмосферное</option>
+                                    <option value="Relaxed">Спокойное</option>
+                                    <option value="Mysterious">Загадочное</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">Цены за лицензии</label>
+                                <label class="form-label">Цены за лицензии *</label>
                                 <div class="license-prices">
                                     <div class="license-price">
-                                        <span>MP3:</span>
+                                        <span>MP3 Лизинг:</span>
                                         <input type="number" id="mp3Price" placeholder="1000" min="0">
                                         <span>руб.</span>
                                     </div>
                                     <div class="license-price">
-                                        <span>WAV:</span>
+                                        <span>WAV Лицензия:</span>
                                         <input type="number" id="wavPrice" placeholder="1500" min="0">
                                         <span>руб.</span>
                                     </div>
@@ -1956,7 +2100,7 @@
 
                             <div class="form-group">
                                 <label class="form-label">Описание (опционально)</label>
-                                <textarea class="form-textarea" id="beatDescription" placeholder="Опишите особенности бита..."></textarea>
+                                <textarea class="form-textarea" id="beatDescription" placeholder="Опишите особенности бита, вдохновение, идеи для использования..."></textarea>
                             </div>
 
                             <div class="form-actions">
@@ -1965,24 +2109,26 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 🔥 СЕКЦИЯ АРХИВА -->
+                    <div id="profileArchive" class="profile-section-content hidden">
+                        <h2 class="section-title">📦 АРХИВ БИТОВ</h2>
+                        <div class="beats-grid" id="profileArchiveBeats"></div>
+                    </div>
                 </div>
 
-                <!-- КНОПКА АВТОРИЗАЦИИ -->
+                <!-- КНОПКИ АВТОРИЗАЦИИ -->
                 <div class="profile-card">
-                    <button class="auth-btn" onclick="toggleAuth()" style="
-                        width: 100%;
-                        padding: 15px;
-                        background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-                        border: none;
-                        border-radius: 15px;
-                        color: white;
-                        font-size: 16px;
-                        font-weight: 600;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                    " id="authButton">
-                        <i class="fas fa-sign-in-alt"></i> Войти через Telegram
-                    </button>
+                    <div class="auth-buttons">
+                        <button class="telegram-auth-btn" onclick="toggleAuth('telegram')" id="telegramAuthButton">
+                            <i class="fab fa-telegram"></i>
+                            Войти через Telegram
+                        </button>
+                        <button class="google-auth-btn" onclick="toggleAuth('google')" id="googleAuthButton">
+                            <i class="fab fa-google"></i>
+                            Войти через Google
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1994,6 +2140,38 @@
             <h2>🎉 ПОЗДРАВЛЯЕМ!</h2>
             <p id="winMessage">Вы выиграли WAV лицензию!</p>
             <!-- Кнопки добавляются динамически -->
+        </div>
+    </div>
+
+    <!-- 🔥 МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ -->
+    <div class="win-modal" id="confirmModal">
+        <div class="win-content">
+            <h2>⚠️ ПОДТВЕРЖДЕНИЕ</h2>
+            <p id="confirmMessage">Вы уверены, что хотите выполнить это действие?</p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeConfirmModal(false)">Отмена</button>
+                <button class="btn btn-primary" onclick="closeConfirmModal(true)">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔥 МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ НОВОСТИ -->
+    <div class="win-modal" id="addNewsModal">
+        <div class="win-content" style="max-width: 400px;">
+            <h2>📰 ДОБАВИТЬ НОВОСТЬ</h2>
+            <div class="form-group">
+                <input type="text" class="form-input" id="newsTitle" placeholder="Заголовок новости">
+            </div>
+            <div class="form-group">
+                <textarea class="form-textarea" id="newsContent" placeholder="Текст новости" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="url" class="form-input" id="newsMedia" placeholder="Ссылка на медиа (опционально)">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeAddNewsModal()">Отмена</button>
+                <button class="btn btn-primary" onclick="addNews()">Опубликовать</button>
+            </div>
         </div>
     </div>
 
@@ -2022,39 +2200,6 @@
     </div>
 
     <script>
-        // 🔥 ЗАЩИТА ОТ DDoS АТАК
-        let requestCount = 0;
-        let lastRequestTime = Date.now();
-        const MAX_REQUESTS_PER_MINUTE = 100;
-        
-        function checkSecurity() {
-            const now = Date.now();
-            const timeDiff = now - lastRequestTime;
-            
-            if (timeDiff > 60000) {
-                requestCount = 0;
-                lastRequestTime = now;
-            }
-            
-            requestCount++;
-            
-            if (requestCount > MAX_REQUESTS_PER_MINUTE) {
-                showSecurityShield();
-                return false;
-            }
-            
-            return true;
-        }
-        
-        function showSecurityShield() {
-            document.getElementById('securityShield').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('securityShield').style.display = 'none';
-                requestCount = 0;
-                lastRequestTime = Date.now();
-            }, 5000);
-        }
-        
         // 🔥 TELEGRAM ИНИЦИАЛИЗАЦИЯ
         let tg = null;
         let isTelegram = false;
@@ -2242,7 +2387,6 @@
         }
 
         function toggleSound() {
-            if (!checkSecurity()) return;
             soundSystem.play('click');
             soundSystem.toggleMute();
         }
@@ -2265,6 +2409,7 @@
             lastSlotsPlay: 0,
             lastWheelPlay: 0,
             telegramData: null,
+            googleData: null,
             prizes: [],
             activeBonuses: [],
             salesStats: {
@@ -2276,6 +2421,8 @@
         };
 
         let beats = [];
+        let archivedBeats = [];
+        let news = [];
         const audioPlayers = new Map();
         let searchQuery = '';
         let currentFilters = {
@@ -2314,16 +2461,18 @@
                 { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
                 { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
-            // 🔥 ИСПРАВЛЕННАЯ КОНФИГУРАЦИЯ ПРИЗОВ КОЛЕСА
+            // 🔥 ОБНОВЛЕННАЯ КОНФИГУРАЦИЯ ПРИЗОВ КОЛЕСА
             wheelPrizes: [
-                { name: '1%', value: 1, color: '#FF6B6B', chance: 5 },
-                { name: '5%', value: 5, color: '#4ECDC4', chance: 10 },
-                { name: '10%', value: 10, color: '#45B7D1', chance: 15 },
-                { name: '15%', value: 15, color: '#96CEB4', chance: 20 },
-                { name: '20%', value: 20, color: '#FFEAA7', chance: 20 },
-                { name: '25%', value: 25, color: '#DDA0DD', chance: 15 },
-                { name: 'WAV', value: 'wav', color: '#98D8C8', chance: 10 },
-                { name: 'RESPECT', value: 'respect', color: '#F7DC6F', chance: 5 }
+                { name: '1%', value: 1, color: '#FF6B6B', chance: 10 },
+                { name: '5%', value: 5, color: '#4ECDC4', chance: 15 },
+                { name: '10%', value: 10, color: '#45B7D1', chance: 20 },
+                { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
+                { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
+                { name: '30%', value: 30, color: '#DDA0DD', chance: 8 },
+                { name: '40%', value: 40, color: '#98D8C8', chance: 5 },
+                { name: '50%', value: 50, color: '#F7DC6F', chance: 3 },
+                { name: 'WAV', value: 'wav', color: '#FFA500', chance: 5 },
+                { name: 'RESPECT', value: 'respect', color: '#8B5CF6', chance: 7 }
             ]
         };
 
@@ -2334,6 +2483,7 @@
             initTelegram();
             loadUserData();
             loadBeatsData();
+            loadNewsData();
             setupNavigation();
             setupSearch();
             setupFilters();
@@ -2376,11 +2526,11 @@
                     logger('✅ Telegram Web App инициализирован');
                 } else {
                     logger('⚠️ Запущено вне Telegram');
-                    simulateTelegramAuth();
+                    setupNavigation();
                 }
             } catch (error) {
                 console.error('❌ Ошибка инициализации Telegram:', error);
-                simulateTelegramAuth();
+                setupNavigation();
             }
         }
 
@@ -2397,6 +2547,8 @@
                 userData.wheelAttempts = 999;
                 userData.isAdmin = true;
                 document.getElementById('addBeatBtn').style.display = 'block';
+                document.getElementById('archiveBtn').style.display = 'block';
+                document.getElementById('addNewsBtn').style.display = 'block';
             }
             
             userData.telegramData = {
@@ -2411,13 +2563,23 @@
             showNotification(`👋 Добро пожаловать, ${userData.name}!`);
         }
 
-        function simulateTelegramAuth() {
+        function handleGoogleAuth(user) {
             userData.isAuthenticated = true;
-            userData.name = "Demo User";
-            userData.discount = 10;
-            userData.referralCode = "FRESSO-DEMO";
+            userData.name = user.name || 'Google User';
+            userData.email = user.email || '';
+            userData.discount = Math.max(userData.discount, 5);
+            userData.referralCode = `FRESSO-G${Date.now().toString().slice(-6)}`;
+            
+            userData.googleData = {
+                name: user.name,
+                email: user.email,
+                picture: user.picture,
+                auth_date: Date.now()
+            };
+            
             updateProfile();
             saveUserData();
+            showNotification(`👋 Добро пожаловать, ${userData.name}!`);
         }
 
         // 🔥 АНИМАЦИЯ ЗАГРУЗКИ
@@ -2464,25 +2626,75 @@
 
         function loadBeatsData() {
             const savedBeats = localStorage.getItem('fressoBeatsData');
+            const savedArchived = localStorage.getItem('fressoArchivedBeats');
+            
             if (savedBeats) {
                 beats = JSON.parse(savedBeats);
             } else {
                 beats = [
-                    {id: 1, title: "Midnight Drive", bpm: 140, key: "C#min", genre: "Trap", mood: "Dark", isNew: true, plays: 1245, audioUrl: "#", isFavorite: false, inCart: false, price: 1500},
-                    {id: 2, title: "Neon Dreams", bpm: 128, key: "F#maj", genre: "Synthwave", mood: "Dreamy", isNew: true, plays: 892, audioUrl: "#", isFavorite: false, inCart: false, price: 1200},
-                    {id: 3, title: "Urban Storm", bpm: 150, key: "Amin", genre: "Drill", mood: "Aggressive", isNew: false, plays: 2103, audioUrl: "#", isFavorite: false, inCart: false, price: 1800},
-                    {id: 4, title: "Crystal Flow", bpm: 135, key: "G#min", genre: "Phonk", mood: "Vibey", isNew: false, plays: 1678, audioUrl: "#", isFavorite: false, inCart: false, price: 1600},
-                    {id: 5, title: "Sunset Vibes", bpm: 95, key: "Dmin", genre: "Lo-Fi", mood: "Chill", isNew: true, plays: 756, audioUrl: "#", isFavorite: false, inCart: false, price: 1000},
-                    {id: 6, title: "Thunder Bolt", bpm: 160, key: "Emin", genre: "Trap", mood: "Energetic", isNew: false, plays: 1890, audioUrl: "#", isFavorite: false, inCart: false, price: 1700},
-                    {id: 7, title: "Ocean Waves", bpm: 110, key: "Cmaj", genre: "Hip-Hop", mood: "Relaxed", isNew: true, plays: 543, audioUrl: "#", isFavorite: false, inCart: false, price: 1100},
-                    {id: 8, title: "City Lights", bpm: 145, key: "Bmin", genre: "Electronic", mood: "Mysterious", isNew: false, plays: 1321, audioUrl: "#", isFavorite: false, inCart: false, price: 1400}
+                    {
+                        id: 1, 
+                        title: "Midnight Drive", 
+                        bpm: 140, 
+                        key: "C#min", 
+                        genre: "Trap", 
+                        mood: "Dark", 
+                        isNew: true, 
+                        plays: 1245, 
+                        audioUrl: "#", 
+                        isFavorite: false, 
+                        inCart: false, 
+                        price: 1500,
+                        description: "Темный атмосферный бит для ваших треков",
+                        licensePrices: {
+                            mp3: 1000,
+                            wav: 1500,
+                            trackout: 2000,
+                            exclusive: 5000
+                        },
+                        files: {
+                            mp3: "#",
+                            wav: "#",
+                            trackout: "#"
+                        },
+                        createdAt: new Date().toISOString(),
+                        createdBy: "admin"
+                    }
                 ];
                 saveBeatsData();
+            }
+            
+            if (savedArchived) {
+                archivedBeats = JSON.parse(savedArchived);
             }
         }
 
         function saveBeatsData() {
             localStorage.setItem('fressoBeatsData', JSON.stringify(beats));
+            localStorage.setItem('fressoArchivedBeats', JSON.stringify(archivedBeats));
+        }
+
+        function loadNewsData() {
+            const savedNews = localStorage.getItem('fressoNewsData');
+            if (savedNews) {
+                news = JSON.parse(savedNews);
+            } else {
+                news = [
+                    {
+                        id: 1,
+                        title: "🎵 Добро пожаловать в Fresso Beats!",
+                        content: "Мы рады представить вам нашу платформу с эксклюзивными битами для вашего творчества.",
+                        media: "",
+                        date: new Date().toISOString(),
+                        author: "admin"
+                    }
+                ];
+                saveNewsData();
+            }
+        }
+
+        function saveNewsData() {
+            localStorage.setItem('fressoNewsData', JSON.stringify(news));
         }
 
         // 🔥 СИСТЕМА НАВИГАЦИИ С АНИМАЦИЯМИ И ЗВУКАМИ
@@ -2492,15 +2704,7 @@
 
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
-                    if (!checkSecurity()) return;
-                    
                     soundSystem.play('click');
-                    
-                    // Анимация нажатия
-                    this.classList.add('click-animation');
-                    setTimeout(() => {
-                        this.classList.remove('click-animation');
-                    }, 300);
 
                     const targetScreen = this.getAttribute('data-screen');
 
@@ -2539,8 +2743,6 @@
 
         // 🔥 ЗВУКИ ДЛЯ ВСЕХ КЛИКАБЕЛЬНЫХ ЭЛЕМЕНТОВ
         document.addEventListener('click', function(e) {
-            if (!checkSecurity()) return;
-            
             if (e.target.tagName === 'BUTTON' || 
                 e.target.tagName === 'A' || 
                 e.target.closest('button') || 
@@ -2550,15 +2752,6 @@
                 e.target.classList.contains('filter-btn') ||
                 e.target.classList.contains('see-all')) {
                 soundSystem.play('click');
-                
-                // Анимация нажатия для всех кнопок
-                const button = e.target.closest('button') || e.target.closest('.nav-item') || e.target.closest('.action-btn') || e.target.closest('.filter-btn') || e.target.closest('.see-all');
-                if (button) {
-                    button.classList.add('click-animation');
-                    setTimeout(() => {
-                        button.classList.remove('click-animation');
-                    }, 300);
-                }
             }
         });
 
@@ -2577,8 +2770,6 @@
         }
 
         function performSearch() {
-            if (!checkSecurity()) return;
-            
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             searchQuery = searchTerm;
             displayBeats();
@@ -2586,6 +2777,12 @@
             if (searchTerm) {
                 showNotification(`🔍 Найдено битов: ${filterBeats(beats).length}`);
             }
+        }
+
+        function toggleAdvancedSearch() {
+            soundSystem.play('click');
+            const filtersContainer = document.getElementById('filtersContainer');
+            filtersContainer.classList.toggle('active');
         }
 
         // 🔥 ИСПРАВЛЕННЫЕ ФИЛЬТРЫ
@@ -2599,7 +2796,6 @@
             allKeyBtn.textContent = 'Все';
             allKeyBtn.setAttribute('data-key', 'all');
             allKeyBtn.addEventListener('click', function() {
-                if (!checkSecurity()) return;
                 soundSystem.play('click');
                 document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
@@ -2614,7 +2810,6 @@
                 btn.textContent = key;
                 btn.setAttribute('data-key', key);
                 btn.addEventListener('click', function() {
-                    if (!checkSecurity()) return;
                     soundSystem.play('click');
                     document.querySelectorAll('#keyFilters .filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
@@ -2633,7 +2828,6 @@
             allGenreBtn.textContent = 'Все';
             allGenreBtn.setAttribute('data-genre', 'all');
             allGenreBtn.addEventListener('click', function() {
-                if (!checkSecurity()) return;
                 soundSystem.play('click');
                 document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
@@ -2648,7 +2842,6 @@
                 btn.textContent = genre;
                 btn.setAttribute('data-genre', genre);
                 btn.addEventListener('click', function() {
-                    if (!checkSecurity()) return;
                     soundSystem.play('click');
                     document.querySelectorAll('#genreFilters .filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
@@ -2662,7 +2855,6 @@
             const tagButtons = document.querySelectorAll('#tagFilters .filter-btn');
             tagButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (!checkSecurity()) return;
                     soundSystem.play('click');
                     this.classList.toggle('active');
                     const tag = this.getAttribute('data-tag');
@@ -2699,13 +2891,20 @@
             maxSlider.addEventListener('input', updateBpmDisplay);
         }
 
-        // 🔥 ОТОБРАЖЕНИЕ БИТОВ (ТОЛЬКО ОДНА СЕКЦИЯ)
+        // 🔥 ОТОБРАЖЕНИЕ БИТОВ
         function displayBeats() {
+            const newBeatsContainer = document.getElementById('newBeats');
             const allBeatsContainer = document.getElementById('allBeats');
             
+            newBeatsContainer.innerHTML = '';
             allBeatsContainer.innerHTML = '';
             
             const filteredBeats = filterBeats(beats);
+            const newBeats = filteredBeats.filter(beat => beat.isNew);
+            
+            newBeats.forEach(beat => {
+                newBeatsContainer.appendChild(createBeatCard(beat));
+            });
             
             filteredBeats.forEach(beat => {
                 allBeatsContainer.appendChild(createBeatCard(beat));
@@ -2720,6 +2919,15 @@
                     </div>
                 `;
             }
+
+            if (newBeats.length === 0 && filteredBeats.length > 0) {
+                newBeatsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-music"></i>
+                        <p>Нет новых битов</p>
+                    </div>
+                `;
+            }
         }
 
         function filterBeats(beats) {
@@ -2731,7 +2939,8 @@
                     beat.genre.toLowerCase().includes(searchQuery) ||
                     beat.mood.toLowerCase().includes(searchQuery) ||
                     beat.key.toLowerCase().includes(searchQuery) ||
-                    beat.bpm.toString().includes(searchQuery)
+                    beat.bpm.toString().includes(searchQuery) ||
+                    (beat.description && beat.description.toLowerCase().includes(searchQuery))
                 );
             }
             
@@ -2760,6 +2969,28 @@
         function createBeatCard(beat) {
             const card = document.createElement('div');
             card.className = 'beat-card fade-in';
+            
+            let optionsMenu = '';
+            if (userData.isAdmin) {
+                optionsMenu = `
+                    <div class="beat-options">
+                        <button class="beat-menu-btn" onclick="toggleBeatMenu(${beat.id})">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="beat-menu" id="beatMenu-${beat.id}">
+                            <div class="beat-menu-item" onclick="archiveBeat(${beat.id})">
+                                <i class="fas fa-archive"></i>
+                                В архив
+                            </div>
+                            <div class="beat-menu-item delete" onclick="confirmDeleteBeat(${beat.id})">
+                                <i class="fas fa-trash"></i>
+                                Удалить
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
             card.innerHTML = `
                 <div class="beat-header">
                     <div class="beat-image">
@@ -2784,6 +3015,7 @@
                                 onclick="toggleCart(${beat.id})">
                             <i class="fas fa-shopping-cart"></i>
                         </button>
+                        ${optionsMenu}
                     </div>
                 </div>
                 <div class="audio-player-container">
@@ -2801,57 +3033,101 @@
             return card;
         }
 
-        function showAllBeats() {
-            if (!checkSecurity()) return;
-            
+        function toggleBeatMenu(beatId) {
             soundSystem.play('click');
-            currentFilters.key = 'all';
-            currentFilters.genre = 'all';
-            currentFilters.minBpm = 60;
-            currentFilters.maxBpm = 200;
-            currentFilters.tags = [];
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                if (btn.getAttribute('data-key') === 'all' || btn.getAttribute('data-genre') === 'all') {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
+            const menu = document.getElementById(`beatMenu-${beatId}`);
+            document.querySelectorAll('.beat-menu').forEach(m => {
+                if (m !== menu) m.classList.remove('active');
             });
-            
-            document.getElementById('minBpmSlider').value = 60;
-            document.getElementById('maxBpmSlider').value = 200;
-            setupBpmSliders();
-            
-            showNotification('📀 Показаны все биты');
+            menu.classList.toggle('active');
+        }
+
+        function archiveBeat(beatId) {
+            soundSystem.play('click');
+            const beatIndex = beats.findIndex(b => b.id === beatId);
+            if (beatIndex !== -1) {
+                const beat = beats[beatIndex];
+                beats.splice(beatIndex, 1);
+                archivedBeats.push(beat);
+                saveBeatsData();
+                displayBeats();
+                showNotification('📦 Бит перемещен в архив');
+            }
+        }
+
+        function confirmDeleteBeat(beatId) {
+            soundSystem.play('click');
+            document.getElementById('confirmMessage').textContent = 'Вы уверены, что хотите удалить этот бит? Это действие нельзя отменить.';
+            document.getElementById('confirmModal').style.display = 'flex';
+            window.confirmAction = function(confirmed) {
+                if (confirmed) {
+                    deleteBeat(beatId);
+                }
+                document.getElementById('confirmModal').style.display = 'none';
+            };
+        }
+
+        function deleteBeat(beatId) {
+            const beatIndex = beats.findIndex(b => b.id === beatId);
+            if (beatIndex !== -1) {
+                beats.splice(beatIndex, 1);
+                saveBeatsData();
+                displayBeats();
+                showNotification('🗑️ Бит удален');
+            }
+        }
+
+        function showAllBeats(type) {
+            soundSystem.play('click');
+            if (type === 'new') {
+                currentFilters.key = 'all';
+                currentFilters.genre = 'all';
+                currentFilters.minBpm = 60;
+                currentFilters.maxBpm = 200;
+                currentFilters.tags = [];
+                
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    if (btn.getAttribute('data-key') === 'all' || btn.getAttribute('data-genre') === 'all') {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                document.getElementById('minBpmSlider').value = 60;
+                document.getElementById('maxBpmSlider').value = 200;
+                setupBpmSliders();
+                
+                showNotification('📀 Показаны все новые биты');
+            } else {
+                showNotification('📀 Показаны все биты');
+            }
             displayBeats();
         }
 
-        // 🔥 АУДИО ПЛЕЕР С АНИМАЦИЕЙ ДИСКА
+        // 🔥 АУДИО ПЛЕЕР С УЛУЧШЕННОЙ АНИМАЦИЕЙ
         function initializeAudioPlayers() {
             beats.forEach(beat => {
                 audioPlayers.set(beat.id, {
                     isPlaying: false,
                     currentTime: 0,
                     duration: 180,
-                    interval: null
+                    interval: null,
+                    animationFrame: null
                 });
             });
         }
 
         function togglePlay(beatId) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const player = audioPlayers.get(beatId);
             const playBtn = document.querySelector(`#player-${beatId} .play-btn i`);
-            const beatCard = document.querySelector(`#player-${beatId}`).closest('.beat-card');
             
             if (player.isPlaying) {
                 player.isPlaying = false;
                 playBtn.className = 'fas fa-play';
                 clearInterval(player.interval);
-                beatCard.classList.remove('playing');
+                cancelAnimationFrame(player.animationFrame);
             } else {
                 audioPlayers.forEach((p, id) => {
                     if (id !== beatId && p.isPlaying) {
@@ -2859,13 +3135,12 @@
                         const otherBtn = document.querySelector(`#player-${id} .play-btn i`);
                         if (otherBtn) otherBtn.className = 'fas fa-play';
                         clearInterval(p.interval);
-                        document.querySelector(`#player-${id}`).closest('.beat-card').classList.remove('playing');
+                        cancelAnimationFrame(p.animationFrame);
                     }
                 });
                 
                 player.isPlaying = true;
                 playBtn.className = 'fas fa-pause';
-                beatCard.classList.add('playing');
                 simulatePlayback(beatId);
                 
                 userData.listens++;
@@ -2876,16 +3151,17 @@
 
         function simulatePlayback(beatId) {
             const player = audioPlayers.get(beatId);
+            const startTime = Date.now() - player.currentTime * 1000;
             
-            player.interval = setInterval(() => {
-                if (!player.isPlaying) {
-                    clearInterval(player.interval);
-                    return;
-                }
+            function updatePlayback() {
+                if (!player.isPlaying) return;
                 
-                player.currentTime += 1;
+                player.currentTime = (Date.now() - startTime) / 1000;
                 const progress = (player.currentTime / player.duration) * 100;
-                document.getElementById(`progress-${beatId}`).style.width = `${progress}%`;
+                const progressBar = document.getElementById(`progress-${beatId}`);
+                
+                // 🔥 ПЛАВНАЯ АНИМАЦИЯ ПРОГРЕСС-БАРА
+                progressBar.style.width = `${progress}%`;
                 
                 const minutes = Math.floor(player.currentTime / 60);
                 const seconds = Math.floor(player.currentTime % 60);
@@ -2895,18 +3171,18 @@
                 if (player.currentTime >= player.duration) {
                     player.isPlaying = false;
                     player.currentTime = 0;
-                    document.getElementById(`progress-${beatId}`).style.width = '0%';
+                    progressBar.style.width = '0%';
                     document.getElementById(`time-${beatId}`).textContent = '0:00';
                     document.querySelector(`#player-${beatId} .play-btn i`).className = 'fas fa-play';
-                    document.querySelector(`#player-${beatId}`).closest('.beat-card').classList.remove('playing');
-                    clearInterval(player.interval);
+                } else {
+                    player.animationFrame = requestAnimationFrame(updatePlayback);
                 }
-            }, 1000);
+            }
+            
+            player.animationFrame = requestAnimationFrame(updatePlayback);
         }
 
         function seekAudio(beatId, event) {
-            if (!checkSecurity()) return;
-            
             const player = audioPlayers.get(beatId);
             const progressContainer = event.currentTarget;
             const rect = progressContainer.getBoundingClientRect();
@@ -2924,8 +3200,6 @@
 
         // 🔥 ИЗБРАННОЕ И КОРЗИНА
         function toggleFavorite(beatId) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const index = userData.favorites.indexOf(beatId);
             
@@ -2947,8 +3221,6 @@
         }
 
         function toggleCart(beatId) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const index = userData.cart.indexOf(beatId);
             if (index === -1) {
@@ -2965,13 +3237,15 @@
             displayCart();
         }
 
-        // 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА С БОНУСАМИ
+        // 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА С БОНУСАМИ И ЛИЦЕНЗИЯМИ
         function displayCart() {
             const cartItems = document.getElementById('cartItems');
             const cartEmpty = document.getElementById('cartEmpty');
             const cartTotal = document.getElementById('cartTotal');
+            const licenseSelection = document.getElementById('licenseSelection');
             
             cartItems.innerHTML = '';
+            licenseSelection.innerHTML = '';
             
             if (userData.cart.length === 0) {
                 cartEmpty.style.display = 'block';
@@ -3004,6 +3278,36 @@
                         </button>
                     `;
                     cartItems.appendChild(cartItem);
+                    
+                    // 🔥 ДОБАВЛЯЕМ ВЫБОР ЛИЦЕНЗИИ
+                    const licenseOption = document.createElement('div');
+                    licenseOption.className = 'license-option active';
+                    licenseOption.innerHTML = `
+                        <div class="license-name">${beat.title} - Лицензии</div>
+                        <div style="display: grid; gap: 8px; margin-top: 10px;">
+                            <div class="license-option" onclick="selectLicense(${beat.id}, 'mp3')">
+                                <div class="license-name">MP3 Лизинг</div>
+                                <div class="license-price">${beat.licensePrices.mp3} руб.</div>
+                                <div class="license-description">Базовая лицензия для некоммерческого использования</div>
+                            </div>
+                            <div class="license-option" onclick="selectLicense(${beat.id}, 'wav')">
+                                <div class="license-name">WAV Лицензия</div>
+                                <div class="license-price">${beat.licensePrices.wav} руб.</div>
+                                <div class="license-description">Высококачественный звук для профессионального использования</div>
+                            </div>
+                            <div class="license-option" onclick="selectLicense(${beat.id}, 'trackout')">
+                                <div class="license-name">TRACKOUT</div>
+                                <div class="license-price">${beat.licensePrices.trackout} руб.</div>
+                                <div class="license-description">Отдельные дорожки для профессионального сведения</div>
+                            </div>
+                            <div class="license-option" onclick="selectLicense(${beat.id}, 'exclusive')">
+                                <div class="license-name">ЭКСКЛЮЗИВ</div>
+                                <div class="license-price">${beat.licensePrices.exclusive} руб.</div>
+                                <div class="license-description">Полные права на бит, исключительное использование</div>
+                            </div>
+                        </div>
+                    `;
+                    licenseSelection.appendChild(licenseOption);
                 }
             });
             
@@ -3018,9 +3322,13 @@
             updateBonusOptions();
         }
 
+        function selectLicense(beatId, licenseType) {
+            soundSystem.play('click');
+            // Здесь будет логика выбора лицензии
+            showNotification(`✅ Выбрана ${licenseType.toUpperCase()} лицензия`);
+        }
+
         function removeFromCart(beatId) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const index = userData.cart.indexOf(beatId);
             if (index !== -1) {
@@ -3034,8 +3342,6 @@
 
         // 🔥 СИСТЕМА БОНУСОВ
         function toggleBonusSection() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const bonusOptions = document.getElementById('bonusOptions');
             const bonusCheckbox = document.getElementById('bonusCheckbox');
@@ -3072,8 +3378,6 @@
         }
 
         function selectBonus(bonus, index) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             if (bonus.prizeType === 'wav') {
                 userData.activeBonuses = [{ type: 'wav', bonus: bonus }];
@@ -3090,8 +3394,6 @@
 
         // 🔥 СИСТЕМА ОПЛАТЫ
         function selectPayment(method) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('active'));
             document.querySelectorAll('.payment-details').forEach(pd => pd.classList.remove('active'));
@@ -3100,7 +3402,7 @@
             document.getElementById(`${method}Details`).classList.add('active');
         }
 
-        // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
+        // 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО ФОРТУНЫ
         function setupWheel() {
             const wheel = document.getElementById('wheel');
             wheel.innerHTML = '';
@@ -3144,8 +3446,6 @@
         let isWheelSpinning = false;
 
         function spinWheel() {
-            if (!checkSecurity()) return;
-            
             if (isWheelSpinning) return;
             
             soundSystem.play('spin');
@@ -3178,7 +3478,7 @@
             const targetSegmentAngle = selectedIndex * segmentAngle;
             
             // Полные обороты + смещение к нужному сегменту
-            const fullRotations = 5;
+            const fullRotations = 5 + Math.floor(Math.random() * 3); // 5-7 полных оборотов
             const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle) + (segmentAngle / 2);
             
             // Сброс анимации
@@ -3187,7 +3487,7 @@
             
             // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
             setTimeout(() => {
-                wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 0.95)';
+                wheel.style.transition = `transform ${3 + Math.random() * 2}s cubic-bezier(0.2, 0.8, 0.3, 0.95)`;
                 wheel.style.transform = `rotate(${targetAngle}deg)`;
             }, 10);
 
@@ -3218,7 +3518,7 @@
                 saveUserData();
                 wheelBtn.disabled = false;
 
-            }, 4050);
+            }, 3500 + Math.random() * 1000);
         }
 
         // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВЫБОРА ПРИЗА
@@ -3239,8 +3539,6 @@
 
         // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ
         function spinSlots() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('spin');
             
             if (!userData.isAdmin && userData.slotsAttempts <= 0) {
@@ -3387,8 +3685,6 @@
         let currentProfileSection = 'favorites';
 
         function toggleProfileSection(section) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             
             if (currentProfileSection === section) {
@@ -3417,6 +3713,8 @@
                     displayProfilePrizes();
                 } else if (section === 'addBeat') {
                     setupBeatForm();
+                } else if (section === 'archive') {
+                    displayProfileArchive();
                 }
             }
         }
@@ -3510,9 +3808,66 @@
             });
         }
 
-        function claimPrize(prizeIndex) {
-            if (!checkSecurity()) return;
+        function displayProfileArchive() {
+            const container = document.getElementById('profileArchiveBeats');
+            container.innerHTML = '';
             
+            if (archivedBeats.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-archive"></i>
+                        <p>Архив пуст</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Здесь будут биты, перемещенные в архив</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            archivedBeats.forEach(beat => {
+                const card = document.createElement('div');
+                card.className = 'beat-card';
+                card.innerHTML = `
+                    <div class="beat-header">
+                        <div class="beat-image">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="beat-info">
+                            <h3>${beat.title}</h3>
+                            <div class="beat-meta">
+                                <span>${beat.bpm} BPM</span>
+                                <span>${beat.key}</span>
+                                <span>${beat.genre}</span>
+                                <span style="background: var(--text-secondary);">В архиве</span>
+                            </div>
+                        </div>
+                        <div class="beat-actions">
+                            <button class="action-btn" onclick="restoreBeat(${beat.id})">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="confirmDeleteBeat(${beat.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function restoreBeat(beatId) {
+            soundSystem.play('click');
+            const beatIndex = archivedBeats.findIndex(b => b.id === beatId);
+            if (beatIndex !== -1) {
+                const beat = archivedBeats[beatIndex];
+                archivedBeats.splice(beatIndex, 1);
+                beats.push(beat);
+                saveBeatsData();
+                displayProfileArchive();
+                showNotification('📦 Бит восстановлен из архива');
+            }
+        }
+
+        function claimPrize(prizeIndex) {
             soundSystem.play('click');
             userData.prizes[prizeIndex].used = true;
             saveUserData();
@@ -3548,11 +3903,9 @@
         }
 
         function resetBeatForm() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             document.getElementById('beatTitle').value = '';
-            document.getElementById('beatFileUrl').value = '';
+            document.getElementById('beatFolderUrl').value = '';
             document.getElementById('beatBpm').value = '';
             document.getElementById('beatKey').value = '';
             document.getElementById('beatGenre').value = '';
@@ -3567,11 +3920,9 @@
         }
 
         function addNewBeat() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const title = document.getElementById('beatTitle').value.trim();
-            const fileUrl = document.getElementById('beatFileUrl').value.trim();
+            const folderUrl = document.getElementById('beatFolderUrl').value.trim();
             const bpm = parseInt(document.getElementById('beatBpm').value);
             const key = document.getElementById('beatKey').value;
             const genre = document.getElementById('beatGenre').value;
@@ -3582,7 +3933,7 @@
             const exclusivePrice = parseInt(document.getElementById('exclusivePrice').value) || 0;
             const description = document.getElementById('beatDescription').value.trim();
             
-            if (!title || !fileUrl || !bpm || !key || !genre || !mood) {
+            if (!title || !folderUrl || !bpm || !key || !genre || !mood) {
                 showNotification('❌ Заполните все обязательные поля');
                 return;
             }
@@ -3591,6 +3942,14 @@
                 showNotification('❌ BPM должен быть от 60 до 200');
                 return;
             }
+            
+            // 🔥 ПАРСИНГ ССЫЛКИ НА ПАПКУ
+            // В реальном приложении здесь будет API для получения файлов из папки
+            const files = {
+                mp3: folderUrl + '/beat.mp3',
+                wav: folderUrl + '/beat.wav',
+                trackout: folderUrl + '/trackout.zip'
+            };
             
             const newBeat = {
                 id: Date.now(),
@@ -3601,7 +3960,7 @@
                 mood: mood,
                 isNew: true,
                 plays: 0,
-                audioUrl: fileUrl,
+                audioUrl: files.mp3,
                 isFavorite: false,
                 inCart: false,
                 price: wavPrice || mp3Price,
@@ -3612,7 +3971,9 @@
                     trackout: trackoutPrice,
                     exclusive: exclusivePrice
                 },
-                createdAt: new Date().toISOString()
+                files: files,
+                createdAt: new Date().toISOString(),
+                createdBy: userData.isAdmin ? "admin" : userData.name
             };
             
             beats.unshift(newBeat);
@@ -3633,42 +3994,100 @@
         // 🔥 АВТОМАТИЧЕСКИЕ НОВОСТИ
         function loadNews() {
             const newsContainer = document.getElementById('newsContainer');
-            
-            const musicNews = [
-                {
-                    title: "🎵 Новый альбом Fresso Beats",
-                    content: "Вышел новый сборник эксклюзивных битов 'Urban Dreams'. Доступно для покупки в магазине!",
-                    date: new Date().toLocaleDateString('ru-RU')
-                },
-                {
-                    title: "🔥 Тренды Beatmaking 2024",
-                    content: "Фьюче-фанк и хард-дрилл становятся главными трендами этого года. Успей создать хит!",
-                    date: new Date(Date.now() - 86400000).toLocaleDateString('ru-RU')
-                },
-                {
-                    title: "💎 Скидка 25% на все биты",
-                    content: "Только этой недели скидка 25% на всю коллекцию битов. Успей приобрести!",
-                    date: new Date(Date.now() - 172800000).toLocaleDateString('ru-RU')
-                },
-                {
-                    title: "🎤 Коллаборация с топовыми MC",
-                    content: "Fresso Beats начинает сотрудничество с известными исполнителями. Следи за новостями!",
-                    date: new Date(Date.now() - 259200000).toLocaleDateString('ru-RU')
-                }
-            ];
-            
             newsContainer.innerHTML = '';
             
-            musicNews.forEach(news => {
-                const newsItem = document.createElement('div');
-                newsItem.className = 'news-item fade-in';
-                newsItem.innerHTML = `
-                    <h3>${news.title}</h3>
-                    <p>${news.content}</p>
-                    <div class="news-date">${news.date}</div>
+            if (news.length === 0) {
+                newsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <p>Новостей пока нет</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Следите за обновлениями!</p>
+                    </div>
                 `;
-                newsContainer.appendChild(newsItem);
+                return;
+            }
+            
+            news.forEach((newsItem, index) => {
+                const newsElement = document.createElement('div');
+                newsElement.className = 'news-item fade-in';
+                
+                let deleteButton = '';
+                if (userData.isAdmin) {
+                    deleteButton = `<button class="remove-from-cart" onclick="deleteNews(${index})" style="margin-top: 10px;">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>`;
+                }
+                
+                newsElement.innerHTML = `
+                    <h3>${newsItem.title}</h3>
+                    <p>${newsItem.content}</p>
+                    ${newsItem.media ? `<div style="margin: 10px 0;"><a href="${newsItem.media}" target="_blank" style="color: var(--primary);">📎 Медиа вложение</a></div>` : ''}
+                    <div class="news-date">${new Date(newsItem.date).toLocaleDateString('ru-RU')}</div>
+                    ${deleteButton}
+                `;
+                newsContainer.appendChild(newsElement);
             });
+        }
+
+        function showAddNewsForm() {
+            soundSystem.play('click');
+            document.getElementById('addNewsModal').style.display = 'flex';
+        }
+
+        function closeAddNewsModal() {
+            soundSystem.play('click');
+            document.getElementById('addNewsModal').style.display = 'none';
+        }
+
+        function addNews() {
+            soundSystem.play('click');
+            const title = document.getElementById('newsTitle').value.trim();
+            const content = document.getElementById('newsContent').value.trim();
+            const media = document.getElementById('newsMedia').value.trim();
+            
+            if (!title || !content) {
+                showNotification('❌ Заполните заголовок и текст новости');
+                return;
+            }
+            
+            const newNews = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                media: media,
+                date: new Date().toISOString(),
+                author: userData.name
+            };
+            
+            news.unshift(newNews);
+            saveNewsData();
+            closeAddNewsModal();
+            loadNews();
+            
+            showNotification('✅ Новость опубликована!');
+        }
+
+        function deleteNews(index) {
+            soundSystem.play('click');
+            document.getElementById('confirmMessage').textContent = 'Вы уверены, что хотите удалить эту новость?';
+            document.getElementById('confirmModal').style.display = 'flex';
+            window.confirmAction = function(confirmed) {
+                if (confirmed) {
+                    news.splice(index, 1);
+                    saveNewsData();
+                    loadNews();
+                    showNotification('🗑️ Новость удалена');
+                }
+                document.getElementById('confirmModal').style.display = 'none';
+            };
+        }
+
+        function closeConfirmModal(confirmed) {
+            soundSystem.play('click');
+            if (window.confirmAction) {
+                window.confirmAction(confirmed);
+            }
+            document.getElementById('confirmModal').style.display = 'none';
         }
 
         // 🔥 МОДАЛЬНЫЕ ОКНА
@@ -3707,8 +4126,6 @@
         }
 
         function closeWinModal(goToHome = false) {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             document.getElementById('winModal').style.display = 'none';
             if (goToHome) {
@@ -3720,8 +4137,6 @@
         }
 
         function contactAboutPrize() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             if (isTelegram && tg) {
                 tg.openTelegramLink('https://t.me/Fr1sso');
@@ -3776,43 +4191,68 @@
             if (userData.isAuthenticated) {
                 avatar.textContent = userData.name.charAt(0).toUpperCase();
                 name.textContent = userData.name;
-                status.textContent = userData.username ? `@${userData.username}` : 'Premium пользователь';
+                
+                if (userData.telegramData) {
+                    status.textContent = userData.username ? `@${userData.username}` : 'Telegram пользователь';
+                } else if (userData.googleData) {
+                    status.textContent = userData.email || 'Google пользователь';
+                } else {
+                    status.textContent = 'Авторизованный пользователь';
+                }
                 
                 if (userData.isAdmin) {
                     status.textContent += ' 👑 АДМИН';
                 }
                 
-                document.getElementById('authButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
+                document.getElementById('telegramAuthButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
+                document.getElementById('googleAuthButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
             } else {
                 avatar.textContent = 'G';
                 name.textContent = 'Гость';
                 status.textContent = 'Не авторизован';
-                document.getElementById('authButton').innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти через Telegram';
+                document.getElementById('telegramAuthButton').innerHTML = '<i class="fab fa-telegram"></i> Войти через Telegram';
+                document.getElementById('googleAuthButton').innerHTML = '<i class="fab fa-google"></i> Войти через Google';
             }
         }
 
-        function toggleAuth() {
-            if (!checkSecurity()) return;
-            
+        function toggleAuth(provider) {
             soundSystem.play('click');
             if (userData.isAuthenticated) {
                 userData.isAuthenticated = false;
                 userData.isAdmin = false;
                 userData.name = "Гость";
                 userData.telegramData = null;
+                userData.googleData = null;
                 document.getElementById('addBeatBtn').style.display = 'none';
+                document.getElementById('archiveBtn').style.display = 'none';
+                document.getElementById('addNewsBtn').style.display = 'none';
                 showNotification('👋 До скорой встречи!');
             } else {
-                if (isTelegram && tg) {
-                    const user = tg.initDataUnsafe?.user;
-                    if (user) {
-                        handleTelegramAuth(user);
+                if (provider === 'telegram') {
+                    if (isTelegram && tg) {
+                        const user = tg.initDataUnsafe?.user;
+                        if (user) {
+                            handleTelegramAuth(user);
+                        } else {
+                            showNotification('🔗 Открой в Telegram для авторизации');
+                        }
                     } else {
-                        showNotification('🔗 Открой в Telegram для авторизации');
+                        showNotification('🔗 Открой в Telegram для полного функционала');
+                        // Симуляция авторизации для демо
+                        handleTelegramAuth({
+                            id: 123456789,
+                            first_name: 'Demo User',
+                            username: 'demo_user'
+                        });
                     }
-                } else {
-                    showNotification('🔗 Открой в Telegram для полного функционала');
-                    simulateTelegramAuth();
+                } else if (provider === 'google') {
+                    // В реальном приложении здесь будет OAuth для Google
+                    showNotification('🔗 Функция Google авторизации в разработке');
+                    // Симуляция авторизации для демо
+                    handleGoogleAuth({
+                        name: 'Google User',
+                        email: 'user@gmail.com'
+                    });
                 }
             }
             saveUserData();
@@ -3820,8 +4260,6 @@
         }
 
         function copyReferralCode() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const code = userData.referralCode;
             navigator.clipboard.writeText(code).then(() => {
@@ -3838,8 +4276,6 @@
         }
 
         function useReferralCode() {
-            if (!checkSecurity()) return;
-            
             soundSystem.play('click');
             const code = document.getElementById('friendReferralCode').value.trim();
             
