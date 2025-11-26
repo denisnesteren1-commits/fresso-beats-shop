@@ -44,6 +44,7 @@
             color: var(--text);
             min-height: 100vh;
             padding-bottom: 80px;
+            overflow-x: hidden;
         }
 
         .container {
@@ -690,125 +691,262 @@
             50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
         }
 
-        /* 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО ФОРТУНЫ */
-        .wheel-machine {
+        /* 🔥 КНОПКА ПОКУПКИ ПОПЫТОК ДЛЯ СЛОТОВ */
+        .buy-attempts-section {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .buy-attempts-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .attempts-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .attempt-option {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .attempt-option:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .attempt-option.active {
+            background: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .attempt-count {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .attempt-price {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .buy-attempt-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buy-attempt-btn:hover {
+            background: #e69007;
+            transform: translateY(-2px);
+        }
+
+        .buy-attempt-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 🔥 НОВАЯ ТАПАЛКА С БАЛАНСОМ */
+        .tap-game {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 20px;
             padding: 20px;
             border: 1px solid rgba(139, 92, 246, 0.2);
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
-            position: relative;
+            text-align: center;
         }
 
-        .wheel-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 20px;
-        }
-
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-            border: 3px solid rgba(255,255,255,0.1);
-            background: var(--bg-darker);
-        }
-
-        .wheel-segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            transform-origin: 100% 100%;
-            left: 50%;
-            top: 0;
-            overflow: hidden;
-        }
-
-        .segment-content {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            transform-origin: 0% 0%;
+        .tap-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding-left: 30px;
-            box-sizing: border-box;
+            margin-bottom: 15px;
         }
 
-        .segment-text {
-            transform: rotate(45deg);
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-            white-space: nowrap;
+        .tap-balance {
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        .wheel-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: var(--accent);
+        .tap-area {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border-radius: 50%;
-            border: 3px solid white;
-            z-index: 10;
+            margin: 20px auto;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 48px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            user-select: none;
+        }
+
+        .tap-area:active {
+            transform: scale(0.95);
+        }
+
+        .tap-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+
+        .tap-stat {
+            text-align: center;
+        }
+
+        .tap-stat-value {
+            font-size: 24px;
             font-weight: bold;
-            color: white;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            color: var(--primary);
         }
 
-        .wheel-pointer {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 25px;
-            height: 35px;
-            background: var(--accent);
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            z-index: 20;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        .tap-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
-        .spin-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            border: none;
-            border-radius: 15px;
-            color: white;
-            font-size: 16px;
+        /* 🔥 ИГРА "ТРИ В РЯД" */
+        .match3-game {
+            background: rgba(45, 45, 66, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .match3-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .match3-level {
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
             font-weight: 600;
+        }
+
+        .match3-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin: 15px 0;
+            background: rgba(15, 10, 28, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .match3-cell {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: var(--glow);
+            user-select: none;
+        }
+
+        .match3-cell.selected {
+            transform: scale(0.9);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .match3-cell[data-type="1"] { background: #EF4444; } /* Красный */
+        .match3-cell[data-type="2"] { background: #3B82F6; } /* Синий */
+        .match3-cell[data-type="3"] { background: #10B981; } /* Зеленый */
+        .match3-cell[data-type="4"] { background: #F59E0B; } /* Желтый */
+        .match3-cell[data-type="5"] { background: #8B5CF6; } /* Фиолетовый */
+        .match3-cell[data-type="6"] { background: #EC4899; } /* Розовый */
+
+        .match3-info {
             display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .match3-score, .match3-moves {
+            text-align: center;
+        }
+
+        .match3-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .match3-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .match3-prizes {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .prize-item {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
         }
 
-        .spin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        .prize-item:last-child {
+            border-bottom: none;
         }
 
-        .spin-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .prize-level {
+            font-weight: 600;
+        }
+
+        .prize-reward {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .prize-completed {
+            color: var(--success);
+            font-size: 12px;
         }
 
         /* 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА */
@@ -1630,57 +1768,6 @@
             margin-top: 5px;
         }
 
-        /* 🔥 НОВЫЕ ИГРЫ В ЛУДИКЕ */
-        .tap-game {
-            background: rgba(45, 45, 66, 0.6);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-        }
-
-        .tap-area {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            user-select: none;
-        }
-
-        .tap-area:active {
-            transform: scale(0.95);
-        }
-
-        .tap-stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-        }
-
-        .tap-stat {
-            text-align: center;
-        }
-
-        .tap-stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .tap-stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
         /* 🔥 НАСТРОЙКИ ЗВУКА */
         .sound-settings {
             background: rgba(45, 45, 66, 0.6);
@@ -1841,6 +1928,36 @@
             background: var(--primary);
             transition: width 0.3s ease;
         }
+
+        /* 🔥 ВКЛАДКИ ЛУДИКА */
+        .casino-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .casino-tab {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 15px;
+            padding: 12px 20px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .casino-tab:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .casino-tab.active {
+            background: var(--primary);
+            box-shadow: var(--glow);
+        }
     </style>
 </head>
 <body>
@@ -1962,77 +2079,167 @@
             </div>
         </div>
 
-        <!-- 🔥 ЛУДИК С ПЕРЕРАБОТАННЫМ КОЛЕСОМ -->
+        <!-- 🔥 ЛУДИК С ВКЛАДКАМИ -->
         <div id="casinoScreen" class="screen hidden">
             <div class="casino-section">
+                <!-- ВКЛАДКИ ЛУДИКА -->
+                <div class="casino-tabs">
+                    <div class="casino-tab active" data-tab="slots">🎰 Слоты</div>
+                    <div class="casino-tab" data-tab="tap">👆 Тапалка</div>
+                    <div class="casino-tab" data-tab="match3">🎯 Три в ряд</div>
+                </div>
+
                 <!-- СЛОТЫ -->
-                <div class="slots-machine">
-                    <h2 class="section-title">🎰 УДАЧА ВАМ УЛЫБНЕТСЯ!</h2>
-                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                        Испытай удачу и получи эксклюзивные призы!
-                    </p>
-                    
-                    <div class="slots-display">
-                        <div class="slot" id="slot1"></div>
-                        <div class="slot" id="slot2"></div>
-                        <div class="slot" id="slot3"></div>
+                <div id="slotsTab" class="casino-tab-content">
+                    <div class="slots-machine">
+                        <h2 class="section-title">🎰 УДАЧА ВАМ УЛЫБНЕТСЯ!</h2>
+                        <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                            Испытай удачу и получи эксклюзивные призы!
+                        </p>
+                        
+                        <div class="slots-display">
+                            <div class="slot" id="slot1"></div>
+                            <div class="slot" id="slot2"></div>
+                            <div class="slot" id="slot3"></div>
+                        </div>
+                        
+                        <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
+                            🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
+                        </button>
+                        
+                        <!-- 🔥 СЕКЦИЯ ПОКУПКИ ПОПЫТОК -->
+                        <div class="buy-attempts-section">
+                            <div class="buy-attempts-title">
+                                <i class="fas fa-shopping-cart"></i>
+                                Купить попытки
+                            </div>
+                            <div class="attempts-options">
+                                <div class="attempt-option" onclick="selectAttemptOption(1)">
+                                    <div class="attempt-count">1 попытка</div>
+                                    <div class="attempt-price">300 очков</div>
+                                </div>
+                                <div class="attempt-option" onclick="selectAttemptOption(3)">
+                                    <div class="attempt-count">3 попытки</div>
+                                    <div class="attempt-price">800 очков</div>
+                                </div>
+                                <div class="attempt-option" onclick="selectAttemptOption(5)">
+                                    <div class="attempt-count">5 попыток</div>
+                                    <div class="attempt-price">1200 очков</div>
+                                </div>
+                                <div class="attempt-option" onclick="selectAttemptOption(10)">
+                                    <div class="attempt-count">10 попыток</div>
+                                    <div class="attempt-price">2000 очков</div>
+                                </div>
+                            </div>
+                            <button class="buy-attempt-btn" id="buyAttemptBtn" onclick="buySlotsAttempts()">
+                                Купить (<span id="selectedAttemptCount">1</span> попытку за <span id="selectedAttemptPrice">300</span> очков)
+                            </button>
+                        </div>
                     </div>
-                    
-                    <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
-                        🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
-                    </button>
-                    <div class="attempts-counter" id="slotsTimer"></div>
                 </div>
 
-                <!-- 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО УДАЧИ -->
-                <div class="wheel-machine">
-                    <h2 class="section-title">🎡 КОЛЕСО УДАЧИ</h2>
-                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                        Крути колесо и получай эксклюзивные скидки и призы!
-                    </p>
-                    
-                    <div class="wheel-container">
-                        <div class="wheel-pointer"></div>
-                        <div class="wheel" id="wheel">
-                            <!-- Колесо генерируется динамически -->
+                <!-- 🔥 ТАПАЛКА С БАЛАНСОМ -->
+                <div id="tapTab" class="casino-tab-content hidden">
+                    <div class="tap-game">
+                        <div class="tap-header">
+                            <h2 class="section-title">👆 ТАПАЛКА</h2>
+                            <div class="tap-balance">
+                                Баланс: <span id="tapBalance">0</span> очков
+                            </div>
                         </div>
+                        <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                            Тапай как можно быстрее и зарабатывай очки для покупки попыток в слотах!
+                        </p>
+                        
+                        <div class="tap-area" id="tapArea" onclick="tap()">
+                            👆
+                        </div>
+                        
+                        <div class="tap-stats">
+                            <div class="tap-stat">
+                                <div class="tap-stat-value" id="tapCount">0</div>
+                                <div class="tap-stat-label">Тапов</div>
+                            </div>
+                            <div class="tap-stat">
+                                <div class="tap-stat-value" id="tapTime">30</div>
+                                <div class="tap-stat-label">Секунд</div>
+                            </div>
+                            <div class="tap-stat">
+                                <div class="tap-stat-value" id="tapScore">0</div>
+                                <div class="tap-stat-label">Очков за игру</div>
+                            </div>
+                        </div>
+                        
+                        <button class="spin-btn" id="tapBtn" onclick="startTapGame()">
+                            🎮 Начать игру (Осталось: <span id="tapAttempts">3</span>)
+                        </button>
                     </div>
-                    
-                    <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
-                        🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
-                    </button>
-                    <div class="attempts-counter" id="wheelTimer"></div>
                 </div>
 
-                <!-- 🔥 НОВАЯ ИГРА: ТАПАЛКА -->
-                <div class="tap-game">
-                    <h2 class="section-title">👆 ТАПАЛКА</h2>
-                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                        Тапай как можно быстрее и получай призы!
-                    </p>
-                    
-                    <div class="tap-area" id="tapArea" onclick="tap()">
-                        👆
+                <!-- 🔥 ИГРА "ТРИ В РЯД" -->
+                <div id="match3Tab" class="casino-tab-content hidden">
+                    <div class="match3-game">
+                        <div class="match3-header">
+                            <h2 class="section-title">🎯 ТРИ В РЯД</h2>
+                            <div class="match3-level">
+                                Уровень: <span id="match3Level">1</span>
+                            </div>
+                        </div>
+                        
+                        <div class="match3-info">
+                            <div class="match3-score">
+                                <div class="match3-value" id="match3Score">0</div>
+                                <div class="match3-label">Счет</div>
+                            </div>
+                            <div class="match3-moves">
+                                <div class="match3-value" id="match3Moves">20</div>
+                                <div class="match3-label">Ходы</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match3-board" id="match3Board">
+                            <!-- Игровое поле генерируется динамически -->
+                        </div>
+                        
+                        <button class="spin-btn" id="match3Btn" onclick="startMatch3Game()">
+                            🎮 Начать уровень
+                        </button>
+                        
+                        <!-- 🔥 ПРИЗЫ ЗА УРОВНИ -->
+                        <div class="match3-prizes">
+                            <h3 style="color: var(--primary); margin-bottom: 10px;">🏆 Призы за уровни:</h3>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 10</span>
+                                <span class="prize-reward">10% скидка</span>
+                                <span class="prize-completed" id="level10Status"></span>
+                            </div>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 50</span>
+                                <span class="prize-reward">30% скидка</span>
+                                <span class="prize-completed" id="level50Status"></span>
+                            </div>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 100</span>
+                                <span class="prize-reward">50% скидка</span>
+                                <span class="prize-completed" id="level100Status"></span>
+                            </div>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 150</span>
+                                <span class="prize-reward">WAV лицензия</span>
+                                <span class="prize-completed" id="level150Status"></span>
+                            </div>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 200</span>
+                                <span class="prize-reward">TRACKOUT</span>
+                                <span class="prize-completed" id="level200Status"></span>
+                            </div>
+                            <div class="prize-item">
+                                <span class="prize-level">Уровень 500</span>
+                                <span class="prize-reward">EXCLUSIVE</span>
+                                <span class="prize-completed" id="level500Status"></span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="tap-stats">
-                        <div class="tap-stat">
-                            <div class="tap-stat-value" id="tapCount">0</div>
-                            <div class="tap-stat-label">Тапов</div>
-                        </div>
-                        <div class="tap-stat">
-                            <div class="tap-stat-value" id="tapTime">30</div>
-                            <div class="tap-stat-label">Секунд</div>
-                        </div>
-                        <div class="tap-stat">
-                            <div class="tap-stat-value" id="tapScore">0</div>
-                            <div class="tap-stat-label">Очков</div>
-                        </div>
-                    </div>
-                    
-                    <button class="spin-btn" id="tapBtn" onclick="startTapGame()">
-                        🎮 Начать игру (Осталось: <span id="tapAttempts">3</span>)
-                    </button>
                 </div>
             </div>
         </div>
@@ -2739,10 +2946,8 @@
             referralCode: "FRESSO-12345",
             usedReferralCodes: [],
             slotsAttempts: 3,
-            wheelAttempts: 1,
             tapAttempts: 3,
             lastSlotsPlay: 0,
-            lastWheelPlay: 0,
             lastTapPlay: 0,
             telegramData: null,
             prizes: [],
@@ -2753,7 +2958,13 @@
                 totalRevenue: 0,
                 beatsSold: 0,
                 activeUsers: 0
-            }
+            },
+            // 🔥 НОВЫЕ ДАННЫЕ ДЛЯ ИГР
+            tapBalance: 0, // Баланс очков в тапалке
+            match3Level: 1, // Текущий уровень в "Три в ряд"
+            match3Score: 0, // Общий счет в "Три в ряд"
+            completedLevels: [], // Пройденные уровни
+            selectedAttemptOption: 1 // Выбранная опция покупки попыток
         };
 
         let beats = [];
@@ -2797,24 +3008,27 @@
                 { symbols: ['🥁', '🥁', '🥁'], prize: '15% скидка', type: 'discount', chance: 0.12 },
                 { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
-            wheelPrizes: [
-                { name: '50%', value: 50, color: '#90EE90', chance: 3 },
-                { name: '40%', value: 40, color: '#32CD32', chance: 5 },
-                { name: '30%', value: 30, color: '#7CFC00', chance: 8 },
-                { name: '20%', value: 20, color: '#FFFF00', chance: 12 },
-                { name: '10%', value: 10, color: '#FFA500', chance: 15 },
-                { name: '5%', value: 5, color: '#FF0000', chance: 15 },
-                { name: '1%', value: 1, color: '#800080', chance: 10 },
-                { name: 'WAV', value: 'wav', color: '#0000FF', chance: 2 },
-                { name: 'Респект', value: 'respect', color: '#FFD700', chance: 30 }
-            ],
-            tapGamePrizes: [
-                { minScore: 100, prize: '5% скидка', type: 'discount', value: 5 },
-                { minScore: 200, prize: '10% скидка', type: 'discount', value: 10 },
-                { minScore: 300, prize: '15% скидка', type: 'discount', value: 15 },
-                { minScore: 400, prize: 'LOOPKIT', type: 'loopkit', value: 1 },
-                { minScore: 500, prize: 'DRUMKIT', type: 'drumkit', value: 1 }
-            ]
+            // 🔥 ЦЕНЫ ПОПЫТОК ДЛЯ СЛОТОВ
+            attemptPrices: {
+                1: 300,
+                3: 800,
+                5: 1200,
+                10: 2000
+            },
+            // 🔥 ПРИЗЫ ЗА УРОВНИ В "ТРИ В РЯД"
+            match3Prizes: {
+                10: { type: 'discount', value: 10, prize: '10% скидка' },
+                50: { type: 'discount', value: 30, prize: '30% скидка' },
+                100: { type: 'discount', value: 50, prize: '50% скидка' },
+                150: { type: 'wav', value: 1, prize: 'WAV лицензия' },
+                200: { type: 'trackout', value: 1, prize: 'TRACKOUT' },
+                250: { type: 'discount', value: 50, prize: '50% скидка' },
+                300: { type: 'wav', value: 1, prize: 'WAV лицензия' },
+                350: { type: 'trackout', value: 1, prize: 'TRACKOUT' },
+                400: { type: 'discount', value: 50, prize: '50% скидка' },
+                450: { type: 'wav', value: 1, prize: 'WAV лицензия' },
+                500: { type: 'exclusive', value: 1, prize: 'EXCLUSIVE лицензия' }
+            }
         };
 
         // 🔥 ИНИЦИАЛИЗАЦИЯ ПРИЛОЖЕНИЯ
@@ -2833,7 +3047,6 @@
             updateProfile();
             initializeAudioPlayers();
             updateTimers();
-            setupWheel();
             setupCasinoEvents();
             displayCart();
             loadNews();
@@ -2888,7 +3101,6 @@
             
             if (user.id === ADMIN_TELEGRAM_ID) {
                 userData.slotsAttempts = 999;
-                userData.wheelAttempts = 999;
                 userData.tapAttempts = 999;
                 userData.isAdmin = true;
                 document.getElementById('addBeatBtn').style.display = 'block';
@@ -2962,7 +3174,12 @@
                         prizes: savedData.prizes || userData.prizes,
                         referrals: savedData.referrals || userData.referrals,
                         usedReferralCodes: savedData.usedReferralCodes || userData.usedReferralCodes,
-                        selectedLicenses: savedData.selectedLicenses || userData.selectedLicenses
+                        selectedLicenses: savedData.selectedLicenses || userData.selectedLicenses,
+                        tapBalance: savedData.tapBalance || userData.tapBalance,
+                        match3Level: savedData.match3Level || userData.match3Level,
+                        match3Score: savedData.match3Score || userData.match3Score,
+                        completedLevels: savedData.completedLevels || userData.completedLevels,
+                        selectedAttemptOption: savedData.selectedAttemptOption || userData.selectedAttemptOption
                     };
                     
                     const now = Date.now();
@@ -2970,10 +3187,6 @@
                     
                     if (now - userData.lastSlotsPlay > dayInMs && !userData.isAdmin) {
                         userData.slotsAttempts = 3;
-                    }
-                    
-                    if (now - userData.lastWheelPlay > dayInMs && !userData.isAdmin) {
-                        userData.wheelAttempts = 1;
                     }
                     
                     if (now - userData.lastTapPlay > dayInMs && !userData.isAdmin) {
@@ -3167,6 +3380,8 @@
                                 showProfileSection('favorites');
                             } else if (targetScreen === 'newsScreen') {
                                 loadNews();
+                            } else if (targetScreen === 'casinoScreen') {
+                                setupCasinoTabs();
                             }
                         }, 300);
                     }
@@ -3970,139 +4185,35 @@
             }, 0);
         }
 
-        // 🔥 ПЕРЕРАБОТАННОЕ КОЛЕСО УДАЧИ
-        function setupWheel() {
-            const wheel = document.getElementById('wheel');
-            wheel.innerHTML = '';
+        // 🔥 ВКЛАДКИ ЛУДИКА
+        function setupCasinoTabs() {
+            const tabs = document.querySelectorAll('.casino-tab');
+            const tabContents = document.querySelectorAll('.casino-tab-content');
             
-            const prizes = systemConfig.wheelPrizes;
-            const segmentAngle = 360 / prizes.length;
-            
-            prizes.forEach((prize, index) => {
-                const segment = document.createElement('div');
-                segment.className = 'wheel-segment';
-                
-                const rotateAngle = index * segmentAngle;
-                
-                segment.style.cssText = `
-                    transform: rotate(${rotateAngle}deg);
-                    background: ${prize.color};
-                `;
-                
-                const segmentContent = document.createElement('div');
-                segmentContent.className = 'segment-content';
-                segmentContent.style.transform = `rotate(${segmentAngle / 2}deg)`;
-                
-                const segmentText = document.createElement('div');
-                segmentText.className = 'segment-text';
-                segmentText.textContent = prize.name;
-                segmentText.style.color = ['#90EE90', '#32CD32', '#7CFC00', '#0000FF'].includes(prize.color) ? 'white' : 'black';
-                
-                segmentContent.appendChild(segmentText);
-                segment.appendChild(segmentContent);
-                wheel.appendChild(segment);
-            });
-            
-            // Добавляем центральную часть
-            const wheelCenter = document.createElement('div');
-            wheelCenter.className = 'wheel-center';
-            wheelCenter.textContent = '🎁';
-            wheel.appendChild(wheelCenter);
-        }
-
-        // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ КОЛЕСА
-        let isWheelSpinning = false;
-
-        function spinWheel() {
-            if (isWheelSpinning) return;
-            
-            soundSystem.play('spin');
-            
-            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
-                showNotification('❌ Попытки закончились! Возвращайся завтра!');
-                return;
-            }
-
-            const wheelBtn = document.getElementById('wheelBtn');
-            const wheel = document.getElementById('wheel');
-            
-            wheelBtn.disabled = true;
-            isWheelSpinning = true;
-            
-            if (!userData.isAdmin) {
-                userData.wheelAttempts--;
-            }
-            userData.lastWheelPlay = Date.now();
-
-            // 🔥 ВЫБОР ПРИЗА С УЧЕТОМ ВЕРОЯТНОСТЕЙ
-            const selectedPrize = getRandomWheelPrize();
-            const prizes = systemConfig.wheelPrizes;
-            const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
-            
-            console.log('Выбранный приз:', selectedPrize.name, 'Индекс:', selectedIndex);
-            
-            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА
-            const segmentAngle = 360 / prizes.length;
-            const targetSegmentAngle = selectedIndex * segmentAngle;
-            
-            // Полные обороты + смещение к нужному сегменту
-            const fullRotations = 5 + Math.floor(Math.random() * 3);
-            const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle) + (segmentAngle / 2);
-            
-            // Сброс анимации
-            wheel.style.transition = 'none';
-            wheel.style.transform = 'rotate(0deg)';
-            
-            // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
-            setTimeout(() => {
-                wheel.style.transition = `transform ${3 + Math.random() * 2}s cubic-bezier(0.2, 0.8, 0.3, 0.95)`;
-                wheel.style.transform = `rotate(${targetAngle}deg)`;
-            }, 10);
-
-            setTimeout(() => {
-                soundSystem.play('win');
-                isWheelSpinning = false;
-                
-                // 🔥 СОХРАНЯЕМ ВЫИГРАННЫЙ ПРИЗ
-                userData.prizes.push({
-                    type: 'wheel',
-                    prize: selectedPrize.name,
-                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
-                    value: selectedPrize.value,
-                    date: new Date().toISOString(),
-                    used: false
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    soundSystem.play('click');
+                    
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Скрываем все вкладки
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Показываем выбранную вкладку
+                    this.classList.add('active');
+                    document.getElementById(`${targetTab}Tab`).classList.remove('hidden');
+                    
+                    // Если выбрана игра "Три в ряд", инициализируем ее
+                    if (targetTab === 'match3') {
+                        initializeMatch3Game();
+                    }
                 });
-
-                // 🔥 СООБЩЕНИЕ О ВЫИГРЫШЕ
-                if (selectedPrize.value === 'wav') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-                } else if (selectedPrize.value === 'respect') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ СОЗДАТЕЛЯ!`, false);
-                } else {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
-                }
-
-                updateProfile();
-                saveUserData();
-                wheelBtn.disabled = false;
-
-            }, 3500 + Math.random() * 1000);
+            });
         }
 
-        // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВЫБОРА ПРИЗА
-        function getRandomWheelPrize() {
-            const totalChance = systemConfig.wheelPrizes.reduce((sum, prize) => sum + prize.chance, 0);
-            const random = Math.random() * totalChance;
-            let cumulativeChance = 0;
-            
-            for (const prize of systemConfig.wheelPrizes) {
-                cumulativeChance += prize.chance;
-                if (random <= cumulativeChance) {
-                    return prize;
-                }
-            }
-            
-            return systemConfig.wheelPrizes[systemConfig.wheelPrizes.length - 1];
+        function setupCasinoEvents() {
+            setupCasinoTabs();
         }
 
         // 🔥 ИСПРАВЛЕННЫЕ СЛОТЫ
@@ -4110,7 +4221,7 @@
             soundSystem.play('spin');
             
             if (!userData.isAdmin && userData.slotsAttempts <= 0) {
-                showNotification('❌ Попытки закончились! Возвращайся завтра!');
+                showNoAttemptsModal();
                 return;
             }
 
@@ -4241,7 +4352,82 @@
             saveUserData();
         }
 
-        // 🔥 НОВАЯ ИГРА: ТАПАЛКА
+        // 🔥 МОДАЛЬНОЕ ОКНО "НЕТ ПОПЫТОК"
+        function showNoAttemptsModal() {
+            const winMessage = document.getElementById('winMessage');
+            const winContent = document.querySelector('.win-content');
+            
+            winMessage.textContent = 'У вас закончились попытки! Хотите заработать очки в тапалке?';
+            
+            // Удаляем старые кнопки
+            const oldButtons = winContent.querySelectorAll('.spin-btn');
+            oldButtons.forEach(btn => btn.remove());
+            
+            // Добавляем новые кнопки
+            const buttonHTML = `
+                <button class="spin-btn" onclick="goToTapGame()" style="background: var(--accent); margin: 5px;">
+                    👆 Играть в тапалку
+                </button>
+                <button class="spin-btn" onclick="closeWinModal()" style="background: var(--primary); margin: 5px;">
+                    Позже
+                </button>
+            `;
+            
+            winContent.insertAdjacentHTML('beforeend', buttonHTML);
+            
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        function goToTapGame() {
+            closeWinModal();
+            // Переключаемся на вкладку тапалки
+            document.querySelector('.casino-tab[data-tab="tap"]').click();
+        }
+
+        // 🔥 СИСТЕМА ПОКУПКИ ПОПЫТОК
+        function selectAttemptOption(count) {
+            soundSystem.play('click');
+            
+            // Снимаем выделение со всех опций
+            document.querySelectorAll('.attempt-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Выделяем выбранную опцию
+            event.currentTarget.classList.add('active');
+            
+            // Обновляем данные
+            userData.selectedAttemptOption = count;
+            const price = systemConfig.attemptPrices[count];
+            
+            // Обновляем кнопку
+            document.getElementById('selectedAttemptCount').textContent = count;
+            document.getElementById('selectedAttemptPrice').textContent = price;
+            
+            saveUserData();
+        }
+
+        function buySlotsAttempts() {
+            soundSystem.play('click');
+            
+            const count = userData.selectedAttemptOption;
+            const price = systemConfig.attemptPrices[count];
+            
+            if (userData.tapBalance < price) {
+                showNotification('❌ Недостаточно очков! Заработайте очки в тапалке.');
+                return;
+            }
+            
+            userData.tapBalance -= price;
+            userData.slotsAttempts += count;
+            
+            updateProfile();
+            saveUserData();
+            
+            showNotification(`✅ Куплено ${count} попыток за ${price} очков`);
+        }
+
+        // 🔥 ОБНОВЛЕННАЯ ТАПАЛКА
         let tapGame = {
             isPlaying: false,
             tapCount: 0,
@@ -4293,7 +4479,7 @@
 
             soundSystem.play('click');
             tapGame.tapCount++;
-            tapGame.score = Math.floor(tapGame.tapCount * (tapGame.timeLeft / 30));
+            tapGame.score = tapGame.tapCount; // 🔥 ОЧКИ РАВНЫ КОЛИЧЕСТВУ ТАПОВ
             
             // Анимация нажатия
             const tapArea = document.getElementById('tapArea');
@@ -4309,6 +4495,7 @@
             document.getElementById('tapCount').textContent = tapGame.tapCount;
             document.getElementById('tapTime').textContent = tapGame.timeLeft;
             document.getElementById('tapScore').textContent = tapGame.score;
+            document.getElementById('tapBalance').textContent = userData.tapBalance;
         }
 
         function endTapGame() {
@@ -4318,40 +4505,261 @@
             document.getElementById('tapBtn').disabled = false;
             document.getElementById('tapBtn').textContent = `🎮 Начать игру (Осталось: ${userData.tapAttempts})`;
 
-            // 🔥 ПРОВЕРКА ВЫИГРЫША
-            const prize = checkTapPrize();
+            // 🔥 НАЧИСЛЯЕМ ОЧКИ НА БАЛАНС
+            userData.tapBalance += tapGame.score;
+            
+            showNotification(`🏁 Игра окончена! Вы заработали ${tapGame.score} очков!`);
+            soundSystem.play(tapGame.score > 50 ? 'win' : 'lose');
+
+            updateProfile();
+            saveUserData();
+        }
+
+        // 🔥 ИГРА "ТРИ В РЯД"
+        let match3Game = {
+            isPlaying: false,
+            board: [],
+            selectedCell: null,
+            movesLeft: 20,
+            currentScore: 0
+        };
+
+        function initializeMatch3Game() {
+            const board = document.getElementById('match3Board');
+            board.innerHTML = '';
+            
+            // Создаем игровое поле 8x8
+            for (let row = 0; row < 8; row++) {
+                match3Game.board[row] = [];
+                for (let col = 0; col < 8; col++) {
+                    const cellType = Math.floor(Math.random() * 6) + 1; // 6 типов элементов
+                    match3Game.board[row][col] = cellType;
+                    
+                    const cell = document.createElement('div');
+                    cell.className = 'match3-cell';
+                    cell.setAttribute('data-type', cellType);
+                    cell.setAttribute('data-row', row);
+                    cell.setAttribute('data-col', col);
+                    cell.addEventListener('click', () => handleMatch3CellClick(row, col));
+                    
+                    board.appendChild(cell);
+                }
+            }
+            
+            updateMatch3Display();
+        }
+
+        function handleMatch3CellClick(row, col) {
+            if (!match3Game.isPlaying) return;
+            
+            soundSystem.play('click');
+            
+            const cell = document.querySelector(`.match3-cell[data-row="${row}"][data-col="${col}"]`);
+            
+            if (!match3Game.selectedCell) {
+                // Первое нажатие - выбираем ячейку
+                match3Game.selectedCell = { row, col };
+                cell.classList.add('selected');
+            } else {
+                // Второе нажатие - меняем местами
+                const selected = match3Game.selectedCell;
+                
+                // Проверяем, соседние ли ячейки
+                const isNeighbor = 
+                    (Math.abs(selected.row - row) === 1 && selected.col === col) ||
+                    (Math.abs(selected.col - col) === 1 && selected.row === row);
+                
+                if (isNeighbor) {
+                    // Меняем местами
+                    swapCells(selected.row, selected.col, row, col);
+                    
+                    // Проверяем совпадения
+                    if (checkMatches()) {
+                        match3Game.movesLeft--;
+                        updateMatch3Display();
+                        
+                        if (match3Game.movesLeft <= 0) {
+                            endMatch3Game();
+                        }
+                    } else {
+                        // Если нет совпадений, возвращаем обратно
+                        swapCells(row, col, selected.row, selected.col);
+                    }
+                }
+                
+                // Снимаем выделение
+                document.querySelectorAll('.match3-cell').forEach(c => c.classList.remove('selected'));
+                match3Game.selectedCell = null;
+            }
+        }
+
+        function swapCells(row1, col1, row2, col2) {
+            // Меняем значения в массиве
+            const temp = match3Game.board[row1][col1];
+            match3Game.board[row1][col1] = match3Game.board[row2][col2];
+            match3Game.board[row2][col2] = temp;
+            
+            // Обновляем отображение
+            updateBoardDisplay();
+        }
+
+        function checkMatches() {
+            let hasMatches = false;
+            
+            // Проверяем горизонтальные совпадения
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 6; col++) {
+                    if (match3Game.board[row][col] === match3Game.board[row][col + 1] && 
+                        match3Game.board[row][col] === match3Game.board[row][col + 2]) {
+                        
+                        // Нашли совпадение из 3 элементов
+                        match3Game.currentScore += 10;
+                        hasMatches = true;
+                        
+                        // Удаляем совпавшие элементы
+                        match3Game.board[row][col] = 0;
+                        match3Game.board[row][col + 1] = 0;
+                        match3Game.board[row][col + 2] = 0;
+                    }
+                }
+            }
+            
+            // Проверяем вертикальные совпадения
+            for (let col = 0; col < 8; col++) {
+                for (let row = 0; row < 6; row++) {
+                    if (match3Game.board[row][col] === match3Game.board[row + 1][col] && 
+                        match3Game.board[row][col] === match3Game.board[row + 2][col]) {
+                        
+                        // Нашли совпадение из 3 элементов
+                        match3Game.currentScore += 10;
+                        hasMatches = true;
+                        
+                        // Удаляем совпавшие элементы
+                        match3Game.board[row][col] = 0;
+                        match3Game.board[row + 1][col] = 0;
+                        match3Game.board[row + 2][col] = 0;
+                    }
+                }
+            }
+            
+            if (hasMatches) {
+                // Заполняем пустые ячейки
+                fillEmptyCells();
+                updateBoardDisplay();
+            }
+            
+            return hasMatches;
+        }
+
+        function fillEmptyCells() {
+            for (let col = 0; col < 8; col++) {
+                for (let row = 7; row >= 0; row--) {
+                    if (match3Game.board[row][col] === 0) {
+                        // Сдвигаем элементы вниз
+                        for (let r = row; r > 0; r--) {
+                            match3Game.board[r][col] = match3Game.board[r - 1][col];
+                        }
+                        // Добавляем новый элемент сверху
+                        match3Game.board[0][col] = Math.floor(Math.random() * 6) + 1;
+                    }
+                }
+            }
+        }
+
+        function updateBoardDisplay() {
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const cell = document.querySelector(`.match3-cell[data-row="${row}"][data-col="${col}"]`);
+                    if (cell) {
+                        cell.setAttribute('data-type', match3Game.board[row][col]);
+                    }
+                }
+            }
+        }
+
+        function updateMatch3Display() {
+            document.getElementById('match3Score').textContent = match3Game.currentScore;
+            document.getElementById('match3Moves').textContent = match3Game.movesLeft;
+            document.getElementById('match3Level').textContent = userData.match3Level;
+            
+            // Обновляем статусы призов
+            updateLevelPrizesDisplay();
+        }
+
+        function updateLevelPrizesDisplay() {
+            for (const level in systemConfig.match3Prizes) {
+                const statusElement = document.getElementById(`level${level}Status`);
+                if (statusElement) {
+                    if (userData.completedLevels.includes(parseInt(level))) {
+                        statusElement.textContent = '✅';
+                        statusElement.style.color = 'var(--success)';
+                    } else {
+                        statusElement.textContent = '⏳';
+                        statusElement.style.color = 'var(--text-secondary)';
+                    }
+                }
+            }
+        }
+
+        function startMatch3Game() {
+            soundSystem.play('click');
+            
+            match3Game.isPlaying = true;
+            match3Game.movesLeft = 20;
+            match3Game.currentScore = 0;
+            match3Game.selectedCell = null;
+            
+            document.getElementById('match3Btn').disabled = true;
+            document.getElementById('match3Btn').textContent = '🎮 Игра идет...';
+            
+            initializeMatch3Game();
+        }
+
+        function endMatch3Game() {
+            match3Game.isPlaying = false;
+            
+            document.getElementById('match3Btn').disabled = false;
+            document.getElementById('match3Btn').textContent = '🎮 Начать уровень';
+            
+            // Проверяем, пройден ли уровень
+            if (match3Game.currentScore >= userData.match3Level * 10) {
+                userData.match3Score += match3Game.currentScore;
+                userData.completedLevels.push(userData.match3Level);
+                
+                // Проверяем призы за уровень
+                checkLevelPrize(userData.match3Level);
+                
+                userData.match3Level++;
+                showNotification(`🎉 Уровень ${userData.match3Level - 1} пройден!`);
+                soundSystem.play('win');
+            } else {
+                showNotification(`😔 Уровень не пройден. Нужно набрать ${userData.match3Level * 10} очков`);
+                soundSystem.play('lose');
+            }
+            
+            updateProfile();
+            saveUserData();
+        }
+
+        function checkLevelPrize(level) {
+            const prize = systemConfig.match3Prizes[level];
             if (prize) {
                 userData.prizes.push({
-                    type: 'tap',
+                    type: 'match3',
                     prize: prize.prize,
                     prizeType: prize.type,
                     value: prize.value,
                     date: new Date().toISOString(),
                     used: false
                 });
-
-                showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${prize.prize.toUpperCase()}!`, false);
-                soundSystem.play('win');
-            } else {
-                showNotification(`🏁 Игра окончена! Ваш счет: ${tapGame.score}`);
-                soundSystem.play('lose');
+                
+                showWinModal(`🎉 ВЫ ПРОШЛИ УРОВЕНЬ ${level} И ПОЛУЧИЛИ ${prize.prize.toUpperCase()}!`, false);
             }
-
-            updateProfile();
-            saveUserData();
-        }
-
-        function checkTapPrize() {
-            for (const prize of systemConfig.tapGamePrizes) {
-                if (tapGame.score >= prize.minScore) {
-                    return prize;
-                }
+            
+            // Особое сообщение для уровня 500
+            if (level === 500) {
+                showWinModal(`🏆 ВЫ ДОСТИГЛИ МАКСИМАЛЬНОГО УРОВНЯ 500! СЛЕДИТЕ ЗА ОБНОВЛЕНИЯМИ!`, false);
             }
-            return null;
-        }
-
-        function setupCasinoEvents() {
-            // Кнопки уже имеют onclick обработчики в HTML
         }
 
         // 🔥 СИСТЕМА ПРОФИЛЯ С ВКЛАДКАМИ И ПЕРЕКЛЮЧЕНИЕМ
@@ -4463,7 +4871,7 @@
                 prizeCard.innerHTML = `
                     <div class="beat-header">
                         <div class="beat-image" style="background: linear-gradient(135deg, #FF6B6B, #4ECDC4);">
-                            <i class="fas ${prize.type === 'slots' ? 'fa-dice' : prize.type === 'wheel' ? 'fa-redo' : 'fa-trophy'}"></i>
+                            <i class="fas ${prize.type === 'slots' ? 'fa-dice' : prize.type === 'match3' ? 'fa-puzzle-piece' : 'fa-trophy'}"></i>
                         </div>
                         <div class="beat-info">
                             <h3>${prize.prize}</h3>
@@ -4486,7 +4894,7 @@
         function getGameTypeName(type) {
             const names = {
                 'slots': '🎰 Слоты',
-                'wheel': '🎡 Колесо',
+                'match3': '🎯 Три в ряд',
                 'tap': '👆 Тапалка'
             };
             return names[type] || type;
@@ -5103,13 +5511,12 @@
             document.getElementById('discountPercent').textContent = userData.discount + '%';
             document.getElementById('referralsCount').textContent = userData.referrals;
             document.getElementById('referralDiscount').textContent = userData.discount + '%';
+            document.getElementById('tapBalance').textContent = userData.tapBalance;
             
             const slotsText = userData.isAdmin ? '∞' : userData.slotsAttempts;
-            const wheelText = userData.isAdmin ? '∞' : userData.wheelAttempts;
             const tapText = userData.isAdmin ? '∞' : userData.tapAttempts;
             
             document.getElementById('slotsAttempts').textContent = slotsText;
-            document.getElementById('wheelAttempts').textContent = wheelText;
             document.getElementById('tapAttempts').textContent = tapText;
             document.getElementById('referralCode').textContent = userData.referralCode;
             
@@ -5269,11 +5676,6 @@
                 const slotsTimeLeft = userData.lastSlotsPlay + dayInMs - now;
                 if (slotsTimeLeft <= 0 && userData.slotsAttempts < 3) {
                     userData.slotsAttempts = 3;
-                }
-                
-                const wheelTimeLeft = userData.lastWheelPlay + dayInMs - now;
-                if (wheelTimeLeft <= 0 && userData.wheelAttempts < 1) {
-                    userData.wheelAttempts = 1;
                 }
                 
                 const tapTimeLeft = userData.lastTapPlay + dayInMs - now;
