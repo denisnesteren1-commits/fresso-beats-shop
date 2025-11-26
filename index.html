@@ -656,90 +656,100 @@
             50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
         }
 
-        /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
-        .wheel-machine {
-            background: rgba(45, 45, 66, 0.6);
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            position: relative;
-        }
+       /* 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ */
+.wheel-machine {
+    background: rgba(45, 45, 66, 0.6);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
 
-        .wheel-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            margin: 0 auto 20px;
-        }
+.wheel-container {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 20px;
+}
 
-        .wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            position: relative;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-            border: 3px solid rgba(255,255,255,0.1);
-            background: var(--bg-darker);
-        }
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transition: transform 4s cubic-bezier(0.1, 0.8, 0.2, 1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.1);
+    background: var(--bg-darker);
+}
 
-        /* 🔥 ПРАВИЛЬНЫЕ СЕГМЕНТЫ */
-        .wheel-segment {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-origin: 100% 100%;
-            left: 0;
-            top: 0;
-            clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
-        }
+/* 🔥 ПРАВИЛЬНЫЕ СЕГМЕНТЫ */
+.wheel-segment {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    transform-origin: 100% 100%;
+    left: 50%;
+    top: 0;
+    overflow: hidden;
+}
 
-        /* 🔥 ТОЧНАЯ СТРЕЛКА */
-        .wheel-pointer {
-            position: absolute;
-            top: 50%;
-            right: -8px;
-            transform: translateY(-50%);
-            width: 25px;
-            height: 35px;
-            background: var(--accent);
-            clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
-            z-index: 10;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            border-left: 2px solid rgba(255,255,255,0.3);
-        }
+.segment-content {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    transform-origin: 0% 0%;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    box-sizing: border-box;
+}
 
-        .spin-btn {
-            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
+.segment-text {
+    transform: rotate(45deg);
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    white-space: nowrap;
+}
 
-        .spin-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: var(--glow);
-        }
+/* 🔥 ЦЕНТРАЛЬНАЯ ЧАСТЬ */
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: var(--accent);
+    border-radius: 50%;
+    border: 3px solid white;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
 
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .attempts-counter {
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
+/* 🔥 СТРЕЛКА СВЕРХУ */
+.wheel-pointer {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 25px;
+    height: 35px;
+    background: var(--accent);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    z-index: 20;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
 
         /* 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА */
         .cart-section {
@@ -1492,48 +1502,34 @@
         </div>
 
         <!-- 🔥 ЛУДИК С ИСПРАВЛЕННЫМ КОЛЕСОМ -->
-        <div id="casinoScreen" class="screen hidden">
-            <div class="casino-section">
-                <!-- СЛОТЫ -->
-                <div class="slots-machine">
-                    <h2 class="section-title">🎰 МУЗЫКАЛЬНЫЕ СЛОТЫ</h2>
-                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                        🎁 Выиграй WAV!
-                    </p>
-                    
-                    <div class="slots-display">
-                        <div class="slot" id="slot1">🎵</div>
-                        <div class="slot" id="slot2">🎹</div>
-                        <div class="slot" id="slot3">🎤</div>
-                    </div>
-                    
-                    <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
-                        🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
-                    </button>
-                    <div class="attempts-counter" id="slotsTimer"></div>
-                </div>
+<div id="casinoScreen" class="screen hidden">
+    <div class="casino-section">
+        <!-- СЛОТЫ -->
+        <div class="slots-machine">
+            <!-- ... слоты без изменений ... -->
+        </div>
 
-                <!-- 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ -->
-                <div class="wheel-machine">
-                    <h2 class="section-title">🎡 КОЛЕСО ФОРТУНЫ</h2>
-                    <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
-                        Крути и получай призы!
-                    </p>
-                    
-                    <div class="wheel-container">
-                        <div class="wheel-pointer"></div>
-                        <div class="wheel" id="wheel">
-                            <!-- Колесо генерируется динамически -->
-                        </div>
-                    </div>
-                    
-                    <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
-                        🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
-                    </button>
-                    <div class="attempts-counter" id="wheelTimer"></div>
+        <!-- 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ -->
+        <div class="wheel-machine">
+            <h2 class="section-title">🎡 КОЛЕСО ФОРТУНЫ</h2>
+            <p style="text-align: center; margin-bottom: 15px; color: var(--text-secondary);">
+                Крути и получай призы!
+            </p>
+            
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="wheel">
+                    <!-- Колесо генерируется динамически -->
                 </div>
             </div>
+            
+            <button class="spin-btn" id="wheelBtn" onclick="spinWheel()">
+                🎡 Крутить колесо (Осталось: <span id="wheelAttempts">1</span>)
+            </button>
+            <div class="attempts-counter" id="wheelTimer"></div>
         </div>
+    </div>
+</div>
 
         <!-- 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА -->
         <div id="cartScreen" class="screen hidden">
@@ -2889,109 +2885,123 @@
         }
 
         // 🔥 ИСПРАВЛЕННОЕ КОЛЕСО ФОРТУНЫ
-        function setupWheel() {
-            const wheel = document.getElementById('wheel');
-            wheel.innerHTML = '';
-            
-            const prizes = systemConfig.wheelPrizes;
-            const segmentAngle = 360 / prizes.length;
-            
-            prizes.forEach((prize, index) => {
-                const segment = document.createElement('div');
-                segment.className = 'wheel-segment';
-                segment.dataset.prizeIndex = index;
-                
-                const rotateAngle = index * segmentAngle;
-                
-                segment.style.cssText = `
-                    background: ${prize.color};
-                    transform: rotate(${rotateAngle}deg);
-                    transform-origin: 100% 100%;
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
-                `;
-                
-                wheel.appendChild(segment);
-            });
+function setupWheel() {
+    const wheel = document.getElementById('wheel');
+    wheel.innerHTML = '';
+    
+    const prizes = systemConfig.wheelPrizes;
+    const segmentAngle = 360 / prizes.length;
+    
+    prizes.forEach((prize, index) => {
+        const segment = document.createElement('div');
+        segment.className = 'wheel-segment';
+        
+        const rotateAngle = index * segmentAngle;
+        
+        segment.style.cssText = `
+            transform: rotate(${rotateAngle}deg);
+            background: ${prize.color};
+        `;
+        
+        const segmentContent = document.createElement('div');
+        segmentContent.className = 'segment-content';
+        segmentContent.style.transform = `rotate(${segmentAngle / 2}deg)`;
+        
+        const segmentText = document.createElement('div');
+        segmentText.className = 'segment-text';
+        segmentText.textContent = prize.name;
+        segmentText.style.color = ['#FF6B6B', '#4ECDC4', '#45B7D1'].includes(prize.color) ? 'white' : 'black';
+        
+        segmentContent.appendChild(segmentText);
+        segment.appendChild(segmentContent);
+        wheel.appendChild(segment);
+    });
+    
+    // Добавляем центральную часть
+    const wheelCenter = document.createElement('div');
+    wheelCenter.className = 'wheel-center';
+    wheelCenter.textContent = '🎁';
+    wheel.appendChild(wheelCenter);
+}
+
+// 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ КОЛЕСА
+let isWheelSpinning = false;
+
+function spinWheel() {
+    if (isWheelSpinning) return;
+    
+    soundSystem.play('spin');
+    
+    if (!userData.isAdmin && userData.wheelAttempts <= 0) {
+        showNotification('❌ Попытки закончились! Возвращайся завтра!');
+        return;
+    }
+
+    const wheelBtn = document.getElementById('wheelBtn');
+    const wheel = document.getElementById('wheel');
+    
+    wheelBtn.disabled = true;
+    isWheelSpinning = true;
+    
+    if (!userData.isAdmin) {
+        userData.wheelAttempts--;
+    }
+    userData.lastWheelPlay = Date.now();
+
+    // 🔥 ВЫБОР ПРИЗА
+    const selectedPrize = getRandomWheelPrize();
+    const prizes = systemConfig.wheelPrizes;
+    const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
+    
+    console.log('Выбранный приз:', selectedPrize.name, 'Индекс:', selectedIndex);
+    
+    // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (стрелка сверху)
+    const segmentAngle = 360 / prizes.length;
+    const targetSegmentAngle = selectedIndex * segmentAngle;
+    
+    // Полные обороты + смещение к нужному сегменту
+    const fullRotations = 5;
+    const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle) + (segmentAngle / 2);
+    
+    // Сброс анимации
+    wheel.style.transition = 'none';
+    wheel.style.transform = 'rotate(0deg)';
+    
+    // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
+    setTimeout(() => {
+        wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 0.95)';
+        wheel.style.transform = `rotate(${targetAngle}deg)`;
+    }, 10);
+
+    setTimeout(() => {
+        soundSystem.play('win');
+        isWheelSpinning = false;
+        
+        // 🔥 СОХРАНЯЕМ ВЫИГРАННЫЙ ПРИЗ
+        userData.prizes.push({
+            type: 'wheel',
+            prize: selectedPrize.name,
+            prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
+            value: selectedPrize.value,
+            date: new Date().toISOString(),
+            used: false
+        });
+
+        // 🔥 СООБЩЕНИЕ О ВЫИГРЫШЕ
+        if (selectedPrize.value === 'wav') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
+        } else if (selectedPrize.value === 'respect') {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
+        } else {
+            showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
         }
 
-        // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВРАЩЕНИЯ
-        function spinWheel() {
-            soundSystem.play('spin');
-            
-            if (!userData.isAdmin && userData.wheelAttempts <= 0) {
-                showNotification('❌ Попытки закончились! Возвращайся завтра!');
-                return;
-            }
+        updateProfile();
+        saveUserData();
+        wheelBtn.disabled = false;
 
-            const wheelBtn = document.getElementById('wheelBtn');
-            const wheel = document.getElementById('wheel');
-            
-            wheelBtn.disabled = true;
-            
-            if (!userData.isAdmin) {
-                userData.wheelAttempts--;
-            }
-            userData.lastWheelPlay = Date.now();
-
-            // 🔥 ВЫБОР ПРИЗА ДО ВРАЩЕНИЯ
-            const selectedPrize = getRandomWheelPrize();
-            const prizes = systemConfig.wheelPrizes;
-            const selectedIndex = prizes.findIndex(p => p.value === selectedPrize.value);
-            
-            console.log('Выбранный приз:', selectedPrize.name, 'Индекс:', selectedIndex);
-            
-            // 🔥 РАСЧЕТ УГЛА ПОВОРОТА (стрелка справа)
-            const segmentAngle = 360 / prizes.length;
-            
-            // Угол сегмента, на который должна указать стрелка
-            const targetSegmentAngle = (selectedIndex * segmentAngle) + (segmentAngle / 2);
-            
-            // Полные обороты + смещение к нужному сегменту
-            // Стрелка справа, поэтому вычитаем 90 градусов
-            const fullRotations = 5;
-            const targetAngle = (fullRotations * 360) + (360 - targetSegmentAngle - 90);
-            
-            // Сброс анимации
-            wheel.style.transition = 'none';
-            wheel.style.transform = 'rotate(0deg)';
-            
-            // 🔥 АНИМАЦИЯ ВРАЩЕНИЯ
-            setTimeout(() => {
-                wheel.style.transition = 'transform 4s cubic-bezier(0.1, 0.8, 0.2, 1)';
-                wheel.style.transform = `rotate(${targetAngle}deg)`;
-            }, 10);
-
-            setTimeout(() => {
-                soundSystem.play('win');
-                
-                // 🔥 СОХРАНЯЕМ ВЫИГРАННЫЙ ПРИЗ
-                userData.prizes.push({
-                    type: 'wheel',
-                    prize: selectedPrize.name,
-                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
-                    value: selectedPrize.value,
-                    date: new Date().toISOString(),
-                    used: false
-                });
-
-                // 🔥 СООБЩЕНИЕ О ВЫИГРЫШЕ
-                if (selectedPrize.value === 'wav') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-                } else if (selectedPrize.value === 'respect') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ АВТОРА!`, false);
-                } else {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
-                }
-
-                updateProfile();
-                saveUserData();
-                wheelBtn.disabled = false;
-
-            }, 4000);
-        }
+    }, 4050);
+}
 
         // 🔥 ИСПРАВЛЕННАЯ ФУНКЦИЯ ВЫБОРА ПРИЗА
         function getRandomWheelPrize() {
@@ -3688,3 +3698,4 @@
     </script>
 </body>
 </html>
+
