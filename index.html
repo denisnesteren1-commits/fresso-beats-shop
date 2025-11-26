@@ -835,7 +835,7 @@
             color: var(--text-secondary);
         }
 
-        /* 🔥 ИГРА "ТРИ В РЯД" */
+        /* 🔥 УЛУЧШЕННАЯ ИГРА "ТРИ В РЯД" */
         .match3-game {
             background: rgba(45, 45, 66, 0.6);
             border-radius: 20px;
@@ -843,6 +843,8 @@
             border: 1px solid rgba(139, 92, 246, 0.2);
             margin-bottom: 20px;
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
 
         .match3-header {
@@ -868,31 +870,95 @@
             padding: 10px;
             border-radius: 10px;
             border: 1px solid rgba(139, 92, 246, 0.3);
+            touch-action: none;
+            user-select: none;
         }
 
         .match3-cell {
             aspect-ratio: 1;
-            border-radius: 8px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 0;
             cursor: pointer;
             transition: all 0.3s ease;
             user-select: none;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .match3-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent 70%);
+            border-radius: 12px;
         }
 
         .match3-cell.selected {
             transform: scale(0.9);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            z-index: 10;
         }
 
-        .match3-cell[data-type="1"] { background: #EF4444; } /* Красный */
-        .match3-cell[data-type="2"] { background: #3B82F6; } /* Синий */
-        .match3-cell[data-type="3"] { background: #10B981; } /* Зеленый */
-        .match3-cell[data-type="4"] { background: #F59E0B; } /* Желтый */
-        .match3-cell[data-type="5"] { background: #8B5CF6; } /* Фиолетовый */
-        .match3-cell[data-type="6"] { background: #EC4899; } /* Розовый */
+        .match3-cell.moving {
+            z-index: 20;
+            transition: transform 0.3s ease;
+        }
+
+        /* Конфетки вместо кубиков */
+        .match3-cell[data-type="1"] { background: linear-gradient(135deg, #FF6B6B, #FF8E8E); } /* Красная конфета */
+        .match3-cell[data-type="2"] { background: linear-gradient(135deg, #4ECDC4, #88E0D0); } /* Голубая конфета */
+        .match3-cell[data-type="3"] { background: linear-gradient(135deg, #45B7D1, #7AD0F0); } /* Синяя конфета */
+        .match3-cell[data-type="4"] { background: linear-gradient(135deg, #96CEB4, #B8E0D2); } /* Зеленая конфета */
+        .match3-cell[data-type="5"] { background: linear-gradient(135deg, #FFEAA7, #FFEFC1); } /* Желтая конфета */
+        .match3-cell[data-type="6"] { background: linear-gradient(135deg, #DDA0DD, #E6BBE6); } /* Фиолетовая конфета */
+        .match3-cell[data-type="7"] { background: linear-gradient(135deg, #FFA07A, #FFB499); } /* Оранжевая конфета */
+        .match3-cell[data-type="8"] { background: linear-gradient(135deg, #98D8C8, #B4E4D6); } /* Бирюзовая конфета */
+
+        /* Бонусные конфеты */
+        .match3-cell.bomb {
+            background: linear-gradient(135deg, #FF4757, #FF6B81);
+            animation: bombPulse 2s infinite;
+        }
+
+        .match3-cell.rocket-h {
+            background: linear-gradient(135deg, #3742FA, #5352ED);
+        }
+
+        .match3-cell.rocket-v {
+            background: linear-gradient(135deg, #3742FA, #5352ED);
+        }
+
+        .match3-cell.chocolate {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            animation: chocolatePulse 2s infinite;
+        }
+
+        .match3-cell.ghost {
+            background: linear-gradient(135deg, #DFE4EA, #F1F2F6);
+            animation: ghostFloat 3s infinite;
+        }
+
+        @keyframes bombPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes chocolatePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px #8B4513; }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px #8B4513; }
+        }
+
+        @keyframes ghostFloat {
+            0%, 100% { transform: translateY(0); opacity: 0.8; }
+            50% { transform: translateY(-3px); opacity: 1; }
+        }
 
         .match3-info {
             display: flex;
@@ -947,6 +1013,65 @@
         .prize-completed {
             color: var(--success);
             font-size: 12px;
+        }
+
+        /* 🔥 УЛУЧШЕННЫЕ КНОПКИ ИГР */
+        .spin-btn {
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spin-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .spin-btn:hover::before {
+            left: 100%;
+        }
+
+        .spin-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        }
+
+        .spin-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spin-btn:disabled:hover {
+            transform: none;
+            box-shadow: none;
         }
 
         /* 🔥 МИНИМАЛИСТИЧНАЯ КОРЗИНА */
@@ -1958,6 +2083,72 @@
             background: var(--primary);
             box-shadow: var(--glow);
         }
+
+        /* 🔥 ЭФФЕКТЫ ЧАСТИЦ */
+        .particles {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 1s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx, 0), var(--ty, -50px)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* 🔥 АНИМАЦИИ ДЛЯ MATCH3 */
+        @keyframes candyFall {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes candyMatch {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes bonusActivate {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            50% {
+                transform: scale(1.3);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -2104,7 +2295,8 @@
                         </div>
                         
                         <button class="spin-btn" id="spinBtn" onclick="spinSlots()">
-                            🎰 Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
+                            <i class="fas fa-dice"></i>
+                            Крутить слоты (Осталось: <span id="slotsAttempts">3</span>)
                         </button>
                         
                         <!-- 🔥 СЕКЦИЯ ПОКУПКИ ПОПЫТОК -->
@@ -2132,6 +2324,7 @@
                                 </div>
                             </div>
                             <button class="buy-attempt-btn" id="buyAttemptBtn" onclick="buySlotsAttempts()">
+                                <i class="fas fa-shopping-bag"></i>
                                 Купить (<span id="selectedAttemptCount">1</span> попытку за <span id="selectedAttemptPrice">300</span> очков)
                             </button>
                         </div>
@@ -2171,12 +2364,13 @@
                         </div>
                         
                         <button class="spin-btn" id="tapBtn" onclick="startTapGame()">
-                            🎮 Начать игру (Осталось: <span id="tapAttempts">3</span>)
+                            <i class="fas fa-gamepad"></i>
+                            Начать игру (Осталось: <span id="tapAttempts">3</span>)
                         </button>
                     </div>
                 </div>
 
-                <!-- 🔥 ИГРА "ТРИ В РЯД" -->
+                <!-- 🔥 УЛУЧШЕННАЯ ИГРА "ТРИ В РЯД" -->
                 <div id="match3Tab" class="casino-tab-content hidden">
                     <div class="match3-game">
                         <div class="match3-header">
@@ -2202,7 +2396,8 @@
                         </div>
                         
                         <button class="spin-btn" id="match3Btn" onclick="startMatch3Game()">
-                            🎮 Начать уровень
+                            <i class="fas fa-play"></i>
+                            Начать уровень
                         </button>
                         
                         <!-- 🔥 ПРИЗЫ ЗА УРОВНИ -->
@@ -2279,7 +2474,8 @@
                     </div>
 
                     <button class="spin-btn" id="checkoutBtn" style="margin-top: 20px; background: var(--success);" onclick="showPaymentConfirmation()">
-                        💳 Перейти к оплате
+                        <i class="fas fa-credit-card"></i>
+                        Перейти к оплате
                     </button>
 
                     <!-- МЕТОДЫ ОПЛАТЫ -->
@@ -2470,7 +2666,7 @@
                                 </div>
                                 <div>
                                     <input type="file" id="clickSoundUpload" accept="audio/mp3" style="display: none;" onchange="uploadSound('click', this.files[0])">
-                                    <button class="sound-upload-btn" onclick="document.getElementById('clickSoundUpload').click()">
+                                    <button class="sound-upload-btn" onclick="selectTelegramFile('click', 'audio')">
                                         Загрузить MP3
                                     </button>
                                     <button class="sound-preview-btn" onclick="previewSound('click')">
@@ -2486,7 +2682,7 @@
                                 </div>
                                 <div>
                                     <input type="file" id="spinSoundUpload" accept="audio/mp3" style="display: none;" onchange="uploadSound('spin', this.files[0])">
-                                    <button class="sound-upload-btn" onclick="document.getElementById('spinSoundUpload').click()">
+                                    <button class="sound-upload-btn" onclick="selectTelegramFile('spin', 'audio')">
                                         Загрузить MP3
                                     </button>
                                     <button class="sound-preview-btn" onclick="previewSound('spin')">
@@ -2502,7 +2698,7 @@
                                 </div>
                                 <div>
                                     <input type="file" id="winSoundUpload" accept="audio/mp3" style="display: none;" onchange="uploadSound('win', this.files[0])">
-                                    <button class="sound-upload-btn" onclick="document.getElementById('winSoundUpload').click()">
+                                    <button class="sound-upload-btn" onclick="selectTelegramFile('win', 'audio')">
                                         Загрузить MP3
                                     </button>
                                     <button class="sound-preview-btn" onclick="previewSound('win')">
@@ -2518,7 +2714,7 @@
                                 </div>
                                 <div>
                                     <input type="file" id="backgroundSoundUpload" accept="audio/mp3" style="display: none;" onchange="uploadSound('background', this.files[0])">
-                                    <button class="sound-upload-btn" onclick="document.getElementById('backgroundSoundUpload').click()">
+                                    <button class="sound-upload-btn" onclick="selectTelegramFile('background', 'audio')">
                                         Загрузить MP3
                                     </button>
                                     <button class="sound-preview-btn" onclick="previewSound('background')">
@@ -2552,8 +2748,7 @@
                                 
                                 <div class="form-group">
                                     <label class="form-label">MP3 файл для предпрослушивания *</label>
-                                    <input type="file" id="beatMp3File" accept="audio/mp3" style="display: none;" onchange="handleBeatFileUpload('mp3', this.files[0])">
-                                    <button class="file-upload-btn" onclick="document.getElementById('beatMp3File').click()">
+                                    <button class="file-upload-btn" onclick="selectTelegramBeatFile('mp3')">
                                         <i class="fas fa-upload"></i> Загрузить MP3
                                     </button>
                                     <div id="mp3FileInfo" class="file-list"></div>
@@ -2561,8 +2756,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label">WAV файл для скачивания</label>
-                                    <input type="file" id="beatWavFile" accept="audio/wav,audio/x-wav" style="display: none;" onchange="handleBeatFileUpload('wav', this.files[0])">
-                                    <button class="file-upload-btn" onclick="document.getElementById('beatWavFile').click()">
+                                    <button class="file-upload-btn" onclick="selectTelegramBeatFile('wav')">
                                         <i class="fas fa-upload"></i> Загрузить WAV
                                     </button>
                                     <div id="wavFileInfo" class="file-list"></div>
@@ -2570,8 +2764,7 @@
 
                                 <div class="form-group">
                                     <label class="form-label">Папка с дополнительными материалами</label>
-                                    <input type="file" id="beatFolder" webkitdirectory directory multiple style="display: none;" onchange="handleBeatFolderUpload(this.files)">
-                                    <button class="file-upload-btn" onclick="document.getElementById('beatFolder').click()">
+                                    <button class="file-upload-btn" onclick="selectTelegramBeatFolder()">
                                         <i class="fas fa-folder"></i> Загрузить папку
                                     </button>
                                     <div id="folderInfo" class="file-list"></div>
@@ -2720,8 +2913,7 @@
                 <h3 style="color: var(--primary); margin-bottom: 10px; font-size: 14px;">📁 Загрузка медиа для новости</h3>
                 
                 <div class="form-group">
-                    <input type="file" id="newsMediaFile" accept="image/*,video/*,audio/*" style="display: none;" onchange="handleNewsMediaUpload(this.files[0])">
-                    <button class="file-upload-btn" onclick="document.getElementById('newsMediaFile').click()">
+                    <button class="file-upload-btn" onclick="selectTelegramNewsMedia()">
                         <i class="fas fa-upload"></i> Загрузить медиа
                     </button>
                     <div id="newsMediaInfo" class="file-list"></div>
@@ -4515,13 +4707,16 @@
             saveUserData();
         }
 
-        // 🔥 ИГРА "ТРИ В РЯД"
+        // 🔥 УЛУЧШЕННАЯ ИГРА "ТРИ В РЯД" С СВАЙПАМИ И КОНФЕТКАМИ
         let match3Game = {
             isPlaying: false,
             board: [],
             selectedCell: null,
             movesLeft: 20,
-            currentScore: 0
+            currentScore: 0,
+            isDragging: false,
+            dragStartCell: null,
+            dragEndCell: null
         };
 
         function initializeMatch3Game() {
@@ -4529,10 +4724,11 @@
             board.innerHTML = '';
             
             // Создаем игровое поле 8x8
+            match3Game.board = [];
             for (let row = 0; row < 8; row++) {
                 match3Game.board[row] = [];
                 for (let col = 0; col < 8; col++) {
-                    const cellType = Math.floor(Math.random() * 6) + 1; // 6 типов элементов
+                    const cellType = Math.floor(Math.random() * 6) + 1; // 6 типов конфет
                     match3Game.board[row][col] = cellType;
                     
                     const cell = document.createElement('div');
@@ -4540,38 +4736,161 @@
                     cell.setAttribute('data-type', cellType);
                     cell.setAttribute('data-row', row);
                     cell.setAttribute('data-col', col);
-                    cell.addEventListener('click', () => handleMatch3CellClick(row, col));
+                    
+                    // Добавляем обработчики свайпов
+                    cell.addEventListener('touchstart', handleTouchStart);
+                    cell.addEventListener('touchmove', handleTouchMove);
+                    cell.addEventListener('touchend', handleTouchEnd);
+                    cell.addEventListener('mousedown', handleMouseDown);
                     
                     board.appendChild(cell);
                 }
             }
             
             updateMatch3Display();
+            createParticles(board);
         }
 
-        function handleMatch3CellClick(row, col) {
+        function handleTouchStart(e) {
             if (!match3Game.isPlaying) return;
             
+            const cell = e.target.closest('.match3-cell');
+            if (!cell) return;
+            
+            match3Game.isDragging = true;
+            match3Game.dragStartCell = {
+                row: parseInt(cell.getAttribute('data-row')),
+                col: parseInt(cell.getAttribute('data-col'))
+            };
+            
+            cell.classList.add('selected');
             soundSystem.play('click');
+        }
+
+        function handleTouchMove(e) {
+            if (!match3Game.isDragging) return;
             
-            const cell = document.querySelector(`.match3-cell[data-row="${row}"][data-col="${col}"]`);
+            e.preventDefault();
+            const touch = e.touches[0];
+            const element = document.elementFromPoint(touch.clientX, touch.clientY);
+            const cell = element?.closest('.match3-cell');
             
-            if (!match3Game.selectedCell) {
-                // Первое нажатие - выбираем ячейку
-                match3Game.selectedCell = { row, col };
-                cell.classList.add('selected');
-            } else {
-                // Второе нажатие - меняем местами
-                const selected = match3Game.selectedCell;
+            if (cell && match3Game.dragStartCell) {
+                const row = parseInt(cell.getAttribute('data-row'));
+                const col = parseInt(cell.getAttribute('data-col'));
                 
-                // Проверяем, соседние ли ячейки
+                // Проверяем, что ячейка соседняя
                 const isNeighbor = 
-                    (Math.abs(selected.row - row) === 1 && selected.col === col) ||
-                    (Math.abs(selected.col - col) === 1 && selected.row === row);
+                    (Math.abs(match3Game.dragStartCell.row - row) === 1 && match3Game.dragStartCell.col === col) ||
+                    (Math.abs(match3Game.dragStartCell.col - col) === 1 && match3Game.dragStartCell.row === row);
                 
                 if (isNeighbor) {
-                    // Меняем местами
-                    swapCells(selected.row, selected.col, row, col);
+                    match3Game.dragEndCell = { row, col };
+                }
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (!match3Game.isDragging || !match3Game.dragStartCell) return;
+            
+            if (match3Game.dragEndCell) {
+                swapCells(
+                    match3Game.dragStartCell.row,
+                    match3Game.dragStartCell.col,
+                    match3Game.dragEndCell.row,
+                    match3Game.dragEndCell.col
+                );
+            }
+            
+            // Сбрасываем состояние
+            document.querySelectorAll('.match3-cell').forEach(c => c.classList.remove('selected'));
+            match3Game.isDragging = false;
+            match3Game.dragStartCell = null;
+            match3Game.dragEndCell = null;
+        }
+
+        function handleMouseDown(e) {
+            if (!match3Game.isPlaying) return;
+            
+            const cell = e.target.closest('.match3-cell');
+            if (!cell) return;
+            
+            match3Game.isDragging = true;
+            match3Game.dragStartCell = {
+                row: parseInt(cell.getAttribute('data-row')),
+                col: parseInt(cell.getAttribute('data-col'))
+            };
+            
+            cell.classList.add('selected');
+            soundSystem.play('click');
+            
+            // Добавляем обработчики для мыши
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        }
+
+        function handleMouseMove(e) {
+            if (!match3Game.isDragging) return;
+            
+            const element = document.elementFromPoint(e.clientX, e.clientY);
+            const cell = element?.closest('.match3-cell');
+            
+            if (cell && match3Game.dragStartCell) {
+                const row = parseInt(cell.getAttribute('data-row'));
+                const col = parseInt(cell.getAttribute('data-col'));
+                
+                // Проверяем, что ячейка соседняя
+                const isNeighbor = 
+                    (Math.abs(match3Game.dragStartCell.row - row) === 1 && match3Game.dragStartCell.col === col) ||
+                    (Math.abs(match3Game.dragStartCell.col - col) === 1 && match3Game.dragStartCell.row === row);
+                
+                if (isNeighbor) {
+                    match3Game.dragEndCell = { row, col };
+                }
+            }
+        }
+
+        function handleMouseUp(e) {
+            if (!match3Game.isDragging || !match3Game.dragStartCell) return;
+            
+            if (match3Game.dragEndCell) {
+                swapCells(
+                    match3Game.dragStartCell.row,
+                    match3Game.dragStartCell.col,
+                    match3Game.dragEndCell.row,
+                    match3Game.dragEndCell.col
+                );
+            }
+            
+            // Сбрасываем состояние
+            document.querySelectorAll('.match3-cell').forEach(c => c.classList.remove('selected'));
+            match3Game.isDragging = false;
+            match3Game.dragStartCell = null;
+            match3Game.dragEndCell = null;
+            
+            // Убираем обработчики мыши
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        }
+
+        function swapCells(row1, col1, row2, col2) {
+            // Визуальная анимация перемещения
+            const cell1 = document.querySelector(`.match3-cell[data-row="${row1}"][data-col="${col1}"]`);
+            const cell2 = document.querySelector(`.match3-cell[data-row="${row2}"][data-col="${col2}"]`);
+            
+            if (cell1 && cell2) {
+                cell1.classList.add('moving');
+                cell2.classList.add('moving');
+                
+                // Меняем местами с анимацией
+                setTimeout(() => {
+                    // Меняем значения в массиве
+                    const temp = match3Game.board[row1][col1];
+                    match3Game.board[row1][col1] = match3Game.board[row2][col2];
+                    match3Game.board[row2][col2] = temp;
+                    
+                    // Обновляем отображение
+                    updateBoardDisplay();
                     
                     // Проверяем совпадения
                     if (checkMatches()) {
@@ -4583,43 +4902,33 @@
                         }
                     } else {
                         // Если нет совпадений, возвращаем обратно
-                        swapCells(row, col, selected.row, selected.col);
+                        const temp = match3Game.board[row1][col1];
+                        match3Game.board[row1][col1] = match3Game.board[row2][col2];
+                        match3Game.board[row2][col2] = temp;
+                        updateBoardDisplay();
                     }
-                }
-                
-                // Снимаем выделение
-                document.querySelectorAll('.match3-cell').forEach(c => c.classList.remove('selected'));
-                match3Game.selectedCell = null;
+                    
+                    cell1.classList.remove('moving');
+                    cell2.classList.remove('moving');
+                }, 300);
             }
-        }
-
-        function swapCells(row1, col1, row2, col2) {
-            // Меняем значения в массиве
-            const temp = match3Game.board[row1][col1];
-            match3Game.board[row1][col1] = match3Game.board[row2][col2];
-            match3Game.board[row2][col2] = temp;
-            
-            // Обновляем отображение
-            updateBoardDisplay();
         }
 
         function checkMatches() {
             let hasMatches = false;
+            const matches = [];
             
             // Проверяем горизонтальные совпадения
             for (let row = 0; row < 8; row++) {
                 for (let col = 0; col < 6; col++) {
-                    if (match3Game.board[row][col] === match3Game.board[row][col + 1] && 
+                    if (match3Game.board[row][col] !== 0 &&
+                        match3Game.board[row][col] === match3Game.board[row][col + 1] && 
                         match3Game.board[row][col] === match3Game.board[row][col + 2]) {
                         
-                        // Нашли совпадение из 3 элементов
-                        match3Game.currentScore += 10;
+                        matches.push({row, col});
+                        matches.push({row, col: col + 1});
+                        matches.push({row, col: col + 2});
                         hasMatches = true;
-                        
-                        // Удаляем совпавшие элементы
-                        match3Game.board[row][col] = 0;
-                        match3Game.board[row][col + 1] = 0;
-                        match3Game.board[row][col + 2] = 0;
                     }
                 }
             }
@@ -4627,25 +4936,50 @@
             // Проверяем вертикальные совпадения
             for (let col = 0; col < 8; col++) {
                 for (let row = 0; row < 6; row++) {
-                    if (match3Game.board[row][col] === match3Game.board[row + 1][col] && 
+                    if (match3Game.board[row][col] !== 0 &&
+                        match3Game.board[row][col] === match3Game.board[row + 1][col] && 
                         match3Game.board[row][col] === match3Game.board[row + 2][col]) {
                         
-                        // Нашли совпадение из 3 элементов
-                        match3Game.currentScore += 10;
+                        matches.push({row, col});
+                        matches.push({row: row + 1, col});
+                        matches.push({row: row + 2, col});
                         hasMatches = true;
-                        
-                        // Удаляем совпавшие элементы
-                        match3Game.board[row][col] = 0;
-                        match3Game.board[row + 1][col] = 0;
-                        match3Game.board[row + 2][col] = 0;
                     }
                 }
             }
             
             if (hasMatches) {
+                // Удаляем совпавшие элементы с анимацией
+                matches.forEach(match => {
+                    const cell = document.querySelector(`.match3-cell[data-row="${match.row}"][data-col="${match.col}"]`);
+                    if (cell) {
+                        cell.style.animation = 'candyMatch 0.5s ease forwards';
+                        setTimeout(() => {
+                            match3Game.board[match.row][match.col] = 0;
+                            updateBoardDisplay();
+                        }, 500);
+                    }
+                });
+                
+                // Начисляем очки
+                match3Game.currentScore += matches.length * 10;
+                
                 // Заполняем пустые ячейки
-                fillEmptyCells();
-                updateBoardDisplay();
+                setTimeout(() => {
+                    fillEmptyCells();
+                    updateBoardDisplay();
+                    
+                    // Проверяем цепные реакции
+                    setTimeout(() => {
+                        if (checkMatches()) {
+                            match3Game.currentScore += 50; // Бонус за комбо
+                            showNotification('🔥 КОМБО! +50 очков');
+                        }
+                    }, 600);
+                }, 600);
+                
+                // Создаем эффекты частиц
+                createMatchParticles(matches);
             }
             
             return hasMatches;
@@ -4653,15 +4987,22 @@
 
         function fillEmptyCells() {
             for (let col = 0; col < 8; col++) {
+                let emptySpaces = 0;
+                
+                // Считаем пустые ячейки снизу вверх
                 for (let row = 7; row >= 0; row--) {
                     if (match3Game.board[row][col] === 0) {
-                        // Сдвигаем элементы вниз
-                        for (let r = row; r > 0; r--) {
-                            match3Game.board[r][col] = match3Game.board[r - 1][col];
-                        }
-                        // Добавляем новый элемент сверху
-                        match3Game.board[0][col] = Math.floor(Math.random() * 6) + 1;
+                        emptySpaces++;
+                    } else if (emptySpaces > 0) {
+                        // Перемещаем конфету вниз
+                        match3Game.board[row + emptySpaces][col] = match3Game.board[row][col];
+                        match3Game.board[row][col] = 0;
                     }
+                }
+                
+                // Заполняем верхние ячейки новыми конфетами
+                for (let row = 0; row < emptySpaces; row++) {
+                    match3Game.board[row][col] = Math.floor(Math.random() * 6) + 1;
                 }
             }
         }
@@ -4672,6 +5013,10 @@
                     const cell = document.querySelector(`.match3-cell[data-row="${row}"][data-col="${col}"]`);
                     if (cell) {
                         cell.setAttribute('data-type', match3Game.board[row][col]);
+                        cell.style.animation = 'candyFall 0.5s ease';
+                        setTimeout(() => {
+                            cell.style.animation = '';
+                        }, 500);
                     }
                 }
             }
@@ -4760,6 +5105,62 @@
             if (level === 500) {
                 showWinModal(`🏆 ВЫ ДОСТИГЛИ МАКСИМАЛЬНОГО УРОВНЯ 500! СЛЕДИТЕ ЗА ОБНОВЛЕНИЯМИ!`, false);
             }
+        }
+
+        // 🔥 ЭФФЕКТЫ ЧАСТИЦ
+        function createParticles(container) {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `
+                    --tx: ${Math.random() * 100 - 50}px;
+                    --ty: ${Math.random() * 100 - 50}px;
+                    background: ${getRandomColor()};
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                `;
+                container.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+        }
+
+        function createMatchParticles(matches) {
+            matches.forEach(match => {
+                const cell = document.querySelector(`.match3-cell[data-row="${match.row}"][data-col="${match.col}"]`);
+                if (cell) {
+                    const rect = cell.getBoundingClientRect();
+                    createParticlesAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
+                }
+            });
+        }
+
+        function createParticlesAt(x, y) {
+            const particles = document.createElement('div');
+            particles.className = 'particles';
+            particles.style.cssText = `left: ${x}px; top: ${y}px;`;
+            document.body.appendChild(particles);
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `
+                    --tx: ${Math.random() * 100 - 50}px;
+                    --ty: ${Math.random() * 100 - 50}px;
+                    background: ${getRandomColor()};
+                `;
+                particles.appendChild(particle);
+            }
+            
+            setTimeout(() => particles.remove(), 1000);
+        }
+
+        function getRandomColor() {
+            const colors = [
+                'var(--primary)', 'var(--accent)', 'var(--success)', 
+                'var(--danger)', '#FF6B6B', '#4ECDC4', '#45B7D1'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
 
         // 🔥 СИСТЕМА ПРОФИЛЯ С ВКЛАДКАМИ И ПЕРЕКЛЮЧЕНИЕМ
@@ -4966,6 +5367,262 @@
             displayProfilePrizes();
             closeWinModal(true);
             showNotification('🎵 Теперь выбери бит для WAV лицензии!');
+        }
+
+        // 🔥 TELEGRAM ФУНКЦИИ ДЛЯ ЗАГРУЗКИ ФАЙЛОВ
+        async function selectTelegramFile(soundName, fileType) {
+            if (isTelegram && tg) {
+                try {
+                    const result = await tg.showFileSelector({
+                        type: fileType,
+                        multiple: false
+                    });
+                    
+                    if (result && result.length > 0) {
+                        const file = result[0];
+                        await handleTelegramFileUpload(soundName, file);
+                    }
+                } catch (error) {
+                    console.error('Ошибка выбора файла в Telegram:', error);
+                    showNotification('❌ Ошибка загрузки файла');
+                }
+            } else {
+                // Fallback для браузера
+                document.getElementById(`${soundName}SoundUpload`).click();
+            }
+        }
+
+        async function handleTelegramFileUpload(soundName, file) {
+            try {
+                showNotification('📤 Загружаем звук...');
+                
+                // В Telegram мы получаем file blob напрямую
+                await soundSystem.uploadSound(soundName, file);
+                showNotification('✅ Звук успешно загружен!');
+            } catch (error) {
+                console.error('Ошибка загрузки звука:', error);
+                showNotification('❌ Ошибка загрузки звука');
+            }
+        }
+
+        async function selectTelegramBeatFile(fileType) {
+            if (isTelegram && tg) {
+                try {
+                    const result = await tg.showFileSelector({
+                        type: 'audio',
+                        multiple: false
+                    });
+                    
+                    if (result && result.length > 0) {
+                        const file = result[0];
+                        await handleTelegramBeatFileUpload(fileType, file);
+                    }
+                } catch (error) {
+                    console.error('Ошибка выбора файла бита:', error);
+                    showNotification('❌ Ошибка загрузки файла');
+                }
+            } else {
+                // Fallback для браузера
+                document.getElementById(`beat${fileType.toUpperCase()}File`).click();
+            }
+        }
+
+        async function handleTelegramBeatFileUpload(fileType, file) {
+            try {
+                // Валидация формата
+                if (fileType === 'mp3' && !file.type.startsWith('audio/mp3')) {
+                    showNotification('❌ Загрузите MP3 файл');
+                    return;
+                }
+                
+                if (fileType === 'wav' && !file.type.startsWith('audio/wav') && !file.type.startsWith('audio/x-wav')) {
+                    showNotification('❌ Загрузите WAV файл');
+                    return;
+                }
+                
+                // Валидация размера (10MB максимум)
+                if (file.size > 10 * 1024 * 1024) {
+                    showNotification('❌ Файл слишком большой (макс. 10MB)');
+                    return;
+                }
+                
+                // Сохраняем файл
+                beatFiles[fileType] = file;
+                
+                // Показываем информацию о файле
+                const fileInfo = document.getElementById(`${fileType}FileInfo`);
+                fileInfo.innerHTML = `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                            </div>
+                        </div>
+                        <button class="file-remove" onclick="removeBeatFile('${fileType}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                showNotification(`✅ ${fileType.toUpperCase()} файл загружен`);
+            } catch (error) {
+                console.error('Ошибка загрузки файла бита:', error);
+                showNotification('❌ Ошибка загрузки файла');
+            }
+        }
+
+        async function selectTelegramBeatFolder() {
+            if (isTelegram && tg) {
+                try {
+                    const result = await tg.showFileSelector({
+                        type: 'document',
+                        multiple: true
+                    });
+                    
+                    if (result && result.length > 0) {
+                        await handleTelegramBeatFolderUpload(result);
+                    }
+                } catch (error) {
+                    console.error('Ошибка выбора папки:', error);
+                    showNotification('❌ Ошибка загрузки папки');
+                }
+            } else {
+                // Fallback для браузера
+                document.getElementById('beatFolder').click();
+            }
+        }
+
+        async function handleTelegramBeatFolderUpload(files) {
+            try {
+                beatFiles.folder = Array.from(files);
+                
+                // Анализируем структуру папки
+                const trackOutFiles = Array.from(files).filter(f => 
+                    f.name.includes('track out') || 
+                    f.name.includes('trackout') ||
+                    f.name.includes('track_out')
+                );
+                
+                const stemsFiles = Array.from(files).filter(f => 
+                    f.name.includes('stems')
+                );
+                
+                const projectFiles = Array.from(files).filter(f => 
+                    f.name.includes('project') || 
+                    f.name.endsWith('.flp') || 
+                    f.name.endsWith('.als') ||
+                    f.name.endsWith('.abp')
+                );
+                
+                const folderInfo = document.getElementById('folderInfo');
+                let infoHTML = '';
+                
+                if (trackOutFiles.length > 0) {
+                    infoHTML += `<div style="color: var(--success); font-size: 12px; margin-bottom: 5px;">🎵 Track Out файлы: ${trackOutFiles.length}</div>`;
+                }
+                
+                if (stemsFiles.length > 0) {
+                    infoHTML += `<div style="color: var(--primary); font-size: 12px; margin-bottom: 5px;">🎛️ Stems файлы: ${stemsFiles.length}</div>`;
+                }
+                
+                if (projectFiles.length > 0) {
+                    infoHTML += `<div style="color: var(--accent); font-size: 12px; margin-bottom: 5px;">💾 Project файлы: ${projectFiles.length}</div>`;
+                }
+                
+                folderInfo.innerHTML = infoHTML + `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="fas fa-folder"></i>
+                            </div>
+                            <div>
+                                <div class="file-name">Папка с материалами</div>
+                                <div class="file-size">${files.length} файлов</div>
+                            </div>
+                        </div>
+                        <button class="file-remove" onclick="removeBeatFile('folder')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                showNotification(`✅ Папка загружена (${files.length} файлов)`);
+            } catch (error) {
+                console.error('Ошибка загрузки папки:', error);
+                showNotification('❌ Ошибка загрузки папки');
+            }
+        }
+
+        async function selectTelegramNewsMedia() {
+            if (isTelegram && tg) {
+                try {
+                    const result = await tg.showFileSelector({
+                        type: 'media',
+                        multiple: false
+                    });
+                    
+                    if (result && result.length > 0) {
+                        const file = result[0];
+                        await handleTelegramNewsMediaUpload(file);
+                    }
+                } catch (error) {
+                    console.error('Ошибка выбора медиа:', error);
+                    showNotification('❌ Ошибка загрузки медиа');
+                }
+            } else {
+                // Fallback для браузера
+                document.getElementById('newsMediaFile').click();
+            }
+        }
+
+        async function handleTelegramNewsMediaUpload(file) {
+            try {
+                // Валидация формата
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'audio/mp3'];
+                if (!allowedTypes.includes(file.type)) {
+                    showNotification('❌ Загрузите изображение, видео или аудио файл');
+                    return;
+                }
+                
+                // Валидация размера (20MB максимум)
+                if (file.size > 20 * 1024 * 1024) {
+                    showNotification('❌ Файл слишком большой (макс. 20MB)');
+                    return;
+                }
+                
+                newsMediaFile = file;
+                
+                // Показываем информацию о файле
+                const mediaInfo = document.getElementById('newsMediaInfo');
+                const fileType = file.type.startsWith('image/') ? 'Изображение' : 
+                                file.type.startsWith('video/') ? 'Видео' : 'Аудио';
+                
+                mediaInfo.innerHTML = `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="fas ${file.type.startsWith('image/') ? 'fa-image' : file.type.startsWith('video/') ? 'fa-video' : 'fa-music'}"></i>
+                            </div>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${fileType} • ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                            </div>
+                        </div>
+                        <button class="file-remove" onclick="removeNewsMedia()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+                
+                showNotification(`✅ Медиа файл загружен (${fileType})`);
+            } catch (error) {
+                console.error('Ошибка загрузки медиа:', error);
+                showNotification('❌ Ошибка загрузки медиа');
+            }
         }
 
         // 🔥 НАСТРОЙКИ ЗВУКА
