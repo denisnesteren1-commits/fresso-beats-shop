@@ -27,6 +27,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        button, .clickable {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         body {
@@ -1740,6 +1747,100 @@
         .sound-preview-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        /* 🔥 ФОРМА ЗАГРУЗКИ ФАЙЛОВ */
+        .file-upload-section {
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .file-upload-btn {
+            background: var(--primary);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .file-list {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-icon {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .file-remove {
+            background: var(--danger);
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -2238,21 +2339,41 @@
                         <div class="add-beat-form">
                             <h2 class="section-title">🎵 ДОБАВИТЬ НОВЫЙ БИТ</h2>
                             
+                            <!-- 🔥 СЕКЦИЯ ЗАГРУЗКИ ФАЙЛОВ -->
+                            <div class="file-upload-section">
+                                <h3 style="color: var(--primary); margin-bottom: 15px;">📁 Загрузка файлов бита</h3>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">MP3 файл для предпрослушивания *</label>
+                                    <input type="file" id="beatMp3File" accept="audio/mp3" style="display: none;" onchange="handleBeatFileUpload('mp3', this.files[0])">
+                                    <button class="file-upload-btn" onclick="document.getElementById('beatMp3File').click()">
+                                        <i class="fas fa-upload"></i> Загрузить MP3
+                                    </button>
+                                    <div id="mp3FileInfo" class="file-list"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">WAV файл для скачивания</label>
+                                    <input type="file" id="beatWavFile" accept="audio/wav,audio/x-wav" style="display: none;" onchange="handleBeatFileUpload('wav', this.files[0])">
+                                    <button class="file-upload-btn" onclick="document.getElementById('beatWavFile').click()">
+                                        <i class="fas fa-upload"></i> Загрузить WAV
+                                    </button>
+                                    <div id="wavFileInfo" class="file-list"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Папка с дополнительными материалами</label>
+                                    <input type="file" id="beatFolder" webkitdirectory directory multiple style="display: none;" onchange="handleBeatFolderUpload(this.files)">
+                                    <button class="file-upload-btn" onclick="document.getElementById('beatFolder').click()">
+                                        <i class="fas fa-folder"></i> Загрузить папку
+                                    </button>
+                                    <div id="folderInfo" class="file-list"></div>
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
                                 <label class="form-label">Название бита *</label>
                                 <input type="text" class="form-input" id="beatTitle" placeholder="Введите креативное название">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Ссылка на MP3 файл *</label>
-                                <input type="url" class="form-input" id="beatMp3Url" placeholder="https://.../beat.mp3">
-                                <div class="form-hint">Прямая ссылка на MP3 файл для воспроизведения</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Ссылка на папку с битом (Яндекс.Диск)</label>
-                                <input type="url" class="form-input" id="beatFolderUrl" placeholder="https://disk.yandex.ru/...">
-                                <div class="form-hint">Папка должна содержать WAV файлы и папку TRACKOUT</div>
                             </div>
 
                             <div class="form-group">
@@ -2386,14 +2507,25 @@
     <div class="win-modal" id="addNewsModal">
         <div class="win-content" style="max-width: 400px;">
             <h2>📰 ДОБАВИТЬ НОВОСТЬ</h2>
+            
+            <!-- 🔥 СЕКЦИЯ ЗАГРУЗКИ МЕДИА -->
+            <div class="file-upload-section" style="margin-bottom: 15px;">
+                <h3 style="color: var(--primary); margin-bottom: 10px; font-size: 14px;">📁 Загрузка медиа для новости</h3>
+                
+                <div class="form-group">
+                    <input type="file" id="newsMediaFile" accept="image/*,video/*,audio/*" style="display: none;" onchange="handleNewsMediaUpload(this.files[0])">
+                    <button class="file-upload-btn" onclick="document.getElementById('newsMediaFile').click()">
+                        <i class="fas fa-upload"></i> Загрузить медиа
+                    </button>
+                    <div id="newsMediaInfo" class="file-list"></div>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <input type="text" class="form-input" id="newsTitle" placeholder="Заголовок новости">
             </div>
             <div class="form-group">
                 <textarea class="form-textarea" id="newsContent" placeholder="Текст новости" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <input type="url" class="form-input" id="newsMedia" placeholder="Ссылка на медиа (опционально)">
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button class="btn btn-secondary" onclick="closeAddNewsModal()">Отмена</button>
@@ -2666,16 +2798,15 @@
                 { symbols: ['🎧', '🎧', '🎧'], prize: '10% скидка', type: 'discount', chance: 0.15 }
             ],
             wheelPrizes: [
-                { name: '1%', value: 1, color: '#FF6B6B', chance: 10 },
-                { name: '5%', value: 5, color: '#4ECDC4', chance: 15 },
-                { name: '10%', value: 10, color: '#45B7D1', chance: 20 },
-                { name: '15%', value: 15, color: '#96CEB4', chance: 15 },
-                { name: '20%', value: 20, color: '#FFEAA7', chance: 12 },
-                { name: '30%', value: 30, color: '#DDA0DD', chance: 8 },
-                { name: '40%', value: 40, color: '#98D8C8', chance: 5 },
-                { name: '50%', value: 50, color: '#F7DC6F', chance: 3 },
-                { name: 'WAV', value: 'wav', color: '#FFA500', chance: 5 },
-                { name: 'DRUMKIT', value: 'drumkit', color: '#8B5CF6', chance: 7 }
+                { name: '50%', value: 50, color: '#90EE90', chance: 3 },
+                { name: '40%', value: 40, color: '#32CD32', chance: 5 },
+                { name: '30%', value: 30, color: '#7CFC00', chance: 8 },
+                { name: '20%', value: 20, color: '#FFFF00', chance: 12 },
+                { name: '10%', value: 10, color: '#FFA500', chance: 15 },
+                { name: '5%', value: 5, color: '#FF0000', chance: 15 },
+                { name: '1%', value: 1, color: '#800080', chance: 10 },
+                { name: 'WAV', value: 'wav', color: '#0000FF', chance: 2 },
+                { name: 'Респект', value: 'respect', color: '#FFD700', chance: 30 }
             ],
             tapGamePrizes: [
                 { minScore: 100, prize: '5% скидка', type: 'discount', value: 5 },
@@ -3865,7 +3996,7 @@
                 const segmentText = document.createElement('div');
                 segmentText.className = 'segment-text';
                 segmentText.textContent = prize.name;
-                segmentText.style.color = ['#FF6B6B', '#4ECDC4', '#45B7D1'].includes(prize.color) ? 'white' : 'black';
+                segmentText.style.color = ['#90EE90', '#32CD32', '#7CFC00', '#0000FF'].includes(prize.color) ? 'white' : 'black';
                 
                 segmentContent.appendChild(segmentText);
                 segment.appendChild(segmentContent);
@@ -3936,7 +4067,7 @@
                 userData.prizes.push({
                     type: 'wheel',
                     prize: selectedPrize.name,
-                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'drumkit' ? 'drumkit' : 'discount',
+                    prizeType: selectedPrize.value === 'wav' ? 'wav' : selectedPrize.value === 'respect' ? 'respect' : 'discount',
                     value: selectedPrize.value,
                     date: new Date().toISOString(),
                     used: false
@@ -3945,8 +4076,8 @@
                 // 🔥 СООБЩЕНИЕ О ВЫИГРЫШЕ
                 if (selectedPrize.value === 'wav') {
                     showWinModal(`🎉 ВЫ ВЫИГРАЛИ WAV ЛИЦЕНЗИЮ!`, true);
-                } else if (selectedPrize.value === 'drumkit') {
-                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ ЭКСКЛЮЗИВНЫЙ DRUMKIT!`, false);
+                } else if (selectedPrize.value === 'respect') {
+                    showWinModal(`🎉 ВЫ ВЫИГРАЛИ РЕСПЕКТ ОТ СОЗДАТЕЛЯ!`, false);
                 } else {
                     showWinModal(`🎉 ВЫ ВЫИГРАЛИ ${selectedPrize.value}% СКИДКУ!`, false);
                 }
@@ -4500,11 +4631,129 @@
             });
         }
 
+        // 🔥 ОБРАБОТКА ЗАГРУЗКИ ФАЙЛОВ БИТА
+        let beatFiles = {
+            mp3: null,
+            wav: null,
+            folder: []
+        };
+
+        function handleBeatFileUpload(fileType, file) {
+            if (!file) return;
+            
+            // Валидация формата
+            if (fileType === 'mp3' && !file.type.startsWith('audio/mp3')) {
+                showNotification('❌ Загрузите MP3 файл');
+                return;
+            }
+            
+            if (fileType === 'wav' && !file.type.startsWith('audio/wav') && !file.type.startsWith('audio/x-wav')) {
+                showNotification('❌ Загрузите WAV файл');
+                return;
+            }
+            
+            // Валидация размера (10MB максимум)
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('❌ Файл слишком большой (макс. 10MB)');
+                return;
+            }
+            
+            // Сохраняем файл
+            beatFiles[fileType] = file;
+            
+            // Показываем информацию о файле
+            const fileInfo = document.getElementById(`${fileType}FileInfo`);
+            fileInfo.innerHTML = `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                        </div>
+                    </div>
+                    <button class="file-remove" onclick="removeBeatFile('${fileType}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            showNotification(`✅ ${fileType.toUpperCase()} файл загружен`);
+        }
+
+        function handleBeatFolderUpload(files) {
+            if (!files || files.length === 0) return;
+            
+            beatFiles.folder = Array.from(files);
+            
+            // Анализируем структуру папки
+            const trackOutFiles = Array.from(files).filter(f => 
+                f.webkitRelativePath.includes('track out') || 
+                f.webkitRelativePath.includes('trackout') ||
+                f.webkitRelativePath.includes('track_out')
+            );
+            
+            const stemsFiles = Array.from(files).filter(f => 
+                f.webkitRelativePath.includes('stems')
+            );
+            
+            const projectFiles = Array.from(files).filter(f => 
+                f.webkitRelativePath.includes('project') || 
+                f.name.endsWith('.flp') || 
+                f.name.endsWith('.als') ||
+                f.name.endsWith('.abp')
+            );
+            
+            const folderInfo = document.getElementById('folderInfo');
+            let infoHTML = '';
+            
+            if (trackOutFiles.length > 0) {
+                infoHTML += `<div style="color: var(--success); font-size: 12px; margin-bottom: 5px;">🎵 Track Out файлы: ${trackOutFiles.length}</div>`;
+            }
+            
+            if (stemsFiles.length > 0) {
+                infoHTML += `<div style="color: var(--primary); font-size: 12px; margin-bottom: 5px;">🎛️ Stems файлы: ${stemsFiles.length}</div>`;
+            }
+            
+            if (projectFiles.length > 0) {
+                infoHTML += `<div style="color: var(--accent); font-size: 12px; margin-bottom: 5px;">💾 Project файлы: ${projectFiles.length}</div>`;
+            }
+            
+            folderInfo.innerHTML = infoHTML + `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <div>
+                            <div class="file-name">Папка с материалами</div>
+                            <div class="file-size">${files.length} файлов</div>
+                        </div>
+                    </div>
+                    <button class="file-remove" onclick="removeBeatFile('folder')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            showNotification(`✅ Папка загружена (${files.length} файлов)`);
+        }
+
+        function removeBeatFile(fileType) {
+            beatFiles[fileType] = null;
+            if (fileType === 'folder') beatFiles.folder = [];
+            
+            const fileInfo = document.getElementById(`${fileType}FileInfo`);
+            fileInfo.innerHTML = '';
+            
+            showNotification(`🗑️ ${fileType.toUpperCase()} файл удален`);
+        }
+
         function resetBeatForm() {
             soundSystem.play('click');
             document.getElementById('beatTitle').value = '';
-            document.getElementById('beatMp3Url').value = '';
-            document.getElementById('beatFolderUrl').value = '';
             document.getElementById('beatBpm').value = '';
             document.getElementById('beatKey').value = '';
             document.getElementById('beatGenre').value = '';
@@ -4515,14 +4764,18 @@
             document.getElementById('exclusivePrice').value = '';
             document.getElementById('beatDescription').value = '';
             
+            // Очищаем файлы
+            beatFiles = { mp3: null, wav: null, folder: [] };
+            document.getElementById('mp3FileInfo').innerHTML = '';
+            document.getElementById('wavFileInfo').innerHTML = '';
+            document.getElementById('folderInfo').innerHTML = '';
+            
             showNotification('🧹 Форма очищена');
         }
 
         function addNewBeat() {
             soundSystem.play('click');
             const title = document.getElementById('beatTitle').value.trim();
-            const mp3Url = document.getElementById('beatMp3Url').value.trim();
-            const folderUrl = document.getElementById('beatFolderUrl').value.trim();
             const bpm = parseInt(document.getElementById('beatBpm').value);
             const key = document.getElementById('beatKey').value;
             const genre = document.getElementById('beatGenre').value;
@@ -4533,8 +4786,13 @@
             const exclusivePrice = parseInt(document.getElementById('exclusivePrice').value) || 0;
             const description = document.getElementById('beatDescription').value.trim();
             
-            if (!title || !mp3Url || !bpm || !key || !genre || !mood) {
+            if (!title || !bpm || !key || !genre || !mood) {
                 showNotification('❌ Заполните все обязательные поля');
+                return;
+            }
+            
+            if (!beatFiles.mp3) {
+                showNotification('❌ Загрузите MP3 файл для предпрослушивания');
                 return;
             }
             
@@ -4543,68 +4801,119 @@
                 return;
             }
             
-            // 🔥 ПРОВЕРКА ССЫЛКИ НА MP3
-            if (!isValidUrl(mp3Url) || !mp3Url.toLowerCase().endsWith('.mp3')) {
-                showNotification('❌ Укажите корректную ссылку на MP3 файл');
+            // 🔥 СОЗДАЕМ DATA URL ДЛЯ ФАЙЛОВ
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const mp3DataUrl = e.target.result;
+                
+                // Создаем объект бита
+                const files = {
+                    mp3: mp3DataUrl,
+                    wav: beatFiles.wav ? URL.createObjectURL(beatFiles.wav) : '#',
+                    trackout: beatFiles.folder.length > 0 ? 'folder_uploaded' : '#'
+                };
+                
+                const newBeat = {
+                    id: Date.now(),
+                    title: title,
+                    bpm: bpm,
+                    key: key,
+                    genre: genre,
+                    mood: mood,
+                    isNew: true,
+                    plays: 0,
+                    audioUrl: mp3DataUrl, // 🔥 ИСПОЛЬЗУЕМ DATA URL ДЛЯ ПРЕДПРОСЛУШИВАНИЯ
+                    isFavorite: false,
+                    inCart: false,
+                    price: wavPrice || mp3Price,
+                    description: description,
+                    licensePrices: {
+                        mp3: mp3Price,
+                        wav: wavPrice,
+                        trackout: trackoutPrice,
+                        exclusive: exclusivePrice
+                    },
+                    files: files,
+                    createdAt: new Date().toISOString(),
+                    createdBy: userData.isAdmin ? "admin" : userData.name,
+                    uploadedFiles: {
+                        mp3: beatFiles.mp3.name,
+                        wav: beatFiles.wav ? beatFiles.wav.name : null,
+                        folder: beatFiles.folder.length > 0 ? beatFiles.folder.map(f => f.name) : []
+                    }
+                };
+                
+                beats.unshift(newBeat);
+                saveBeatsData();
+                resetBeatForm();
+                
+                // 🔥 ПЕРЕИНИЦИАЛИЗИРУЕМ АУДИО ПЛЕЕРЫ
+                initializeAudioPlayers();
+                
+                showNotification('✅ Бит успешно добавлен!');
+                
+                // Переходим на главную чтобы увидеть новый бит
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
+                document.querySelector('[data-screen="homeScreen"]').classList.add('active');
+                document.getElementById('homeScreen').classList.remove('hidden');
+                
+                displayBeats();
+            };
+            
+            reader.readAsDataURL(beatFiles.mp3);
+        }
+
+        // 🔥 ОБРАБОТКА ЗАГРУЗКИ МЕДИА ДЛЯ НОВОСТЕЙ
+        let newsMediaFile = null;
+
+        function handleNewsMediaUpload(file) {
+            if (!file) return;
+            
+            // Валидация формата
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'audio/mp3'];
+            if (!allowedTypes.includes(file.type)) {
+                showNotification('❌ Загрузите изображение, видео или аудио файл');
                 return;
             }
             
-            const files = {
-                mp3: mp3Url,
-                wav: folderUrl ? folderUrl + '/beat.wav' : '#',
-                trackout: folderUrl ? folderUrl + '/trackout.zip' : '#'
-            };
+            // Валидация размера (20MB максимум)
+            if (file.size > 20 * 1024 * 1024) {
+                showNotification('❌ Файл слишком большой (макс. 20MB)');
+                return;
+            }
             
-            const newBeat = {
-                id: Date.now(),
-                title: title,
-                bpm: bpm,
-                key: key,
-                genre: genre,
-                mood: mood,
-                isNew: true,
-                plays: 0,
-                audioUrl: mp3Url, // 🔥 ИСПОЛЬЗУЕМ ПРЯМУЮ ССЫЛКУ НА MP3
-                isFavorite: false,
-                inCart: false,
-                price: wavPrice || mp3Price,
-                description: description,
-                licensePrices: {
-                    mp3: mp3Price,
-                    wav: wavPrice,
-                    trackout: trackoutPrice,
-                    exclusive: exclusivePrice
-                },
-                files: files,
-                createdAt: new Date().toISOString(),
-                createdBy: userData.isAdmin ? "admin" : userData.name
-            };
+            newsMediaFile = file;
             
-            beats.unshift(newBeat);
-            saveBeatsData();
-            resetBeatForm();
+            // Показываем информацию о файле
+            const mediaInfo = document.getElementById('newsMediaInfo');
+            const fileType = file.type.startsWith('image/') ? 'Изображение' : 
+                            file.type.startsWith('video/') ? 'Видео' : 'Аудио';
             
-            // 🔥 ПЕРЕИНИЦИАЛИЗИРУЕМ АУДИО ПЛЕЕРЫ
-            initializeAudioPlayers();
+            mediaInfo.innerHTML = `
+                <div class="file-item">
+                    <div class="file-info">
+                        <div class="file-icon">
+                            <i class="fas ${file.type.startsWith('image/') ? 'fa-image' : file.type.startsWith('video/') ? 'fa-video' : 'fa-music'}"></i>
+                        </div>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${fileType} • ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                        </div>
+                    </div>
+                    <button class="file-remove" onclick="removeNewsMedia()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
             
-            showNotification('✅ Бит успешно добавлен!');
-            
-            // Переходим на главную чтобы увидеть новый бит
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
-            document.querySelector('[data-screen="homeScreen"]').classList.add('active');
-            document.getElementById('homeScreen').classList.remove('hidden');
-            
-            displayBeats();
+            showNotification(`✅ Медиа файл загружен (${fileType})`);
         }
 
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
+        function removeNewsMedia() {
+            newsMediaFile = null;
+            document.getElementById('newsMediaInfo').innerHTML = '';
+            showNotification('🗑️ Медиа файл удален');
         }
 
         // 🔥 АВТОМАТИЧЕСКИЕ НОВОСТИ
@@ -4627,6 +4936,17 @@
                 const newsElement = document.createElement('div');
                 newsElement.className = 'news-item fade-in';
                 
+                let mediaHTML = '';
+                if (newsItem.media) {
+                    if (newsItem.media.startsWith('data:image/')) {
+                        mediaHTML = `<div style="margin: 10px 0;"><img src="${newsItem.media}" style="max-width: 100%; border-radius: 10px;"></div>`;
+                    } else if (newsItem.media.startsWith('data:video/')) {
+                        mediaHTML = `<div style="margin: 10px 0;"><video src="${newsItem.media}" controls style="max-width: 100%; border-radius: 10px;"></video></div>`;
+                    } else if (newsItem.media.startsWith('data:audio/')) {
+                        mediaHTML = `<div style="margin: 10px 0;"><audio src="${newsItem.media}" controls style="width: 100%;"></audio></div>`;
+                    }
+                }
+                
                 let deleteButton = '';
                 if (userData.isAdmin) {
                     deleteButton = `<button class="remove-from-cart" onclick="deleteNews(${index})" style="margin-top: 10px;">
@@ -4637,7 +4957,7 @@
                 newsElement.innerHTML = `
                     <h3>${newsItem.title}</h3>
                     <p>${newsItem.content}</p>
-                    ${newsItem.media ? `<div style="margin: 10px 0;"><a href="${newsItem.media}" target="_blank" style="color: var(--primary);">📎 Медиа вложение</a></div>` : ''}
+                    ${mediaHTML}
                     <div class="news-date">${new Date(newsItem.date).toLocaleDateString('ru-RU')}</div>
                     ${deleteButton}
                 `;
@@ -4659,13 +4979,26 @@
             soundSystem.play('click');
             const title = document.getElementById('newsTitle').value.trim();
             const content = document.getElementById('newsContent').value.trim();
-            const media = document.getElementById('newsMedia').value.trim();
             
             if (!title || !content) {
                 showNotification('❌ Заполните заголовок и текст новости');
                 return;
             }
             
+            let mediaDataUrl = '';
+            if (newsMediaFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    mediaDataUrl = e.target.result;
+                    saveNewsItem(title, content, mediaDataUrl);
+                };
+                reader.readAsDataURL(newsMediaFile);
+            } else {
+                saveNewsItem(title, content, '');
+            }
+        }
+
+        function saveNewsItem(title, content, media) {
             const newNews = {
                 id: Date.now(),
                 title: title,
