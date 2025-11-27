@@ -2962,6 +2962,13 @@
         let tg = null;
         let isTelegram = false;
         const ADMIN_TELEGRAM_ID = 856199923;
+        
+        // 🔥 ЯНДЕКС ДИСК КОНФИГУРАЦИЯ
+        const YANDEX_DISK_CONFIG = {
+            token: 'YOUR_YANDEX_DISK_TOKEN_HERE', // 🔥 ЗАМЕНИТЕ НА СВОЙ ТОКЕН
+            baseUrl: 'https://cloud-api.yandex.net/v1/disk/resources',
+            uploadUrl: 'https://cloud-api.yandex.net/v1/disk/resources/upload'
+        };
 
         // 🔥 УЛУЧШЕННАЯ СИСТЕМА ЗВУКОВ
         const soundSystem = {
@@ -5816,41 +5823,84 @@
             showNotification(`🗑️ ${fileType.toUpperCase()} файл удален`);
         }
 
-        function resetBeatForm() {
-            soundSystem.play('click');
-            document.getElementById('beatTitle').value = '';
-            document.getElementById('beatBpm').value = '';
-            document.getElementById('beatKey').value = '';
-            document.getElementById('beatGenre').value = '';
-            document.getElementById('beatMood').value = '';
-            document.getElementById('mp3Price').value = '';
-            document.getElementById('wavPrice').value = '';
-            document.getElementById('trackoutPrice').value = '';
-            document.getElementById('exclusivePrice').value = '';
-            document.getElementById('beatDescription').value = '';
-            
-            // Очищаем файлы
-            beatFiles = { mp3: null, wav: null, folder: [] };
-            document.getElementById('mp3FileInfo').innerHTML = '';
-            document.getElementById('wavFileInfo').innerHTML = '';
-            document.getElementById('folderInfo').innerHTML = '';
-            
-            showNotification('🧹 Форма очищена');
+        // 🔥 ФУНКЦИИ ДЛЯ РАБОТЫ С ЯНДЕКС ДИСКОМ
+        async function uploadToYandexDisk(file, fileName, folder = 'FressoBeats') {
+            try {
+                // Создаем папку если не существует
+                await createYandexDiskFolder(folder);
+                
+                // Получаем URL для загрузки
+                const uploadUrl = await getYandexDiskUploadUrl(`${folder}/${fileName}`);
+                
+                // Загружаем файл
+                const response = await fetch(uploadUrl, {
+                    method: 'PUT',
+                    body: file,
+                    headers: {
+                        'Authorization': `OAuth ${YANDEX_DISK_CONFIG.token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    return `${folder}/${fileName}`;
+                } else {
+                    throw new Error('Ошибка загрузки файла');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки на Яндекс.Диск:', error);
+                throw error;
+            }
         }
 
-        function addNewBeat() {
+        async function createYandexDiskFolder(folderPath) {
+            try {
+                const response = await fetch(`${YANDEX_DISK_CONFIG.baseUrl}?path=${encodeURIComponent(folderPath)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `OAuth ${YANDEX_DISK_CONFIG.token}`
+                    }
+                });
+                
+                return response.ok;
+            } catch (error) {
+                console.error('Ошибка создания папки:', error);
+                return false;
+            }
+        }
+
+        async function getYandexDiskUploadUrl(filePath) {
+            try {
+                const response = await fetch(`${YANDEX_DISK_CONFIG.uploadUrl}?path=${encodeURIComponent(filePath)}&overwrite=true`, {
+                    headers: {
+                        'Authorization': `OAuth ${YANDEX_DISK_CONFIG.token}`
+                    }
+                });
+                
+                const data = await response.json();
+                return data.href;
+            } catch (error) {
+                console.error('Ошибка получения URL для загрузки:', error);
+                throw error;
+            }
+        }
+
+        // 🔥 ДОБАВЛЕНИЕ НОВОГО БИТА
+        async function addNewBeat() {
             soundSystem.play('click');
+            
             const title = document.getElementById('beatTitle').value.trim();
             const bpm = parseInt(document.getElementById('beatBpm').value);
             const key = document.getElementById('beatKey').value;
             const genre = document.getElementById('beatGenre').value;
             const mood = document.getElementById('beatMood').value;
+            const description = document.getElementById('beatDescription').value.trim();
+            
             const mp3Price = parseInt(document.getElementById('mp3Price').value) || 0;
             const wavPrice = parseInt(document.getElementById('wavPrice').value) || 0;
             const trackoutPrice = parseInt(document.getElementById('trackoutPrice').value) || 0;
             const exclusivePrice = parseInt(document.getElementById('exclusivePrice').value) || 0;
-            const description = document.getElementById('beatDescription').value.trim();
             
+            // Валидация
             if (!title || !bpm || !key || !genre || !mood) {
                 showNotification('❌ Заполните все обязательные поля');
                 return;
@@ -5861,127 +5911,200 @@
                 return;
             }
             
-            if (bpm < 60 || bpm > 200) {
-                showNotification('❌ BPM должен быть от 60 до 200');
-                return;
-            }
+            showNotification('📤 Загружаем бит...');
             
-            // 🔥 СОЗДАЕМ DATA URL ДЛЯ ФАЙЛОВ
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const mp3DataUrl = e.target.result;
+            try {
+                // Загружаем файлы на Яндекс.Диск
+                const mp3Url = await uploadToYandexDisk(beatFiles.mp3, `${Date.now()}_${title}.mp3`);
+                let wavUrl = null;
+                let folderUrl = null;
+                
+                if (beatFiles.wav) {
+                    wavUrl = await uploadToYandexDisk(beatFiles.wav, `${Date.now()}_${title}.wav`);
+                }
+                
+                if (beatFiles.folder.length > 0) {
+                    // Для папки создаем отдельную подпапку
+                    const folderName = `${Date.now()}_${title}_materials`;
+                    await createYandexDiskFolder(`FressoBeats/${folderName}`);
+                    
+                    // Загружаем каждый файл из папки
+                    for (const file of beatFiles.folder) {
+                        await uploadToYandexDisk(file, file.name, `FressoBeats/${folderName}`);
+                    }
+                    folderUrl = folderName;
+                }
                 
                 // Создаем объект бита
-                const files = {
-                    mp3: mp3DataUrl,
-                    wav: beatFiles.wav ? URL.createObjectURL(beatFiles.wav) : '#',
-                    trackout: beatFiles.folder.length > 0 ? 'folder_uploaded' : '#'
-                };
-                
                 const newBeat = {
                     id: Date.now(),
-                    title: title,
-                    bpm: bpm,
-                    key: key,
-                    genre: genre,
-                    mood: mood,
+                    title,
+                    bpm,
+                    key,
+                    genre,
+                    mood,
                     isNew: true,
                     plays: 0,
-                    audioUrl: mp3DataUrl, // 🔥 ИСПОЛЬЗУЕМ DATA URL ДЛЯ ПРЕДПРОСЛУШИВАНИЯ
+                    audioUrl: mp3Url,
                     isFavorite: false,
                     inCart: false,
-                    price: wavPrice || mp3Price,
-                    description: description,
+                    price: Math.max(mp3Price, wavPrice, trackoutPrice, exclusivePrice),
+                    description,
                     licensePrices: {
                         mp3: mp3Price,
                         wav: wavPrice,
                         trackout: trackoutPrice,
                         exclusive: exclusivePrice
                     },
-                    files: files,
+                    files: {
+                        mp3: mp3Url,
+                        wav: wavUrl,
+                        trackout: folderUrl
+                    },
                     createdAt: new Date().toISOString(),
-                    createdBy: userData.isAdmin ? "admin" : userData.name,
-                    uploadedFiles: {
-                        mp3: beatFiles.mp3.name,
-                        wav: beatFiles.wav ? beatFiles.wav.name : null,
-                        folder: beatFiles.folder.length > 0 ? beatFiles.folder.map(f => f.name) : []
-                    }
+                    createdBy: userData.name
                 };
                 
+                // Добавляем бит в список
                 beats.unshift(newBeat);
                 saveBeatsData();
+                
+                // Очищаем форму
                 resetBeatForm();
                 
-                // 🔥 ПЕРЕИНИЦИАЛИЗИРУЕМ АУДИО ПЛЕЕРЫ
-                initializeAudioPlayers();
-                
                 showNotification('✅ Бит успешно добавлен!');
-                
-                // Переходим на главную чтобы увидеть новый бит
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
-                document.querySelector('[data-screen="homeScreen"]').classList.add('active');
-                document.getElementById('homeScreen').classList.remove('hidden');
-                
                 displayBeats();
-            };
-            
-            reader.readAsDataURL(beatFiles.mp3);
+                
+            } catch (error) {
+                console.error('Ошибка добавления бита:', error);
+                showNotification('❌ Ошибка добавления бита');
+            }
         }
 
-        // 🔥 ОБРАБОТКА ЗАГРУЗКИ МЕДИА ДЛЯ НОВОСТЕЙ
-        let newsMediaFile = null;
+        function resetBeatForm() {
+            document.getElementById('beatTitle').value = '';
+            document.getElementById('beatBpm').value = '';
+            document.getElementById('beatKey').value = '';
+            document.getElementById('beatGenre').value = '';
+            document.getElementById('beatMood').value = '';
+            document.getElementById('beatDescription').value = '';
+            document.getElementById('mp3Price').value = '';
+            document.getElementById('wavPrice').value = '';
+            document.getElementById('trackoutPrice').value = '';
+            document.getElementById('exclusivePrice').value = '';
+            
+            // Очищаем файлы
+            beatFiles = { mp3: null, wav: null, folder: [] };
+            document.getElementById('mp3FileInfo').innerHTML = '';
+            document.getElementById('wavFileInfo').innerHTML = '';
+            document.getElementById('folderInfo').innerHTML = '';
+            
+            showNotification('🧹 Форма очищена');
+        }
 
-        function handleNewsMediaUpload(file) {
-            if (!file) return;
-            
-            // Валидация формата
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/quicktime', 'audio/mp3'];
-            if (!allowedTypes.includes(file.type)) {
-                showNotification('❌ Загрузите изображение, видео или аудио файл');
-                return;
-            }
-            
-            // Валидация размера (20MB максимум)
-            if (file.size > 20 * 1024 * 1024) {
-                showNotification('❌ Файл слишком большой (макс. 20MB)');
-                return;
-            }
-            
-            newsMediaFile = file;
-            
-            // Показываем информацию о файле
-            const mediaInfo = document.getElementById('newsMediaInfo');
-            const fileType = file.type.startsWith('image/') ? 'Изображение' : 
-                            file.type.startsWith('video/') ? 'Видео' : 'Аудио';
-            
-            mediaInfo.innerHTML = `
-                <div class="file-item">
-                    <div class="file-info">
-                        <div class="file-icon">
-                            <i class="fas ${file.type.startsWith('image/') ? 'fa-image' : file.type.startsWith('video/') ? 'fa-video' : 'fa-music'}"></i>
-                        </div>
-                        <div>
-                            <div class="file-name">${file.name}</div>
-                            <div class="file-size">${fileType} • ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                        </div>
-                    </div>
-                    <button class="file-remove" onclick="removeNewsMedia()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+        // 🔥 ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        function showNotification(message) {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 10px;
+                z-index: 10000;
+                box-shadow: var(--glow);
+                animation: slideDown 0.3s ease;
             `;
+            notification.textContent = message;
             
-            showNotification(`✅ Медиа файл загружен (${fileType})`);
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
         }
 
-        function removeNewsMedia() {
-            newsMediaFile = null;
-            document.getElementById('newsMediaInfo').innerHTML = '';
-            showNotification('🗑️ Медиа файл удален');
+        function updateProfile() {
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userStatus').textContent = userData.isAuthenticated ? 'Авторизован' : 'Не авторизован';
+            document.getElementById('favoritesCount').textContent = userData.favorites.length;
+            document.getElementById('purchasesCount').textContent = userData.purchases.length;
+            document.getElementById('listensCount').textContent = userData.listens;
+            document.getElementById('discountPercent').textContent = userData.discount + '%';
+            document.getElementById('slotsAttempts').textContent = userData.slotsAttempts;
+            document.getElementById('tapAttempts').textContent = userData.tapAttempts;
+            document.getElementById('tapBalance').textContent = userData.tapBalance;
+            
+            if (userData.isAdmin) {
+                document.getElementById('salesStats').style.display = 'block';
+            }
         }
 
-        // 🔥 АВТОМАТИЧЕСКИЕ НОВОСТИ
+        function updateTimers() {
+            // Обновляем таймеры для игр
+            const now = Date.now();
+            const dayInMs = 24 * 60 * 60 * 1000;
+            
+            if (now - userData.lastSlotsPlay > dayInMs && !userData.isAdmin) {
+                userData.slotsAttempts = 3;
+            }
+            
+            if (now - userData.lastTapPlay > dayInMs && !userData.isAdmin) {
+                userData.tapAttempts = 3;
+            }
+            
+            updateProfile();
+            saveUserData();
+        }
+
+        function closeWinModal(claimPrize = false) {
+            document.getElementById('winModal').style.display = 'none';
+            if (claimPrize) {
+                showNotification('🎁 Приз активирован!');
+            }
+        }
+
+        function closeConfirmModal(confirmed) {
+            document.getElementById('confirmModal').style.display = 'none';
+            if (typeof window.confirmAction === 'function') {
+                window.confirmAction(confirmed);
+                window.confirmAction = null;
+            }
+        }
+
+        function showWinModal(message, isWavPrize) {
+            const winMessage = document.getElementById('winMessage');
+            const winContent = document.querySelector('.win-content');
+            
+            winMessage.textContent = message;
+            
+            // Удаляем старые кнопки
+            const oldButtons = winContent.querySelectorAll('.spin-btn');
+            oldButtons.forEach(btn => btn.remove());
+            
+            if (isWavPrize) {
+                const buttonHTML = `
+                    <button class="spin-btn" onclick="claimPrize(${userData.prizes.length - 1})" style="background: var(--accent);">
+                        🎵 Выбрать бит для WAV
+                    </button>
+                    <button class="spin-btn" onclick="closeWinModal()" style="background: var(--primary);">
+                        Позже
+                    </button>
+                `;
+                winContent.insertAdjacentHTML('beforeend', buttonHTML);
+            }
+            
+            document.getElementById('winModal').style.display = 'flex';
+        }
+
+        // 🔥 ФУНКЦИИ ДЛЯ НОВОСТЕЙ
         function loadNews() {
             const newsContainer = document.getElementById('newsContainer');
             newsContainer.innerHTML = '';
@@ -5997,51 +6120,41 @@
                 return;
             }
             
-            news.forEach((newsItem, index) => {
-                const newsElement = document.createElement('div');
-                newsElement.className = 'news-item fade-in';
+            news.forEach(item => {
+                const newsItem = document.createElement('div');
+                newsItem.className = 'news-item';
                 
                 let mediaHTML = '';
-                if (newsItem.media) {
-                    if (newsItem.media.startsWith('data:image/')) {
-                        mediaHTML = `<div style="margin: 10px 0;"><img src="${newsItem.media}" style="max-width: 100%; border-radius: 10px;"></div>`;
-                    } else if (newsItem.media.startsWith('data:video/')) {
-                        mediaHTML = `<div style="margin: 10px 0;"><video src="${newsItem.media}" controls style="max-width: 100%; border-radius: 10px;"></video></div>`;
-                    } else if (newsItem.media.startsWith('data:audio/')) {
-                        mediaHTML = `<div style="margin: 10px 0;"><audio src="${newsItem.media}" controls style="width: 100%;"></audio></div>`;
+                if (item.media) {
+                    if (item.media.startsWith('data:image') || item.media.endsWith('.jpg') || item.media.endsWith('.png') || item.media.endsWith('.gif')) {
+                        mediaHTML = `<img src="${item.media}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;" alt="Новость">`;
+                    } else if (item.media.endsWith('.mp4') || item.media.endsWith('.webm')) {
+                        mediaHTML = `<video src="${item.media}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;" controls></video>`;
+                    } else if (item.media.endsWith('.mp3')) {
+                        mediaHTML = `<audio src="${item.media}" style="width: 100%; margin-bottom: 10px;" controls></audio>`;
                     }
                 }
                 
-                let deleteButton = '';
-                if (userData.isAdmin) {
-                    deleteButton = `<button class="remove-from-cart" onclick="deleteNews(${index})" style="margin-top: 10px;">
-                        <i class="fas fa-trash"></i> Удалить
-                    </button>`;
-                }
-                
-                newsElement.innerHTML = `
-                    <h3>${newsItem.title}</h3>
-                    <p>${newsItem.content}</p>
+                newsItem.innerHTML = `
                     ${mediaHTML}
-                    <div class="news-date">${new Date(newsItem.date).toLocaleDateString('ru-RU')}</div>
-                    ${deleteButton}
+                    <h3>${item.title}</h3>
+                    <p>${item.content}</p>
+                    <div class="news-date">${new Date(item.date).toLocaleDateString('ru-RU')}</div>
                 `;
-                newsContainer.appendChild(newsElement);
+                
+                newsContainer.appendChild(newsItem);
             });
         }
 
         function showAddNewsForm() {
-            soundSystem.play('click');
             document.getElementById('addNewsModal').style.display = 'flex';
         }
 
         function closeAddNewsModal() {
-            soundSystem.play('click');
             document.getElementById('addNewsModal').style.display = 'none';
         }
 
-        function addNews() {
-            soundSystem.play('click');
+        async function addNews() {
             const title = document.getElementById('newsTitle').value.trim();
             const content = document.getElementById('newsContent').value.trim();
             
@@ -6050,362 +6163,153 @@
                 return;
             }
             
-            let mediaDataUrl = '';
+            let mediaUrl = null;
             if (newsMediaFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    mediaDataUrl = e.target.result;
-                    saveNewsItem(title, content, mediaDataUrl);
-                };
-                reader.readAsDataURL(newsMediaFile);
-            } else {
-                saveNewsItem(title, content, '');
+                try {
+                    mediaUrl = await uploadToYandexDisk(newsMediaFile, `news_${Date.now()}_${newsMediaFile.name}`, 'FressoBeats/News');
+                } catch (error) {
+                    console.error('Ошибка загрузки медиа:', error);
+                    showNotification('❌ Ошибка загрузки медиа');
+                    return;
+                }
             }
-        }
-
-        function saveNewsItem(title, content, media) {
+            
             const newNews = {
                 id: Date.now(),
-                title: title,
-                content: content,
-                media: media,
+                title,
+                content,
+                media: mediaUrl,
                 date: new Date().toISOString(),
                 author: userData.name
             };
             
             news.unshift(newNews);
             saveNewsData();
+            
+            document.getElementById('newsTitle').value = '';
+            document.getElementById('newsContent').value = '';
+            document.getElementById('newsMediaInfo').innerHTML = '';
+            newsMediaFile = null;
+            
             closeAddNewsModal();
-            loadNews();
-            
             showNotification('✅ Новость опубликована!');
+            loadNews();
         }
 
-        function deleteNews(index) {
-            soundSystem.play('click');
-            document.getElementById('confirmMessage').textContent = 'Вы уверены, что хотите удалить эту новость?';
-            document.getElementById('confirmModal').style.display = 'flex';
-            window.confirmAction = function(confirmed) {
-                if (confirmed) {
-                    news.splice(index, 1);
-                    saveNewsData();
-                    loadNews();
-                    showNotification('🗑️ Новость удалена');
-                }
-                document.getElementById('confirmModal').style.display = 'none';
-            };
+        function removeNewsMedia() {
+            newsMediaFile = null;
+            document.getElementById('newsMediaInfo').innerHTML = '';
+            showNotification('🗑️ Медиа файл удален');
         }
 
-        function closeConfirmModal(confirmed) {
-            soundSystem.play('click');
-            if (window.confirmAction) {
-                window.confirmAction(confirmed);
-            }
-            document.getElementById('confirmModal').style.display = 'none';
-        }
-
-        // 🔥 МОДАЛЬНЫЕ ОКНА
-        function showWinModal(message, showChooseBeat) {
-            const winMessage = document.getElementById('winMessage');
-            const winContent = document.querySelector('.win-content');
-            
-            winMessage.textContent = message;
-            
-            let buttonHTML = '';
-            if (showChooseBeat) {
-                buttonHTML = `<button class="spin-btn" onclick="closeWinModal(true)" style="background: var(--accent); margin: 5px;">
-                    🎵 Выбрать бит
-                </button>`;
-            } else if (message.includes('DRUMKIT') || message.includes('LOOPKIT')) {
-                buttonHTML = `
-                    <button class="spin-btn" onclick="contactAboutPrize()" style="background: var(--primary); margin: 5px;">
-                        💬 Связаться по поводу выигрыша
-                    </button>
-                    <a href="https://t.me/Fr1sso" target="_blank" style="color: var(--text-secondary); font-size: 12px; display: block; margin-top: 10px;">
-                        👉 Мой Telegram: @Fr1sso
-                    </a>
-                `;
-            } else {
-                buttonHTML = `<button class="spin-btn" onclick="closeWinModal()" style="background: var(--accent);">
-                    👍 Понятно
-                </button>`;
-            }
-            
-            const oldButtons = winContent.querySelectorAll('.spin-btn');
-            oldButtons.forEach(btn => btn.remove());
-            
-            winContent.insertAdjacentHTML('beforeend', buttonHTML);
-            
-            document.getElementById('winModal').style.display = 'flex';
-        }
-
-        function closeWinModal(goToHome = false) {
-            soundSystem.play('click');
-            document.getElementById('winModal').style.display = 'none';
-            if (goToHome) {
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-                document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));
-                document.querySelector('[data-screen="homeScreen"]').classList.add('active');
-                document.getElementById('homeScreen').classList.remove('hidden');
-            }
-        }
-
-        function contactAboutPrize() {
-            soundSystem.play('click');
-            if (isTelegram && tg) {
-                tg.openTelegramLink('https://t.me/Fr1sso');
-            } else {
-                window.open('https://t.me/Fr1sso', '_blank');
-            }
-            closeWinModal();
-        }
-
-        // 🔥 ПРОФИЛЬ И АВТОРИЗАЦИЯ
-        function updateProfile() {
-            document.getElementById('favoritesCount').textContent = userData.favorites.length;
-            document.getElementById('purchasesCount').textContent = userData.purchases.length;
-            document.getElementById('listensCount').textContent = userData.listens;
-            document.getElementById('discountPercent').textContent = userData.discount + '%';
-            document.getElementById('referralsCount').textContent = userData.referrals;
-            document.getElementById('referralDiscount').textContent = userData.discount + '%';
-            document.getElementById('tapBalance').textContent = userData.tapBalance;
-            
-            const slotsText = userData.isAdmin ? '∞' : userData.slotsAttempts;
-            const tapText = userData.isAdmin ? '∞' : userData.tapAttempts;
-            
-            document.getElementById('slotsAttempts').textContent = slotsText;
-            document.getElementById('tapAttempts').textContent = tapText;
-            document.getElementById('referralCode').textContent = userData.referralCode;
-            
-            // 🔥 ОБНОВЛЯЕМ РЕКВИЗИТЫ ОПЛАТЫ ИЗ КОНФИГА
-            document.getElementById('cryptoWallet').textContent = systemConfig.paymentDetails.crypto.wallet;
-            document.getElementById('cryptoNetwork').textContent = systemConfig.paymentDetails.crypto.network;
-            document.getElementById('umoneyWallet').textContent = systemConfig.paymentDetails.umoney.wallet;
-            document.getElementById('sbpPhone').textContent = systemConfig.paymentDetails.sbp.phone;
-            document.getElementById('sbpBank').textContent = systemConfig.paymentDetails.sbp.bank;
-            
-            // 🔥 СТАТИСТИКА ПРОДАЖ ДЛЯ АДМИНА
-            const salesStats = document.getElementById('salesStats');
-            if (userData.isAdmin) {
-                salesStats.style.display = 'block';
-                document.getElementById('totalSales').textContent = userData.salesStats.totalSales;
-                document.getElementById('totalRevenue').textContent = userData.salesStats.totalRevenue + ' руб.';
-                document.getElementById('beatsSold').textContent = userData.salesStats.beatsSold;
-                document.getElementById('activeUsers').textContent = userData.salesStats.activeUsers;
-            } else {
-                salesStats.style.display = 'none';
-            }
-            
-            // 🔥 СКРЫВАЕМ ПОЛЕ ВВОДА ЕСЛИ КОД УЖЕ АКТИВИРОВАН
-            if (userData.usedReferralCodes && userData.usedReferralCodes.length > 0) {
-                document.getElementById('referralInputSection').innerHTML = `
-                    <div style="text-align: center; padding: 10px; background: rgba(16, 185, 129, 0.2); border-radius: 10px;">
-                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                        <span style="color: var(--success); font-size: 14px;">Реферальный код активирован!</span>
-                    </div>
-                `;
-            }
-            
-            const avatar = document.getElementById('userAvatar');
-            const name = document.getElementById('userName');
-            const status = document.getElementById('userStatus');
-            
-            if (userData.isAuthenticated) {
-                avatar.textContent = userData.name.charAt(0).toUpperCase();
-                name.textContent = userData.name;
-                
-                if (userData.telegramData) {
-                    status.textContent = userData.username ? `@${userData.username}` : 'Telegram пользователь';
-                } else {
-                    status.textContent = 'Авторизованный пользователь';
-                }
-                
-                if (userData.isAdmin) {
-                    status.textContent += ' 👑 АДМИН';
-                }
-                
-                document.getElementById('telegramAuthButton').innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти';
-            } else {
-                avatar.textContent = 'G';
-                name.textContent = 'Гость';
-                status.textContent = 'Не авторизован';
-                document.getElementById('telegramAuthButton').innerHTML = '<i class="fab fa-telegram"></i> Войти через Telegram';
-            }
-        }
-
-        function toggleAuth(provider) {
-            soundSystem.play('click');
-            if (userData.isAuthenticated) {
-                userData.isAuthenticated = false;
-                userData.isAdmin = false;
-                userData.name = "Гость";
-                userData.telegramData = null;
-                document.getElementById('addBeatBtn').style.display = 'none';
-                document.getElementById('archiveBtn').style.display = 'none';
-                document.getElementById('addNewsBtn').style.display = 'none';
-                showNotification('👋 До скорой встречи!');
-            } else {
-                if (provider === 'telegram') {
-                    if (isTelegram && tg) {
-                        const user = tg.initDataUnsafe?.user;
-                        if (user) {
-                            handleTelegramAuth(user);
-                        } else {
-                            showNotification('🔗 Открой в Telegram для авторизации');
-                        }
-                    } else {
-                        showNotification('🔗 Открой в Telegram для полного функционала');
-                        // Симуляция авторизации для демо
-                        handleTelegramAuth({
-                            id: 123456789,
-                            first_name: 'Demo User',
-                            username: 'demo_user'
-                        });
-                    }
-                }
-            }
-            saveUserData();
-            updateProfile();
-        }
-
+        // 🔥 РЕФЕРАЛЬНАЯ СИСТЕМА
         function copyReferralCode() {
             soundSystem.play('click');
-            const code = userData.referralCode;
-            navigator.clipboard.writeText(code).then(() => {
-                showNotification('✅ Реферальный код скопирован!');
-            }).catch(() => {
-                const tempInput = document.createElement('input');
-                tempInput.value = code;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-                showNotification('✅ Реферальный код скопирован!');
+            const referralCode = document.getElementById('referralCode').textContent;
+            navigator.clipboard.writeText(referralCode).then(() => {
+                showNotification('📋 Реферальный код скопирован!');
             });
         }
 
         function useReferralCode() {
             soundSystem.play('click');
-            const code = document.getElementById('friendReferralCode').value.trim();
+            const friendCode = document.getElementById('friendReferralCode').value.trim();
             
-            if (!code) {
+            if (!friendCode) {
                 showNotification('❌ Введите реферальный код');
                 return;
             }
             
-            if (userData.usedReferralCodes && userData.usedReferralCodes.includes(code)) {
-                showNotification('❌ Вы уже активировали этот код');
+            if (userData.usedReferralCodes.includes(friendCode)) {
+                showNotification('❌ Вы уже использовали этот код');
                 return;
             }
             
-            if (code === userData.referralCode) {
-                showNotification('❌ Нельзя активировать свой же код');
+            if (friendCode === userData.referralCode) {
+                showNotification('❌ Нельзя использовать свой собственный код');
                 return;
             }
             
-            if (!userData.usedReferralCodes) {
-                userData.usedReferralCodes = [];
-            }
-            
-            userData.usedReferralCodes.push(code);
-            userData.referrals++;
+            userData.usedReferralCodes.push(friendCode);
             userData.discount = Math.min(userData.discount + 5, 50);
+            userData.referrals++;
             
-            updateProfile();
             saveUserData();
+            updateProfile();
             
-            document.getElementById('referralInputSection').innerHTML = `
-                <div style="text-align: center; padding: 10px; background: rgba(16, 185, 129, 0.2); border-radius: 10px;">
-                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
-                    <span style="color: var(--success); font-size: 14px;">Код активирован!</span>
-                </div>
-            `;
-            
-            showNotification('✅ Реферальный код активирован! +5% скидки');
+            document.getElementById('friendReferralCode').value = '';
+            showNotification('🎉 Реферальный код активирован! +5% скидки');
         }
 
-        // 🔥 УТИЛИТЫ
-        function updateTimers() {
-            const now = Date.now();
-            const dayInMs = 24 * 60 * 60 * 1000;
+        // 🔥 АВТОРИЗАЦИЯ
+        function toggleAuth(provider) {
+            soundSystem.play('click');
             
-            if (!userData.isAdmin) {
-                const slotsTimeLeft = userData.lastSlotsPlay + dayInMs - now;
-                if (slotsTimeLeft <= 0 && userData.slotsAttempts < 3) {
-                    userData.slotsAttempts = 3;
-                }
-                
-                const tapTimeLeft = userData.lastTapPlay + dayInMs - now;
-                if (tapTimeLeft <= 0 && userData.tapAttempts < 3) {
-                    userData.tapAttempts = 3;
+            if (provider === 'telegram') {
+                if (isTelegram && tg) {
+                    // В Telegram Mini App авторизация происходит автоматически
+                    showNotification('✅ Вы уже авторизованы через Telegram');
+                } else {
+                    // Запущено вне Telegram - показываем инструкцию
+                    showNotification('🔗 Запустите приложение в Telegram для авторизации');
                 }
             }
-
-            saveUserData();
-            updateProfile();
         }
 
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: var(--primary);
-                color: white;
-                padding: 12px 20px;
-                border-radius: 10px;
-                z-index: 10000;
-                animation: fadeIn 0.3s ease;
-                max-width: 300px;
-                box-shadow: var(--glow);
-                font-size: 14px;
-            `;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'fadeIn 0.3s ease reverse';
-                setTimeout(() => {
-                    notification.remove();
-                }, 300);
-            }, 3000);
-        }
-
+        // 🔥 ЛОГГЕР ДЛЯ ОТЛАДКИ
         function logger(message) {
             console.log(`[Fresso Beats] ${message}`);
         }
 
-        // 🔥 АДМИН ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ РЕКВИЗИТАМИ
-        function updatePaymentDetails() {
-            // Эта функция может быть вызвана из админ-панели для обновления реквизитов
-            if (userData.isAdmin) {
-                // Здесь можно добавить интерфейс для изменения реквизитов
-                console.log('Admin payment details update available');
-            }
-        }
-
-        // 🔥 ОПТИМИЗАЦИЯ ДЛЯ БОЛЬШОГО КОЛИЧЕСТВА ПОЛЬЗОВАТЕЛЕЙ
-        function optimizePerformance() {
-            // Очистка ненужных данных
-            if (beats.length > 100) {
-                beats = beats.slice(0, 100); // Ограничиваем количество битов
+        // 🔥 ИНИЦИАЛИЗАЦИЯ CSS АНИМАЦИЙ ДЛЯ УВЕДОМЛЕНИЙ
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateX(-50%) translateY(-50px); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
             }
             
-            // Очистка старых аудио элементов
-            audioPlayers.forEach((player, beatId) => {
-                if (!beats.find(b => b.id === beatId)) {
-                    if (player.audio) {
-                        player.audio.pause();
-                        player.audio.src = '';
-                    }
-                    audioPlayers.delete(beatId);
-                }
-            });
+            @keyframes slideUp {
+                from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                to { transform: translateX(-50%) translateY(-50px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 🔥 ЗАГРУЗКА НОВОСТЕЙ ПРИ ОТКРЫТИИ ЭКРАНА
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && document.getElementById('newsScreen').classList.contains('hidden') === false) {
+                loadNews();
+            }
+        });
+
+        // 🔥 ПРЕДОТВРАЩЕНИЕ ЗАКРЫТИЯ СТРАНИЦЫ ПРИ АКТИВНЫХ ДЕЙСТВИЯХ
+        window.addEventListener('beforeunload', function(e) {
+            if (tapGame.isPlaying || match3Game.isPlaying) {
+                e.preventDefault();
+                e.returnValue = 'У вас есть активные игры. Вы уверены, что хотите уйти?';
+            }
+        });
+
+        // 🔥 ОБРАБОТКА ОШИБОК
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+            showNotification('⚠️ Произошла ошибка. Обновите страницу.');
+        });
+
+        // 🔥 АДАПТАЦИЯ ПОД РАЗНЫЕ УСТРОЙСТВА
+        function adjustForDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                document.body.style.fontSize = '14px';
+            } else {
+                document.body.style.fontSize = '16px';
+            }
         }
 
-        // 🔥 ИНИЦИАЛИЗАЦИЯ ОПТИМИЗАЦИИ
-        setInterval(optimizePerformance, 60000); // Каждую минуту
+        // Запускаем адаптацию при загрузке
+        adjustForDevice();
     </script>
 </body>
 </html>
